@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - Smart Inventory{% endblock %}
+
+{% block content %}
+<h1>Admin Dashboard</h1>
+
+<div class="dashboard-widgets">
+    <div class="widget">
+        <h3 class="widget-title">Total Products</h3>
+        <div class="widget-value">{{ products|length }}</div>
+        <p class="widget-description">Total products in inventory</p>
+    </div>
+    
+    <div class="widget">
+        <h3 class="widget-title">Low Stock Items</h3>
+        <div class="widget-value {% if low_stock_products|length > 0 %}text-danger{% endif %}">
+            {{ low_stock_products|length }}
+        </div>
+        <p class="widget-description">Products that need restocking</p>
+    </div>
+    
+    <div class="widget">
+        <h3 class="widget-title">Today's Sales</h3>
+        <div class="widget-value">{{ today_sales|length }}</div>
+        <p class="widget-description">Total sales made today</p>
+    </div>
+    
+    <div class="widget">
+        <h3 class="widget-title">Today's Revenue</h3>
+        <div class="widget-value">RWF {{ "%.0f"|format(total_revenue) }}</div>
+        <p class="widget-description">Total revenue generated today</p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2>Low Stock Products</h2>
+    </div>
+    <div class="card-body">
+        {% if low_stock_products|length > 0 %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Current Stock</th>
+                    <th>Threshold</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in low_stock_products %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td class="text-danger">{{ product.stock }}</td>
+                    <td>{{ product.low_stock_threshold }}</td>
+                    <td>
+                        <a href="{{ url_for('edit_product', product_id=product.id) }}" class="btn btn-primary">Update Stock</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No products are currently low on stock.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-header">
+        <h2>Recent Sales</h2>
+    </div>
+    <div class="card-body">
+        {% if today_sales|length > 0 %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Cashier</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sale in today_sales %}
+                <tr>
+                    <td>{{ sale.product.name }}</td>
+                    <td>{{ sale.quantity }}</td>
+                    <td>RWF {{ "%.0f"|format(sale.total_price) }}</td>
+                    <td>{{ sale.cashier.username }}</td>
+                    <td>{{ sale.date_sold.strftime('%H:%M:%S') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No sales have been recorded today.</p>
+        {% endif %}
+    </div>
+    <div class="card-footer">
+        <a href="{{ url_for('view_sales') }}" class="btn btn-primary">View All Sales</a>
+    </div>
+</div>
+{% endblock %}

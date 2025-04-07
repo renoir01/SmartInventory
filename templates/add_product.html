@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Product - Smart Inventory{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Add New Product</h2>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('add_product') }}">
+            <div class="form-group">
+                <label for="name" class="form-label">Product Name</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="description" class="form-control" rows="3"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="category" class="form-label">Category</label>
+                <select id="category" name="category" class="form-control" required>
+                    <option value="Grains">Grains</option>
+                    <option value="Vegetables">Vegetables</option>
+                    <option value="Fruits">Fruits</option>
+                    <option value="Dairy">Dairy</option>
+                    <option value="Meat">Meat</option>
+                    <option value="Beverages">Beverages</option>
+                    <option value="Snacks">Snacks</option>
+                    <option value="Household">Household</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="price" class="form-label">Price</label>
+                <div class="input-group">
+                    <span class="input-group-text">RWF</span>
+                    <input type="number" id="price" name="price" class="form-control" step="1" min="0" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="stock" class="form-label">Initial Stock</label>
+                <input type="number" id="stock" name="stock" class="form-control" min="0" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="low_stock_threshold" class="form-label">Low Stock Threshold</label>
+                <input type="number" id="low_stock_threshold" name="low_stock_threshold" class="form-control" min="1" value="10" required>
+                <small class="form-text text-muted">Stock level at which the system will alert you to restock</small>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Add Product</button>
+                <a href="{{ url_for('manage_products') }}" class="btn btn-danger">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
