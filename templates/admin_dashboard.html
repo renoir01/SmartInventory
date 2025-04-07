@@ -3,104 +3,334 @@
 {% block title %}Admin Dashboard - Smart Inventory{% endblock %}
 
 {% block content %}
-<h1>Admin Dashboard</h1>
+<div class="dashboard-header">
+    <h1>Admin Dashboard</h1>
+    <p class="dashboard-subtitle">Overview of your inventory and sales</p>
+</div>
 
-<div class="dashboard-widgets">
-    <div class="widget">
-        <h3 class="widget-title">Total Products</h3>
-        <div class="widget-value">{{ products|length }}</div>
-        <p class="widget-description">Total products in inventory</p>
-    </div>
-    
-    <div class="widget">
-        <h3 class="widget-title">Low Stock Items</h3>
-        <div class="widget-value {% if low_stock_products|length > 0 %}text-danger{% endif %}">
-            {{ low_stock_products|length }}
+<div class="row">
+    <div class="col col-md-3">
+        <div class="widget" style="border-top: 4px solid var(--primary-color);">
+            <i class="fas fa-box-open widget-icon"></i>
+            <h3 class="widget-title">Total Products</h3>
+            <div class="widget-value">{{ products|length }}</div>
+            <p class="widget-description">Total products in inventory</p>
+            <a href="{{ url_for('manage_products') }}" class="widget-link">View all products <i class="fas fa-arrow-right"></i></a>
         </div>
-        <p class="widget-description">Products that need restocking</p>
     </div>
     
-    <div class="widget">
-        <h3 class="widget-title">Today's Sales</h3>
-        <div class="widget-value">{{ today_sales|length }}</div>
-        <p class="widget-description">Total sales made today</p>
+    <div class="col col-md-3">
+        <div class="widget" style="border-top: 4px solid var(--danger-color);">
+            <i class="fas fa-exclamation-triangle widget-icon"></i>
+            <h3 class="widget-title">Low Stock Items</h3>
+            <div class="widget-value {% if low_stock_products|length > 0 %}text-danger{% endif %}">
+                {{ low_stock_products|length }}
+            </div>
+            <p class="widget-description">Products that need restocking</p>
+            {% if low_stock_products|length > 0 %}
+            <a href="#low-stock-section" class="widget-link">View details <i class="fas fa-arrow-right"></i></a>
+            {% endif %}
+        </div>
     </div>
     
-    <div class="widget">
-        <h3 class="widget-title">Today's Revenue</h3>
-        <div class="widget-value">RWF {{ "%.0f"|format(total_revenue) }}</div>
-        <p class="widget-description">Total revenue generated today</p>
+    <div class="col col-md-3">
+        <div class="widget" style="border-top: 4px solid var(--info-color);">
+            <i class="fas fa-shopping-cart widget-icon"></i>
+            <h3 class="widget-title">Today's Sales</h3>
+            <div class="widget-value">{{ today_sales|length }}</div>
+            <p class="widget-description">Total sales made today</p>
+            <a href="{{ url_for('view_sales') }}" class="widget-link">View all sales <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+    
+    <div class="col col-md-3">
+        <div class="widget" style="border-top: 4px solid var(--success-color);">
+            <i class="fas fa-money-bill-wave widget-icon"></i>
+            <h3 class="widget-title">Today's Revenue</h3>
+            <div class="widget-value">RWF {{ "%.0f"|format(total_revenue) }}</div>
+            <p class="widget-description">Total revenue generated today</p>
+            <a href="{{ url_for('view_sales') }}" class="widget-link">View sales report <i class="fas fa-arrow-right"></i></a>
+        </div>
     </div>
 </div>
 
-<div class="card">
-    <div class="card-header">
-        <h2>Low Stock Products</h2>
+<div class="row mt-4">
+    <div class="col col-md-6">
+        <div class="card" id="low-stock-section">
+            <div class="card-header">
+                <h2><i class="fas fa-exclamation-circle"></i> Low Stock Products</h2>
+            </div>
+            <div class="card-body">
+                {% if low_stock_products|length > 0 %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Current Stock</th>
+                                <th>Threshold</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in low_stock_products %}
+                            <tr>
+                                <td>{{ product.name }}</td>
+                                <td><span class="badge" style="background-color: var(--primary-color);">{{ product.category }}</span></td>
+                                <td class="text-danger">{{ product.stock }}</td>
+                                <td>{{ product.low_stock_threshold }}</td>
+                                <td>
+                                    <a href="{{ url_for('edit_product', product_id=product.id) }}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-edit"></i> Update
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i> All products are well stocked!
+                </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-        {% if low_stock_products|length > 0 %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Current Stock</th>
-                    <th>Threshold</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for product in low_stock_products %}
-                <tr>
-                    <td>{{ product.name }}</td>
-                    <td class="text-danger">{{ product.stock }}</td>
-                    <td>{{ product.low_stock_threshold }}</td>
-                    <td>
-                        <a href="{{ url_for('edit_product', product_id=product.id) }}" class="btn btn-primary">Update Stock</a>
-                    </td>
-                </tr>
+    
+    <div class="col col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-chart-pie"></i> Inventory by Category</h2>
+            </div>
+            <div class="card-body">
+                {% set categories = {} %}
+                {% for product in products %}
+                    {% if product.category in categories %}
+                        {% set _ = categories.update({product.category: categories[product.category] + 1}) %}
+                    {% else %}
+                        {% set _ = categories.update({product.category: 1}) %}
+                    {% endif %}
                 {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>No products are currently low on stock.</p>
-        {% endif %}
+                
+                <div class="category-stats">
+                    {% for category, count in categories.items() %}
+                    <div class="category-stat-item">
+                        <div class="category-header">
+                            <h4>{{ category }}</h4>
+                        </div>
+                        <div class="category-body">
+                            <div class="category-count">{{ count }}</div>
+                            <div class="category-bar">
+                                <div class="category-progress" style="width: {{ (count / products|length * 100)|round }}%;"></div>
+                            </div>
+                            <div class="category-percent">{{ (count / products|length * 100)|round }}%</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="card mt-3">
-    <div class="card-header">
-        <h2>Recent Sales</h2>
-    </div>
-    <div class="card-body">
-        {% if today_sales|length > 0 %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Cashier</th>
-                    <th>Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for sale in today_sales %}
-                <tr>
-                    <td>{{ sale.product.name }}</td>
-                    <td>{{ sale.quantity }}</td>
-                    <td>RWF {{ "%.0f"|format(sale.total_price) }}</td>
-                    <td>{{ sale.cashier.username }}</td>
-                    <td>{{ sale.date_sold.strftime('%H:%M:%S') }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>No sales have been recorded today.</p>
-        {% endif %}
-    </div>
-    <div class="card-footer">
-        <a href="{{ url_for('view_sales') }}" class="btn btn-primary">View All Sales</a>
+<div class="row mt-4">
+    <div class="col col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-tasks"></i> Quick Actions</h2>
+            </div>
+            <div class="card-body">
+                <div class="quick-actions">
+                    <a href="{{ url_for('add_product') }}" class="quick-action-btn">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Add New Product</span>
+                    </a>
+                    <a href="{{ url_for('view_sales') }}" class="quick-action-btn">
+                        <i class="fas fa-chart-line"></i>
+                        <span>View Sales Report</span>
+                    </a>
+                    <a href="{{ url_for('manage_products') }}" class="quick-action-btn">
+                        <i class="fas fa-edit"></i>
+                        <span>Manage Products</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-header {
+        margin-bottom: 2rem;
+    }
+    
+    .dashboard-subtitle {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+    }
+    
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -15px;
+    }
+    
+    .col {
+        padding: 0 15px;
+        box-sizing: border-box;
+    }
+    
+    .col-md-3 {
+        width: 25%;
+    }
+    
+    .col-md-6 {
+        width: 50%;
+    }
+    
+    .col-md-12 {
+        width: 100%;
+    }
+    
+    .mt-4 {
+        margin-top: 2rem;
+    }
+    
+    .widget {
+        position: relative;
+        padding-top: 2rem;
+    }
+    
+    .widget-icon {
+        position: absolute;
+        top: -15px;
+        right: 20px;
+        font-size: 2rem;
+        color: rgba(0, 0, 0, 0.1);
+    }
+    
+    .widget-link {
+        display: inline-block;
+        margin-top: 0.5rem;
+        color: var(--primary-color);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+    }
+    
+    .widget-link:hover {
+        color: var(--primary-dark);
+        transform: translateX(5px);
+    }
+    
+    .badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 20px;
+        color: white;
+        font-size: 0.75rem;
+    }
+    
+    .text-danger {
+        color: var(--danger-color);
+    }
+    
+    .category-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .category-stat-item {
+        border: 1px solid var(--divider-color);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .category-body {
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .category-count {
+        font-weight: bold;
+        min-width: 30px;
+    }
+    
+    .category-bar {
+        flex: 1;
+        height: 10px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    
+    .category-progress {
+        height: 100%;
+        background-color: var(--primary-color);
+    }
+    
+    .category-percent {
+        min-width: 40px;
+        text-align: right;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+    }
+    
+    .quick-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        justify-content: center;
+    }
+    
+    .quick-action-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        height: 150px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        text-decoration: none;
+        color: var(--text-color);
+        transition: all 0.3s;
+        border: 1px solid var(--divider-color);
+    }
+    
+    .quick-action-btn:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        color: var(--primary-color);
+        border-color: var(--primary-light);
+    }
+    
+    .quick-action-btn i {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+    }
+    
+    .table-responsive {
+        overflow-x: auto;
+    }
+    
+    @media (max-width: 768px) {
+        .col-md-3, .col-md-6, .col-md-12 {
+            width: 100%;
+        }
+        
+        .quick-action-btn {
+            width: 120px;
+            height: 120px;
+        }
+    }
+</style>
 {% endblock %}
