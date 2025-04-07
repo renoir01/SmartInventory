@@ -26,9 +26,12 @@ This guide provides step-by-step instructions for deploying the Smart Inventory 
 ### 3. Upload Your Files
 
 1. Go to the **Files** tab in PythonAnywhere
-2. Create a new directory for your project (e.g., `smartinventory`)
+2. Use your existing project directory:
+   ```
+   /home/renoir0/SmartInventory
+   ```
 3. Upload your project files:
-   - Navigate to your new directory
+   - Navigate to your directory
    - Click **Upload a file** for each file, or
    - Use the Bash console to upload multiple files
 
@@ -38,11 +41,11 @@ This guide provides step-by-step instructions for deploying the Smart Inventory 
 2. Start a new **Bash console**
 3. Navigate to your project directory:
    ```bash
-   cd ~/smartinventory
+   cd ~/SmartInventory
    ```
-4. Create a virtual environment:
+4. Your virtual environment is already set up as:
    ```bash
-   mkvirtualenv --python=python3.10 smartinventory-env
+   smartinventory-env
    ```
 5. Activate the virtual environment (if not already activated):
    ```bash
@@ -64,14 +67,14 @@ This guide provides step-by-step instructions for deploying the Smart Inventory 
 ### 6. Configure the WSGI File
 
 1. Go back to the **Web** tab
-2. Click on the WSGI configuration file link (e.g., `/var/www/yourusername_pythonanywhere_com_wsgi.py`)
+2. Click on the WSGI configuration file link (e.g., `/var/www/renoir0_pythonanywhere_com_wsgi.py`)
 3. Replace the content with:
    ```python
    import sys
    import os
    
    # Add your project directory to the path
-   path = '/home/yourusername/smartinventory'
+   path = '/home/renoir0/SmartInventory'
    if path not in sys.path:
        sys.path.append(path)
    
@@ -81,15 +84,14 @@ This guide provides step-by-step instructions for deploying the Smart Inventory 
    # Import your app
    from app import app as application
    ```
-4. **Important**: Replace `yourusername` with your actual PythonAnywhere username
-5. Click **Save**
+4. Click **Save**
 
 ### 7. Configure Static Files
 
 1. In the **Web** tab, under "Static files"
 2. Add a new mapping:
    - URL: `/static/`
-   - Directory: `/home/yourusername/smartinventory/static/`
+   - Directory: `/home/renoir0/SmartInventory/static/`
 3. Click **Save**
 
 ### 8. Configure Virtual Environment
@@ -97,7 +99,7 @@ This guide provides step-by-step instructions for deploying the Smart Inventory 
 1. In the **Web** tab, under "Virtualenv"
 2. Enter the path to your virtual environment:
    ```
-   /home/yourusername/.virtualenvs/smartinventory-env
+   /home/renoir0/.virtualenvs/smartinventory-env
    ```
 3. Click **Save**
 
@@ -108,7 +110,7 @@ This guide provides step-by-step instructions for deploying the Smart Inventory 
 
 ### 10. Access Your Application
 
-1. Click on the link to your web app (e.g., yourusername.pythonanywhere.com)
+1. Click on the link to your web app (e.g., renoir0.pythonanywhere.com)
 2. Log in with the default admin credentials:
    - Username: `renoir01`
    - Password: `Renoir@654`
