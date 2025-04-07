@@ -53,3 +53,99 @@
 2025-04-08 01:32:04,477 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:32:04] "[32mGET /set_language/en HTTP/1.1[0m" 302 -
 2025-04-08 01:32:04,501 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:32:04] "GET /admin/dashboard HTTP/1.1" 200 -
 2025-04-08 01:32:04,568 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:32:04] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:34:25,788 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 01:34:25,860 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-08 01:34:25,860 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-08 01:34:25,866 - werkzeug - INFO -  * Restarting with stat
+2025-04-08 01:34:27,067 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 01:34:27,107 - werkzeug - WARNING -  * Debugger is active!
+2025-04-08 01:34:27,116 - werkzeug - INFO -  * Debugger PIN: 139-586-798
+2025-04-08 01:34:43,147 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:34:43] "[32mGET / HTTP/1.1[0m" 302 -
+2025-04-08 01:34:43,224 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:34:43] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-04-08 01:34:43,371 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:34:43] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:34:43,374 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:34:43] "GET /static/css/dashboard.css HTTP/1.1" 200 -
+2025-04-08 01:34:47,897 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:34:47] "[32mGET /set_language/rw HTTP/1.1[0m" 302 -
+2025-04-08 01:34:47,919 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:34:47] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-04-08 01:34:47,958 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:34:47] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:34:47,959 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:34:47] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-04-08 01:35:05,201 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:35:05] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-04-08 01:35:05,232 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:35:05] "GET /login HTTP/1.1" 200 -
+2025-04-08 01:35:05,299 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:35:05] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:35:20,846 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:35:20] "POST /login HTTP/1.1" 200 -
+2025-04-08 01:35:20,891 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:35:20] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:35:24,636 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:35:24] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-04-08 01:35:24,648 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:35:24] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-04-08 01:35:24,685 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:35:24] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:35:24,686 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:35:24] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-04-08 01:35:30,436 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:35:30] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-04-08 01:35:30,450 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:35:30] "GET /login HTTP/1.1" 200 -
+2025-04-08 01:35:30,488 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:35:30] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:35:47,166 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:35:47] "POST /login HTTP/1.1" 200 -
+2025-04-08 01:35:47,197 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:35:47] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:36:07,372 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:36:07] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-04-08 01:36:07,405 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:36:07] "GET /cashier/dashboard HTTP/1.1" 200 -
+2025-04-08 01:36:07,460 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:36:07] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:36:57,696 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:36:57] "[32mGET /admin/products HTTP/1.1[0m" 302 -
+2025-04-08 01:36:57,711 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:36:57] "[32mGET / HTTP/1.1[0m" 302 -
+2025-04-08 01:36:57,728 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:36:57] "GET /cashier/dashboard HTTP/1.1" 200 -
+2025-04-08 01:36:57,770 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:36:57] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:37:00,384 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:00] "[35m[1mGET /cashier/sales HTTP/1.1[0m" 500 -
+2025-04-08 01:37:00,420 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:00] "GET /cashier/sales?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-04-08 01:37:00,471 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:00] "[36mGET /cashier/sales?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:37:00,485 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:00] "GET /cashier/sales?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-04-08 01:37:00,535 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:00] "GET /cashier/sales?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-04-08 01:37:00,567 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:00] "[36mGET /cashier/sales?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-04-08 01:37:03,712 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:03] "[35m[1mGET /cashier/sales HTTP/1.1[0m" 500 -
+2025-04-08 01:37:03,750 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:03] "[36mGET /cashier/sales?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:37:03,751 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:03] "[36mGET /cashier/sales?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-04-08 01:37:03,816 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:03] "[36mGET /cashier/sales?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:37:03,833 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:03] "[36mGET /cashier/sales?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-04-08 01:37:06,702 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:06] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-04-08 01:37:06,713 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:06] "GET /login HTTP/1.1" 200 -
+2025-04-08 01:37:06,772 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:06] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:37:09,904 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:09] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-04-08 01:37:09,920 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:09] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-04-08 01:37:09,951 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:09] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-04-08 01:37:09,953 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:37:11,800 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:11] "[35m[1mGET /admin/sales HTTP/1.1[0m" 500 -
+2025-04-08 01:37:11,832 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:11] "GET /admin/sales?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-04-08 01:37:11,835 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:11] "GET /admin/sales?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-04-08 01:37:11,884 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:11] "[36mGET /admin/sales?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:37:11,896 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:11] "GET /admin/sales?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-04-08 01:37:11,905 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:37:11] "[36mGET /admin/sales?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-04-08 01:39:48,682 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 01:39:48,734 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-08 01:39:48,735 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-08 01:39:48,738 - werkzeug - INFO -  * Restarting with stat
+2025-04-08 01:39:49,919 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 01:39:49,967 - werkzeug - WARNING -  * Debugger is active!
+2025-04-08 01:39:49,982 - werkzeug - INFO -  * Debugger PIN: 139-586-798
+2025-04-08 01:40:02,831 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:40:02] "[32mGET / HTTP/1.1[0m" 302 -
+2025-04-08 01:40:02,902 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:40:02] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-04-08 01:40:03,028 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:40:03] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:40:03,031 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:40:03] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-04-08 01:40:07,138 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:40:07] "[35m[1mGET /admin/sales HTTP/1.1[0m" 500 -
+2025-04-08 01:40:07,164 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:40:07] "[36mGET /admin/sales?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:40:07,166 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:40:07] "[36mGET /admin/sales?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-04-08 01:40:07,212 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:40:07] "[36mGET /admin/sales?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:40:07,259 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:40:07] "[36mGET /admin/sales?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-04-08 01:40:59,769 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:40:59] "GET /admin/sales HTTP/1.1" 200 -
+2025-04-08 01:40:59,811 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:40:59] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:41:02,198 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:02] "GET /admin/sales HTTP/1.1" 200 -
+2025-04-08 01:41:02,232 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:02] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:41:05,346 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:05] "GET /admin/products HTTP/1.1" 200 -
+2025-04-08 01:41:05,398 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:05] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:41:06,727 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:06] "GET /admin/sales HTTP/1.1" 200 -
+2025-04-08 01:41:06,786 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:06] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:41:18,933 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:18] "GET /admin/sales HTTP/1.1" 200 -
+2025-04-08 01:41:18,969 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:18] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:41:31,041 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:31] "[32mGET /set_language/en HTTP/1.1[0m" 302 -
+2025-04-08 01:41:31,095 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:31] "GET /admin/sales HTTP/1.1" 200 -
+2025-04-08 01:41:31,141 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:31] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:41:35,718 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:35] "GET /admin/products HTTP/1.1" 200 -
+2025-04-08 01:41:35,778 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:35] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:41:36,819 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:36] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-04-08 01:41:36,872 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:36] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:41:36,875 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:36] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -

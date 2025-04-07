@@ -156,3 +156,90 @@ msgstr "Ahabanza"
 
 msgid "Language"
 msgstr "Ururimi"
+
+msgid "2025 Smart Inventory. All rights reserved."
+msgstr "2025 Ububiko Bwiza. Uburenganzira bwose bwihariwe."
+
+msgid "Cashier Dashboard"
+msgstr "Ikibaho cy'Umucuruzi"
+
+msgid "Sales you've made today"
+msgstr "Ubucuruzi wakoze uyu munsi"
+
+msgid "Revenue you've generated today"
+msgstr "Amafaranga winjije uyu munsi"
+
+msgid "Record New Sale"
+msgstr "Andika Ubucuruzi Bushya"
+
+msgid "Select Product"
+msgstr "Hitamo Igicuruzwa"
+
+msgid "-- Select a product --"
+msgstr "-- Hitamo igicuruzwa --"
+
+msgid "in stock"
+msgstr "mu bubiko"
+
+msgid "Quantity"
+msgstr "Ingano"
+
+msgid "Record Sale"
+msgstr "Andika Ubucuruzi"
+
+msgid "Time"
+msgstr "Igihe"
+
+msgid "Product"
+msgstr "Igicuruzwa"
+
+msgid "Price"
+msgstr "Igiciro"
+
+msgid "You haven't recorded any sales today."
+msgstr "Ntabwo wanditse ubucuruzi uyu munsi."
+
+msgid "View All My Sales"
+msgstr "Reba Ubucuruzi Bwanjye Bwose"
+
+msgid "My Sales History"
+msgstr "Amateka y'Ubucuruzi Bwanjye"
+
+msgid "From Date"
+msgstr "Kuva Itariki"
+
+msgid "To Date"
+msgstr "Kugera Itariki"
+
+msgid "All Categories"
+msgstr "Ibyiciro Byose"
+
+msgid "Filter"
+msgstr "Shaka"
+
+msgid "Reset"
+msgstr "Tangira Bushya"
+
+msgid "Total Revenue"
+msgstr "Amafaranga Yose"
+
+msgid "Total revenue for selected period"
+msgstr "Amafaranga yose mu gihe cyahisemo"
+
+msgid "Sales by Category"
+msgstr "Ubucuruzi Bwakurikije Icyiciro"
+
+msgid "Total Items"
+msgstr "Ibintu Byose"
+
+msgid "Revenue"
+msgstr "Amafaranga"
+
+msgid "Detailed Sales"
+msgstr "Ubucuruzi Burambuye"
+
+msgid "Date & Time"
+msgstr "Itariki & Igihe"
+
+msgid "No sales found for the selected criteria."
+msgstr "Nta bucuruzi bwabonetse ku byo wahisemo."

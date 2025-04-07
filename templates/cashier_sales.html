@@ -1,32 +1,32 @@
 {% extends 'base.html' %}
 
-{% block title %}My Sales - Smart Inventory{% endblock %}
+{% block title %}{{ _('My Sales') }} - {{ _('Smart Inventory') }}{% endblock %}
 
 {% block content %}
 <div class="card">
     <div class="card-header">
-        <h2>My Sales History</h2>
+        <h2>{{ _('My Sales History') }}</h2>
     </div>
     <div class="card-body">
         <form method="GET" action="{{ url_for('view_cashier_sales') }}" class="mb-3">
             <div class="row">
                 <div class="col">
                     <div class="form-group">
-                        <label for="date_from" class="form-label">From Date</label>
-                        <input type="date" id="date_from" name="date_from" class="form-control" value="{{ date_from }}">
+                        <label for="start_date" class="form-label">{{ _('From Date') }}</label>
+                        <input type="date" id="start_date" name="start_date" class="form-control" value="{{ start_date }}">
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <label for="date_to" class="form-label">To Date</label>
-                        <input type="date" id="date_to" name="date_to" class="form-control" value="{{ date_to }}">
+                        <label for="end_date" class="form-label">{{ _('To Date') }}</label>
+                        <input type="date" id="end_date" name="end_date" class="form-control" value="{{ end_date }}">
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <label for="category" class="form-label">Category</label>
+                        <label for="category" class="form-label">{{ _('Category') }}</label>
                         <select id="category" name="category" class="form-control">
-                            <option value="">All Categories</option>
+                            <option value="all">{{ _('All Categories') }}</option>
                             {% for cat in categories %}
                             <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>
                                 {{ cat }}
@@ -36,35 +36,34 @@
                     </div>
                 </div>
                 <div class="col d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary">Filter</button>
-                    <a href="{{ url_for('view_cashier_sales') }}" class="btn btn-secondary ml-2">Reset</a>
+                    <button type="submit" class="btn btn-primary">{{ _('Filter') }}</button>
+                    <a href="{{ url_for('view_cashier_sales') }}" class="btn btn-secondary ml-2">{{ _('Reset') }}</a>
                 </div>
             </div>
         </form>
         
-        <div class="widget mb-3">
-            <h3 class="widget-title">Total Revenue</h3>
+        <div class="widget widget-success mb-3">
+            <h3 class="widget-title">{{ _('Total Revenue') }}</h3>
             <div class="widget-value">RWF {{ "%.0f"|format(total_revenue) }}</div>
-            <p class="widget-description">Total revenue for selected period</p>
+            <p class="widget-description">{{ _('Total revenue for selected period') }}</p>
         </div>
         
         <!-- Category Summary -->
         <div class="card mb-4">
             <div class="card-header">
-                <h3>Sales by Category</h3>
+                <h3>{{ _('Sales by Category') }}</h3>
             </div>
             <div class="card-body">
                 <div class="row">
-                    {% for category, data in sales_by_category.items() %}
+                    {% for category, data in category_summary.items() %}
                     <div class="col-md-4 mb-3">
                         <div class="card">
                             <div class="card-header category-header">
                                 <h4>{{ category }}</h4>
                             </div>
                             <div class="card-body">
-                                <p><strong>Total Items:</strong> {{ data.quantity }}</p>
-                                <p><strong>Revenue:</strong> RWF {{ "%.0f"|format(data.revenue) }}</p>
-                                <p><strong>Products:</strong> {{ data.sales|length }}</p>
+                                <p><strong>{{ _('Total Items') }}:</strong> {{ data.count }}</p>
+                                <p><strong>{{ _('Revenue') }}:</strong> RWF {{ "%.0f"|format(data.revenue) }}</p>
                             </div>
                         </div>
                     </div>
@@ -74,15 +73,15 @@
         </div>
         
         {% if sales|length > 0 %}
-        <h3>Detailed Sales</h3>
+        <h3>{{ _('Detailed Sales') }}</h3>
         <table class="table">
             <thead>
                 <tr>
-                    <th>Date & Time</th>
-                    <th>Product</th>
-                    <th>Category</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
+                    <th>{{ _('Date & Time') }}</th>
+                    <th>{{ _('Product') }}</th>
+                    <th>{{ _('Category') }}</th>
+                    <th>{{ _('Quantity') }}</th>
+                    <th>{{ _('Price') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -98,7 +97,7 @@
             </tbody>
         </table>
         {% else %}
-        <p>No sales found for the selected criteria.</p>
+        <p>{{ _('No sales found for the selected criteria.') }}</p>
         {% endif %}
     </div>
 </div>

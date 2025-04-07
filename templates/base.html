@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="{% if g.lang_code == 'rw' %}rw{% else %}en{% endif %}">
+<html lang="{{ g.lang_code }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Smart Inventory{% endblock %}</title>
+    <title>{% block title %}{{ _('Smart Inventory') }}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -13,12 +13,12 @@
     {% if current_user.is_authenticated %}
     <header class="header">
         <div class="container header-content">
-            <div class="logo">Smart Inventory</div>
+            <div class="logo">{{ _('Smart Inventory') }}</div>
             <div class="user-info">
                 <div class="language-selector">
-                    <select id="language-select" onchange="changeLanguage(this.value)" aria-label="Select language">
-                        <option value="en" {% if g.lang_code == 'en' %}selected{% endif %}>English</option>
-                        <option value="rw" {% if g.lang_code == 'rw' %}selected{% endif %}>Kinyarwanda</option>
+                    <select id="language-select" onchange="changeLanguage(this.value)" aria-label="{{ _('Select language') }}">
+                        <option value="en" {% if g.lang_code == 'en' %}selected{% endif %}>{{ _('English') }}</option>
+                        <option value="rw" {% if g.lang_code == 'rw' %}selected{% endif %}>{{ _('Kinyarwanda') }}</option>
                     </select>
                 </div>
                 <div class="user-role">{{ current_user.role.capitalize() }}</div>
@@ -82,7 +82,7 @@
     <footer class="footer">
         <div class="container footer-content">
             <div class="footer-section">
-                <h3>Smart Inventory</h3>
+                <h3>{{ _('Smart Inventory') }}</h3>
                 <p>{{ _('Efficient inventory and sales management for your mini market business.') }}</p>
             </div>
             <div class="footer-section">
@@ -102,8 +102,8 @@
             <div class="footer-section">
                 <h3>{{ _('Language') }}</h3>
                 <ul>
-                    <li><a href="{{ url_for('set_language', language='en') }}">English</a></li>
-                    <li><a href="{{ url_for('set_language', language='rw') }}">Kinyarwanda</a></li>
+                    <li><a href="{{ url_for('set_language', language='en') }}">{{ _('English') }}</a></li>
+                    <li><a href="{{ url_for('set_language', language='rw') }}">{{ _('Kinyarwanda') }}</a></li>
                 </ul>
             </div>
         </div>
