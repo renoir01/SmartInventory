@@ -1,0 +1,55 @@
+2025-04-08 01:28:34,127 - __main__ - ERROR - Error initializing Babel: 'Babel' object has no attribute 'localeselector'
+2025-04-08 01:28:34,186 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-08 01:28:34,187 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-08 01:28:34,190 - werkzeug - INFO -  * Restarting with stat
+2025-04-08 01:28:35,429 - __main__ - ERROR - Error initializing Babel: 'Babel' object has no attribute 'localeselector'
+2025-04-08 01:28:35,465 - werkzeug - WARNING -  * Debugger is active!
+2025-04-08 01:28:35,471 - werkzeug - INFO -  * Debugger PIN: 139-586-798
+2025-04-08 01:29:00,415 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\CascadeProjects\\SmartInventory\\app.py', reloading
+2025-04-08 01:29:00,591 - werkzeug - INFO -  * Restarting with stat
+2025-04-08 01:29:01,639 - __main__ - ERROR - Error initializing Babel: 'Babel' object has no attribute 'localeselector'
+2025-04-08 01:29:01,669 - werkzeug - WARNING -  * Debugger is active!
+2025-04-08 01:29:01,675 - werkzeug - INFO -  * Debugger PIN: 139-586-798
+2025-04-08 01:29:18,005 - __main__ - ERROR - Error initializing Babel: 'Babel' object has no attribute 'localeselector'
+2025-04-08 01:29:18,051 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-08 01:29:18,051 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-08 01:29:18,054 - werkzeug - INFO -  * Restarting with stat
+2025-04-08 01:29:19,081 - __main__ - ERROR - Error initializing Babel: 'Babel' object has no attribute 'localeselector'
+2025-04-08 01:29:19,108 - werkzeug - WARNING -  * Debugger is active!
+2025-04-08 01:29:19,115 - werkzeug - INFO -  * Debugger PIN: 139-586-798
+2025-04-08 01:29:45,195 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\CascadeProjects\\SmartInventory\\app.py', reloading
+2025-04-08 01:29:45,503 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\CascadeProjects\\SmartInventory\\app.py', reloading
+2025-04-08 01:29:45,611 - werkzeug - INFO -  * Restarting with stat
+2025-04-08 01:29:46,637 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 01:29:46,663 - werkzeug - WARNING -  * Debugger is active!
+2025-04-08 01:29:46,667 - werkzeug - INFO -  * Debugger PIN: 139-586-798
+2025-04-08 01:30:07,977 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 01:30:08,027 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-08 01:30:08,027 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-08 01:30:08,029 - werkzeug - INFO -  * Restarting with stat
+2025-04-08 01:30:09,077 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 01:30:09,100 - werkzeug - WARNING -  * Debugger is active!
+2025-04-08 01:30:09,104 - werkzeug - INFO -  * Debugger PIN: 139-586-798
+2025-04-08 01:30:26,107 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:30:26] "[32mGET / HTTP/1.1[0m" 302 -
+2025-04-08 01:30:26,278 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:30:26] "GET /login HTTP/1.1" 200 -
+2025-04-08 01:30:26,437 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:30:26] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-08 01:30:47,816 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:30:47] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-08 01:30:55,463 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:30:55] "[32mGET /set_language/rw HTTP/1.1[0m" 302 -
+2025-04-08 01:30:55,516 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:30:55] "GET /login HTTP/1.1" 200 -
+2025-04-08 01:30:55,576 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:30:55] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:30:58,805 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:30:58] "[32mGET /set_language/rw HTTP/1.1[0m" 302 -
+2025-04-08 01:30:58,896 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:30:58] "GET /login HTTP/1.1" 200 -
+2025-04-08 01:30:58,945 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:30:58] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:31:16,138 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:31:16] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-04-08 01:31:16,277 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:31:16] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-04-08 01:31:16,408 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:31:16] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:31:20,758 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:31:20] "GET /admin/products HTTP/1.1" 200 -
+2025-04-08 01:31:20,828 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:31:20] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:31:21,978 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:31:21] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-04-08 01:31:22,037 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:31:22] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 01:32:04,477 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:32:04] "[32mGET /set_language/en HTTP/1.1[0m" 302 -
+2025-04-08 01:32:04,501 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:32:04] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-04-08 01:32:04,568 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:32:04] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -

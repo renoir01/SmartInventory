@@ -26,50 +26,48 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-key-for-testing')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///inventory.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize database
+# Initialize database before Babel to avoid potential issues
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
-# Define translation function as fallback
-def _(text, **variables):
-    return text % variables if variables else text
-
 # Try to initialize Babel with error handling
 try:
-    from flask_babel import Babel
-    
+    from flask_babel import Babel, gettext as _
     app.config['BABEL_DEFAULT_LOCALE'] = 'en'
     app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'locale'
+    babel = Babel(app)
     
-    # Define locale selector function
+    # Language selection
+    @babel.localeselector
     def get_locale():
+        logger.debug(f"Session contents: {session}")
+        # Try to get the language from the session
         if 'language' in session:
+            logger.debug(f"Language from session: {session['language']}")
             return session['language']
+        # Default to English
+        logger.debug("No language in session, defaulting to English")
         return 'en'
-    
-    # Initialize Babel with the locale selector
-    babel = Babel(app, locale_selector=get_locale)
-    
-    # Import gettext after Babel is initialized
-    from flask_babel import gettext as _
     
     @app.before_request
     def before_request():
         g.lang_code = get_locale()
+        logger.debug(f"Set g.lang_code to {g.lang_code}")
     
     @app.route('/set_language/<language>')
     def set_language(language):
+        logger.debug(f"Setting language to {language}")
         session['language'] = language
         return redirect(request.referrer or url_for('index'))
     
     has_babel = True
-    logger.info("Flask-Babel initialized successfully")
-    
 except Exception as e:
     logger.error(f"Error initializing Babel: {e}")
+    # Define a dummy _ function if Babel fails
+    def _(text, **variables):
+        return text % variables if variables else text
     has_babel = False
-    logger.warning("Using fallback translation function")
 
 # Models
 class User(UserMixin, db.Model):
@@ -260,224 +258,7 @@ def delete_product(product_id):
     flash(_('Product deleted successfully!'), 'success')
     return redirect(url_for('manage_products'))
 
-@app.route('/admin/sales')
-@login_required
-def view_sales():
-    if current_user.role != 'admin':
-        flash(_('Access denied. Admin privileges required.'), 'danger')
-        return redirect(url_for('index'))
-    
-    # Get filter parameters
-    start_date_str = request.args.get('start_date')
-    end_date_str = request.args.get('end_date')
-    category = request.args.get('category')
-    
-    # Base query
-    query = Sale.query
-    
-    # Apply date filters if provided
-    if start_date_str:
-        try:
-            start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
-            query = query.filter(Sale.date_sold >= start_date)
-        except ValueError:
-            flash('Invalid start date format. Please use YYYY-MM-DD.', 'warning')
-    
-    if end_date_str:
-        try:
-            end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
-            # Add one day to include the end date
-            end_date = datetime(end_date.year, end_date.month, end_date.day, 23, 59, 59)
-            query = query.filter(Sale.date_sold <= end_date)
-        except ValueError:
-            flash('Invalid end date format. Please use YYYY-MM-DD.', 'warning')
-    
-    # Apply category filter if provided
-    if category and category != 'all':
-        query = query.join(Product).filter(Product.category == category)
-    
-    # Get all sales based on the filters
-    sales = query.order_by(Sale.date_sold.desc()).all()
-    
-    # Calculate total revenue
-    total_revenue = sum(sale.total_price for sale in sales)
-    
-    # Get unique categories for the filter dropdown
-    categories = db.session.query(Product.category).distinct().all()
-    categories = [cat[0] for cat in categories]
-    
-    # Group sales by category for the summary
-    category_summary = {}
-    for sale in sales:
-        category = sale.product.category
-        if category not in category_summary:
-            category_summary[category] = {
-                'count': 0,
-                'revenue': 0
-            }
-        category_summary[category]['count'] += sale.quantity
-        category_summary[category]['revenue'] += sale.total_price
-    
-    return render_template('view_sales.html', 
-                           sales=sales, 
-                           total_revenue=total_revenue,
-                           categories=categories,
-                           category_summary=category_summary,
-                           selected_category=category,
-                           start_date=start_date_str,
-                           end_date=end_date_str)
-
-@app.route('/cashier/dashboard')
-@login_required
-def cashier_dashboard():
-    if current_user.role != 'cashier':
-        flash(_('Access denied. Cashier privileges required.'), 'danger')
-        return redirect(url_for('index'))
-    
-    products = Product.query.filter(Product.stock > 0).all()
-    
-    today = datetime.utcnow().date()
-    today_sales = Sale.query.filter(
-        Sale.date_sold >= datetime(today.year, today.month, today.day),
-        Sale.cashier_id == current_user.id
-    ).all()
-    
-    total_revenue = sum(sale.total_price for sale in today_sales)
-    
-    return render_template('cashier_dashboard.html', 
-                           products=products,
-                           today_sales=today_sales,
-                           total_revenue=total_revenue)
-
-@app.route('/cashier/sell', methods=['POST'])
-@login_required
-def sell_product():
-    if current_user.role != 'cashier':
-        flash(_('Access denied. Cashier privileges required.'), 'danger')
-        return redirect(url_for('index'))
-    
-    product_id = int(request.form.get('product_id'))
-    quantity = int(request.form.get('quantity'))
-    product = Product.query.get_or_404(product_id)
-    
-    if product.stock < quantity:
-        flash(_('Not enough stock available. Only {0} units left.').format(product.stock), 'danger')
-        return redirect(url_for('cashier_dashboard'))
-    
-    # Calculate total price
-    total_price = product.price * quantity
-    
-    # Update product stock
-    product.stock -= quantity
-    
-    # Record the sale
-    sale = Sale(
-        product_id=product_id,
-        quantity=quantity,
-        total_price=total_price,
-        cashier_id=current_user.id
-    )
-    
-    db.session.add(sale)
-    db.session.commit()
-    
-    flash(_('Sale recorded successfully!'), 'success')
-    return redirect(url_for('cashier_dashboard'))
-
-@app.route('/cashier/sales')
-@login_required
-def view_cashier_sales():
-    if current_user.role != 'cashier':
-        flash(_('Access denied. Cashier privileges required.'), 'danger')
-        return redirect(url_for('index'))
-    
-    # Get filter parameters
-    start_date_str = request.args.get('start_date')
-    end_date_str = request.args.get('end_date')
-    category = request.args.get('category')
-    
-    # Base query - only show sales by the current cashier
-    query = Sale.query.filter(Sale.cashier_id == current_user.id)
-    
-    # Apply date filters if provided
-    if start_date_str:
-        try:
-            start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
-            query = query.filter(Sale.date_sold >= start_date)
-        except ValueError:
-            flash('Invalid start date format. Please use YYYY-MM-DD.', 'warning')
-    
-    if end_date_str:
-        try:
-            end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
-            # Add one day to include the end date
-            end_date = datetime(end_date.year, end_date.month, end_date.day, 23, 59, 59)
-            query = query.filter(Sale.date_sold <= end_date)
-        except ValueError:
-            flash('Invalid end date format. Please use YYYY-MM-DD.', 'warning')
-    
-    # Apply category filter if provided
-    if category and category != 'all':
-        query = query.join(Product).filter(Product.category == category)
-    
-    # Get all sales based on the filters
-    sales = query.order_by(Sale.date_sold.desc()).all()
-    
-    # Calculate total revenue
-    total_revenue = sum(sale.total_price for sale in sales)
-    
-    # Get unique categories for the filter dropdown
-    categories = db.session.query(Product.category).distinct().all()
-    categories = [cat[0] for cat in categories]
-    
-    # Group sales by category for the summary
-    category_summary = {}
-    for sale in sales:
-        category = sale.product.category
-        if category not in category_summary:
-            category_summary[category] = {
-                'count': 0,
-                'revenue': 0
-            }
-        category_summary[category]['count'] += sale.quantity
-        category_summary[category]['revenue'] += sale.total_price
-    
-    return render_template('view_cashier_sales.html', 
-                           sales=sales, 
-                           total_revenue=total_revenue,
-                           categories=categories,
-                           category_summary=category_summary,
-                           selected_category=category,
-                           start_date=start_date_str,
-                           end_date=end_date_str)
-
-# Initialize the database and create an admin user
-def init_db_command():
-    with app.app_context():
-        db.create_all()
-        
-        # Check if admin user exists
-        admin = User.query.filter_by(role='admin').first()
-        if not admin:
-            admin = User(
-                username='renoir01',
-                password_hash=generate_password_hash('Renoir@654'),
-                role='admin'
-            )
-            db.session.add(admin)
-        
-        # Check if cashier user exists
-        cashier = User.query.filter_by(role='cashier').first()
-        if not cashier:
-            cashier = User(
-                username='cashier01',
-                password_hash=generate_password_hash('Cashier@123'),
-                role='cashier'
-            )
-            db.session.add(cashier)
-        
-        db.session.commit()
-    print(_('Database initialized with admin and cashier users.'))
+# Main application code continues...
 
 if __name__ == '__main__':
     with app.app_context():

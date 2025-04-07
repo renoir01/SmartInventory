@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{% if g.lang_code == 'rw' %}rw{% else %}en{% endif %}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +22,7 @@
                     </select>
                 </div>
                 <div class="user-role">{{ current_user.role.capitalize() }}</div>
-                <a href="{{ url_for('logout') }}" class="btn btn-sm btn-danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-sm btn-danger"><i class="fas fa-sign-out-alt"></i> {{ _('Logout') }}</a>
             </div>
         </div>
     </header>
@@ -30,31 +30,34 @@
     <nav class="nav">
         <div class="container">
             <ul class="nav-list">
-                {%- if current_user.role == 'admin' -%}
+                {% if current_user.role == 'admin' %}
                 <li class="nav-item">
                     <a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
-                        <i class="fas fa-tachometer-alt"></i> Dashboard
-                    </a>
-                </li><li class="nav-item">
-                    <a href="{{ url_for('manage_products') }}" class="nav-link {% if request.endpoint == 'manage_products' %}active{% endif %}">
-                        <i class="fas fa-box"></i> Products
-                    </a>
-                </li><li class="nav-item">
-                    <a href="{{ url_for('view_sales') }}" class="nav-link {% if request.endpoint == 'view_sales' %}active{% endif %}">
-                        <i class="fas fa-chart-line"></i> Sales
+                        <i class="fas fa-tachometer-alt"></i> {{ _('Dashboard') }}
                     </a>
                 </li>
-                {%- elif current_user.role == 'cashier' -%}
+                <li class="nav-item">
+                    <a href="{{ url_for('manage_products') }}" class="nav-link {% if request.endpoint == 'manage_products' %}active{% endif %}">
+                        <i class="fas fa-box"></i> {{ _('Products') }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('view_sales') }}" class="nav-link {% if request.endpoint == 'view_sales' %}active{% endif %}">
+                        <i class="fas fa-chart-line"></i> {{ _('Sales') }}
+                    </a>
+                </li>
+                {% elif current_user.role == 'cashier' %}
                 <li class="nav-item">
                     <a href="{{ url_for('cashier_dashboard') }}" class="nav-link {% if request.endpoint == 'cashier_dashboard' %}active{% endif %}">
-                        <i class="fas fa-tachometer-alt"></i> Dashboard
-                    </a>
-                </li><li class="nav-item">
-                    <a href="{{ url_for('view_cashier_sales') }}" class="nav-link {% if request.endpoint == 'view_cashier_sales' %}active{% endif %}">
-                        <i class="fas fa-chart-line"></i> My Sales
+                        <i class="fas fa-tachometer-alt"></i> {{ _('Dashboard') }}
                     </a>
                 </li>
-                {%- endif -%}
+                <li class="nav-item">
+                    <a href="{{ url_for('view_cashier_sales') }}" class="nav-link {% if request.endpoint == 'view_cashier_sales' %}active{% endif %}">
+                        <i class="fas fa-chart-line"></i> {{ _('My Sales') }}
+                    </a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </nav>
@@ -80,56 +83,48 @@
         <div class="container footer-content">
             <div class="footer-section">
                 <h3>Smart Inventory</h3>
-                <p>Efficient inventory and sales management for your mini market business.</p>
+                <p>{{ _('Efficient inventory and sales management for your mini market business.') }}</p>
             </div>
             <div class="footer-section">
-                <h3>Quick Links</h3>
+                <h3>{{ _('Quick Links') }}</h3>
                 <ul>
-                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('index') }}">{{ _('Home') }}</a></li>
                     {% if current_user.is_authenticated %}
                         {% if current_user.role == 'admin' %}
-                            <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
-                            <li><a href="{{ url_for('manage_products') }}">Products</a></li>
+                            <li><a href="{{ url_for('admin_dashboard') }}">{{ _('Dashboard') }}</a></li>
+                            <li><a href="{{ url_for('manage_products') }}">{{ _('Products') }}</a></li>
                         {% elif current_user.role == 'cashier' %}
-                            <li><a href="{{ url_for('cashier_dashboard') }}">Dashboard</a></li>
+                            <li><a href="{{ url_for('cashier_dashboard') }}">{{ _('Dashboard') }}</a></li>
                         {% endif %}
                     {% endif %}
                 </ul>
             </div>
             <div class="footer-section">
-                <h3>Language</h3>
+                <h3>{{ _('Language') }}</h3>
                 <ul>
-                    <li><a href="#" onclick="changeLanguage('en')">English</a></li>
-                    <li><a href="#" onclick="changeLanguage('rw')">Kinyarwanda</a></li>
+                    <li><a href="{{ url_for('set_language', language='en') }}">English</a></li>
+                    <li><a href="{{ url_for('set_language', language='rw') }}">Kinyarwanda</a></li>
                 </ul>
             </div>
         </div>
-        <div class="footer-bottom">
-            <div class="container">
-                <p>&copy; 2025 Smart Inventory and Sales Management System</p>
-            </div>
+        <div class="copyright">
+            &copy; {{ _('2025 Smart Inventory. All rights reserved.') }}
         </div>
     </footer>
     
     <script>
-    function changeLanguage(lang) {
-        window.location.href = "{{ url_for('set_language', language='') }}" + lang;
-    }
-    
-    // Add fade-in animation to elements when they load
-    document.addEventListener('DOMContentLoaded', function() {
-        const cards = document.querySelectorAll('.card');
-        cards.forEach(card => {
-            card.classList.add('fade-in');
-        });
+        function changeLanguage(lang) {
+            window.location.href = "{{ url_for('set_language', language='') }}" + lang;
+        }
         
-        const widgets = document.querySelectorAll('.widget');
-        widgets.forEach(widget => {
-            widget.classList.add('fade-in');
+        // Add fade-in animation to elements when they load
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.classList.add('fade-in');
+            });
         });
-    });
     </script>
-    
-    {% block scripts %}{% endblock %}
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
