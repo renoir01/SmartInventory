@@ -5,3 +5,5 @@ Werkzeug==2.3.7
 SQLAlchemy==2.0.21
 python-dotenv==1.0.0
 gunicorn==21.2.0
+Flask-Babel==3.1.0
+polib==1.2.0

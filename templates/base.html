@@ -16,7 +16,7 @@
             <div class="logo">Smart Inventory</div>
             <div class="user-info">
                 <div class="language-selector">
-                    <select id="language-select" onchange="changeLanguage(this.value)">
+                    <select id="language-select" onchange="changeLanguage(this.value)" aria-label="Select language">
                         <option value="en" {% if g.lang_code == 'en' %}selected{% endif %}>English</option>
                         <option value="rw" {% if g.lang_code == 'rw' %}selected{% endif %}>Kinyarwanda</option>
                     </select>
@@ -35,13 +35,11 @@
                     <a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>
-                </li>
-                <li class="nav-item">
+                </li><li class="nav-item">
                     <a href="{{ url_for('manage_products') }}" class="nav-link {% if request.endpoint == 'manage_products' %}active{% endif %}">
                         <i class="fas fa-box"></i> Products
                     </a>
-                </li>
-                <li class="nav-item">
+                </li><li class="nav-item">
                     <a href="{{ url_for('view_sales') }}" class="nav-link {% if request.endpoint == 'view_sales' %}active{% endif %}">
                         <i class="fas fa-chart-line"></i> Sales
                     </a>
@@ -51,8 +49,7 @@
                     <a href="{{ url_for('cashier_dashboard') }}" class="nav-link {% if request.endpoint == 'cashier_dashboard' %}active{% endif %}">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>
-                </li>
-                <li class="nav-item">
+                </li><li class="nav-item">
                     <a href="{{ url_for('view_cashier_sales') }}" class="nav-link {% if request.endpoint == 'view_cashier_sales' %}active{% endif %}">
                         <i class="fas fa-chart-line"></i> My Sales
                     </a>
@@ -116,17 +113,7 @@
     
     <script>
     function changeLanguage(lang) {
-        let currentUrl = window.location.href;
-        let newUrl;
-        
-        if (currentUrl.includes('/en/') || currentUrl.includes('/rw/')) {
-            newUrl = currentUrl.replace(/\/(en|rw)\//, '/' + lang + '/');
-        } else {
-            // If no language code in URL, add it (this is a fallback)
-            newUrl = '/' + lang + currentUrl.substring(currentUrl.indexOf('/', 8));
-        }
-        
-        window.location.href = newUrl;
+        window.location.href = "{{ url_for('set_language', language='') }}" + lang;
     }
     
     // Add fade-in animation to elements when they load

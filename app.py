@@ -1,10 +1,11 @@
-from flask import Flask, render_template, redirect, url_for, flash, request, session
+from flask import Flask, render_template, redirect, url_for, flash, request, session, g
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import os
 from dotenv import load_dotenv
+from flask_babel import Babel, gettext as _
 
 # Load environment variables
 load_dotenv()
@@ -13,7 +14,10 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-key-for-testing')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///inventory.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['BABEL_DEFAULT_LOCALE'] = 'en'
+app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'locale'
 
+babel = Babel(app)
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
@@ -58,6 +62,24 @@ class Sale(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+# Language selection
+@babel.localeselector
+def get_locale():
+    # Try to get the language from the session
+    if 'language' in session:
+        return session['language']
+    # Default to English
+    return 'en'
+
+@app.before_request
+def before_request():
+    g.lang_code = get_locale()
+
+@app.route('/set_language/<language>')
+def set_language(language):
+    session['language'] = language
+    return redirect(request.referrer or url_for('index'))
+
 # Routes
 @app.route('/')
 def index():
@@ -83,7 +105,7 @@ def login():
             else:
                 return redirect(url_for('cashier_dashboard'))
         else:
-            flash('Invalid username or password', 'danger')
+            flash(_('Invalid username or password'), 'danger')
     
     return render_template('login.html')
 
@@ -97,7 +119,7 @@ def logout():
 @login_required
 def admin_dashboard():
     if current_user.role != 'admin':
-        flash('Access denied. Admin privileges required.', 'danger')
+        flash(_('Access denied. Admin privileges required.'), 'danger')
         return redirect(url_for('index'))
     
     products = Product.query.all()
@@ -118,7 +140,7 @@ def admin_dashboard():
 @login_required
 def manage_products():
     if current_user.role != 'admin':
-        flash('Access denied. Admin privileges required.', 'danger')
+        flash(_('Access denied. Admin privileges required.'), 'danger')
         return redirect(url_for('index'))
     
     products = Product.query.all()
@@ -128,7 +150,7 @@ def manage_products():
 @login_required
 def add_product():
     if current_user.role != 'admin':
-        flash('Access denied. Admin privileges required.', 'danger')
+        flash(_('Access denied. Admin privileges required.'), 'danger')
         return redirect(url_for('index'))
     
     if request.method == 'POST':
@@ -151,7 +173,7 @@ def add_product():
         db.session.add(product)
         db.session.commit()
         
-        flash('Product added successfully!', 'success')
+        flash(_('Product added successfully!'), 'success')
         return redirect(url_for('manage_products'))
     
     return render_template('add_product.html')
@@ -160,7 +182,7 @@ def add_product():
 @login_required
 def edit_product(product_id):
     if current_user.role != 'admin':
-        flash('Access denied. Admin privileges required.', 'danger')
+        flash(_('Access denied. Admin privileges required.'), 'danger')
         return redirect(url_for('index'))
     
     product = Product.query.get_or_404(product_id)
@@ -175,7 +197,7 @@ def edit_product(product_id):
         
         db.session.commit()
         
-        flash('Product updated successfully!', 'success')
+        flash(_('Product updated successfully!'), 'success')
         return redirect(url_for('manage_products'))
     
     return render_template('edit_product.html', product=product)
@@ -184,28 +206,28 @@ def edit_product(product_id):
 @login_required
 def delete_product(product_id):
     if current_user.role != 'admin':
-        flash('Access denied. Admin privileges required.', 'danger')
+        flash(_('Access denied. Admin privileges required.'), 'danger')
         return redirect(url_for('index'))
     
     product = Product.query.get_or_404(product_id)
     
     # Check if the product has associated sales
     if product.sales and len(product.sales) > 0:
-        flash(f'Cannot delete product "{product.name}" because it has associated sales records. Consider updating the product instead.', 'danger')
+        flash(_('Cannot delete product "{}" because it has associated sales records. Consider updating the product instead.').format(product.name), 'danger')
         return redirect(url_for('manage_products'))
     
     # If no sales are associated, proceed with deletion
     db.session.delete(product)
     db.session.commit()
     
-    flash('Product deleted successfully!', 'success')
+    flash(_('Product deleted successfully!'), 'success')
     return redirect(url_for('manage_products'))
 
 @app.route('/admin/sales')
 @login_required
 def view_sales():
     if current_user.role != 'admin':
-        flash('Access denied. Admin privileges required.', 'danger')
+        flash(_('Access denied. Admin privileges required.'), 'danger')
         return redirect(url_for('index'))
     
     # Get filter parameters
@@ -268,7 +290,7 @@ def view_sales():
 @login_required
 def cashier_dashboard():
     if current_user.role != 'cashier':
-        flash('Access denied. Cashier privileges required.', 'danger')
+        flash(_('Access denied. Cashier privileges required.'), 'danger')
         return redirect(url_for('index'))
     
     products = Product.query.filter(Product.stock > 0).all()
@@ -290,7 +312,7 @@ def cashier_dashboard():
 @login_required
 def sell_product():
     if current_user.role != 'cashier':
-        flash('Access denied. Cashier privileges required.', 'danger')
+        flash(_('Access denied. Cashier privileges required.'), 'danger')
         return redirect(url_for('index'))
     
     product_id = int(request.form.get('product_id'))
@@ -299,7 +321,7 @@ def sell_product():
     product = Product.query.get_or_404(product_id)
     
     if product.stock < quantity:
-        flash(f'Not enough stock available. Only {product.stock} units left.', 'danger')
+        flash(_('Not enough stock available. Only {} units left.').format(product.stock), 'danger')
         return redirect(url_for('cashier_dashboard'))
     
     # Calculate total price
@@ -319,14 +341,14 @@ def sell_product():
     db.session.add(sale)
     db.session.commit()
     
-    flash('Sale recorded successfully!', 'success')
+    flash(_('Sale recorded successfully!'), 'success')
     return redirect(url_for('cashier_dashboard'))
 
 @app.route('/cashier/sales')
 @login_required
 def view_cashier_sales():
     if current_user.role != 'cashier':
-        flash('Access denied. Cashier privileges required.', 'danger')
+        flash(_('Access denied. Cashier privileges required.'), 'danger')
         return redirect(url_for('index'))
     
     # Get filter parameters
@@ -397,7 +419,7 @@ def init_db_command():
         db.session.add(cashier)
     
     db.session.commit()
-    print('Database initialized with admin and cashier users.')
+    print(_('Database initialized with admin and cashier users.'))
 
 if __name__ == '__main__':
     with app.app_context():
