@@ -43,7 +43,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                    <a href="{{ url_for('view_sales') }}" class="nav-link {% if request.endpoint == 'view_sales' %}active{% endif %}">
                         <i class="fas fa-chart-line"></i> {{ _('Sales') }}
                     </a>
                 </li>
@@ -61,16 +61,7 @@
                 {% endif %}
             </ul>
         </div>
-    
-                        <div class="language-selector">
-                            <form action="{{ url_for('set_language', language='en') }}" method="GET" style="display: inline;">
-                                <button type="submit" class="btn btn-sm btn-outline-secondary">English</button>
-                            </form>
-                            <form action="{{ url_for('set_language', language='rw') }}" method="GET" style="display: inline;">
-                                <button type="submit" class="btn btn-sm btn-outline-secondary">Kinyarwanda</button>
-                            </form>
-                        </div>
-                        </nav>
+    </nav>
     {% endif %}
     
     <main class="main-content">
