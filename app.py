@@ -264,7 +264,7 @@ def edit_product(product_id):
     
     return render_template('edit_product.html', product=product)
 
-@app.route('/admin/products/delete/<int:product_id>', methods=['POST'])
+@app.route('/admin/products/delete/<int:product_id>', methods=['GET', 'POST'])
 @login_required
 def delete_product(product_id):
     if current_user.role != 'admin':

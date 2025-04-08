@@ -469,3 +469,8 @@
 2025-04-08 12:25:00,338 - __main__ - INFO - Flask-Babel initialized successfully
 2025-04-08 12:25:00,350 - werkzeug - WARNING -  * Debugger is active!
 2025-04-08 12:25:00,359 - werkzeug - INFO -  * Debugger PIN: 139-586-798
+2025-04-08 12:32:45,642 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\CascadeProjects\\SmartInventory\\app.py', reloading
+2025-04-08 12:32:46,085 - werkzeug - INFO -  * Restarting with stat
+2025-04-08 12:32:46,780 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 12:32:46,796 - werkzeug - WARNING -  * Debugger is active!
+2025-04-08 12:32:46,809 - werkzeug - INFO -  * Debugger PIN: 139-586-798
