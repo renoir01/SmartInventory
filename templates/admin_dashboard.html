@@ -27,11 +27,11 @@
         <div class="widget widget-danger">
             <i class="fas fa-exclamation-triangle widget-icon"></i>
             <h3 class="widget-title">{{ _('Low Stock Items') }}</h3>
-            <div class="widget-value {% if low_stock_products|length > 0 %}text-danger{% endif %}">
-                {{ low_stock_products|length }}
+            <div class="widget-value {% if low_stock_products > 0 %}text-danger{% endif %}">
+                {{ low_stock_products }}
             </div>
             <p class="widget-description">{{ _('Products that need restocking') }}</p>
-            {% if low_stock_products|length > 0 %}
+            {% if low_stock_products > 0 %}
             <a href="#low-stock-section" class="widget-link">{{ _('View details') }} <i class="fas fa-arrow-right"></i></a>
             {% endif %}
         </div>
@@ -75,7 +75,7 @@
                 <h2><i class="fas fa-exclamation-circle"></i> {{ _('Low Stock Products') }}</h2>
             </div>
             <div class="card-body">
-                {% if low_stock_products|length > 0 %}
+                {% if low_stock_products > 0 %}
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -139,9 +139,9 @@
                         <div class="category-body">
                             <div class="category-count">{{ count }}</div>
                             <div class="category-bar">
-                                <div class="category-progress" style="width: {{ (count / products|length * 100)|round }}%;"></div>
+                                <div class="category-progress" data-width="{{ (count / total_products * 100)|round }}"></div>
                             </div>
-                            <div class="category-percent">{{ (count / products|length * 100)|round }}%</div>
+                            <div class="category-percent">{{ (count / total_products * 100)|round }}%</div>
                         </div>
                     </div>
                     {% endfor %}

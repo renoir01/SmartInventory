@@ -48,6 +48,17 @@ def reset_database():
             )
             print("Created default admin user 'renoir01' with password 'Renoir@654'")
         
+        # Check if purchase_price column exists in product table
+        cursor.execute("PRAGMA table_info(product)")
+        columns = cursor.fetchall()
+        column_names = [column[1] for column in columns]
+        
+        # Add purchase_price column if it doesn't exist
+        if 'purchase_price' not in column_names:
+            print("Adding 'purchase_price' column to the product table...")
+            cursor.execute("ALTER TABLE product ADD COLUMN purchase_price FLOAT DEFAULT 0")
+            print("Added purchase_price column to product table")
+        
         # Commit the transaction
         conn.commit()
         print("Database reset successful. All trial data has been removed.")

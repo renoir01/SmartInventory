@@ -357,6 +357,56 @@ body {
   font-weight: 600;
 }
 
+/* Category Stats */
+.category-stats {
+  margin-top: 20px;
+}
+
+.category-stat-item {
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--divider-color);
+  padding-bottom: 15px;
+}
+
+.category-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+.category-body {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.category-count {
+  width: 40px;
+  font-weight: bold;
+}
+
+.category-bar {
+  flex-grow: 1;
+  height: 12px;
+  background-color: #e0e0e0;
+  border-radius: 6px;
+  margin: 0 10px;
+  overflow: hidden;
+}
+
+.category-progress {
+  height: 100%;
+  background-color: var(--primary-color);
+  border-radius: 6px;
+}
+
+.category-percent {
+  width: 50px;
+  text-align: right;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .header-content {
