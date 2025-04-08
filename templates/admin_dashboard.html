@@ -17,7 +17,7 @@
         <div class="widget widget-primary">
             <i class="fas fa-box-open widget-icon"></i>
             <h3 class="widget-title">{{ _('Total Products') }}</h3>
-            <div class="widget-value">{{ products|length }}</div>
+            <div class="widget-value">{{ total_products }}</div>
             <p class="widget-description">{{ _('Total products in inventory') }}</p>
             <a href="{{ url_for('manage_products') }}" class="widget-link">{{ _('View all products') }} <i class="fas fa-arrow-right"></i></a>
         </div>
@@ -41,7 +41,7 @@
         <div class="widget widget-info">
             <i class="fas fa-shopping-cart widget-icon"></i>
             <h3 class="widget-title">{{ _('Today\'s Sales') }}</h3>
-            <div class="widget-value">{{ today_sales|length }}</div>
+            <div class="widget-value">{{ total_sales }}</div>
             <p class="widget-description">{{ _('Total sales made today') }}</p>
             <a href="{{ url_for('view_sales') }}" class="widget-link">{{ _('View all sales') }} <i class="fas fa-arrow-right"></i></a>
         </div>
@@ -59,7 +59,17 @@
 </div>
 
 <div class="row mt-4">
-    <div class="col col-md-6">
+    <div class="col col-md-3">
+        <div class="widget widget-warning">
+            <i class="fas fa-chart-line widget-icon"></i>
+            <h3 class="widget-title">{{ _('Today\'s Profit') }}</h3>
+            <div class="widget-value">RWF {{ "%.0f"|format(total_profit) }}</div>
+            <p class="widget-description">{{ _('Total profit generated today') }}</p>
+            <a href="{{ url_for('view_sales') }}" class="widget-link">{{ _('View profit report') }} <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+    
+    <div class="col col-md-9">
         <div class="card" id="low-stock-section">
             <div class="card-header">
                 <h2><i class="fas fa-exclamation-circle"></i> {{ _('Low Stock Products') }}</h2>
@@ -102,7 +112,9 @@
             </div>
         </div>
     </div>
-    
+</div>
+
+<div class="row mt-4">
     <div class="col col-md-6">
         <div class="card">
             <div class="card-header">
@@ -137,10 +149,8 @@
             </div>
         </div>
     </div>
-</div>
-
-<div class="row mt-4">
-    <div class="col col-md-12">
+    
+    <div class="col col-md-6">
         <div class="card">
             <div class="card-header">
                 <h2><i class="fas fa-tasks"></i> {{ _('Quick Actions') }}</h2>

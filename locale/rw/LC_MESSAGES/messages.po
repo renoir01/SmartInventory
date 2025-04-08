@@ -103,6 +103,15 @@ msgstr "Amafaranga yose yakusanyijwe uyu munsi"
 msgid "View sales report"
 msgstr "Reba raporo y'ubucuruzi"
 
+msgid "Today's Profit"
+msgstr "Inyungu y'Uyu Munsi"
+
+msgid "Total profit generated today"
+msgstr "Inyungu yose yakusanyijwe uyu munsi"
+
+msgid "View profit report"
+msgstr "Reba raporo y'inyungu"
+
 msgid "Low Stock Products"
 msgstr "Ibicuruzwa Bike"
 
@@ -196,6 +205,21 @@ msgstr "Igicuruzwa"
 msgid "Price"
 msgstr "Igiciro"
 
+msgid "Purchase Price"
+msgstr "Igiciro cyo Kugura"
+
+msgid "Selling Price"
+msgstr "Igiciro cyo Kugurisha"
+
+msgid "The price at which you purchased this product"
+msgstr "Igiciro waguriyeho iki gicuruzwa"
+
+msgid "The price at which you will sell this product"
+msgstr "Igiciro uzagurisha iki gicuruzwa"
+
+msgid "Profit Margin"
+msgstr "Inyungu ku Ijana"
+
 msgid "You haven't recorded any sales today."
 msgstr "Ntabwo wanditse ubucuruzi uyu munsi."
 
@@ -226,6 +250,12 @@ msgstr "Amafaranga Yose"
 msgid "Total revenue for selected period"
 msgstr "Amafaranga yose mu gihe cyahisemo"
 
+msgid "Total Profit"
+msgstr "Inyungu Yose"
+
+msgid "Total profit for selected period"
+msgstr "Inyungu yose mu gihe cyahisemo"
+
 msgid "Sales by Category"
 msgstr "Ubucuruzi Bwakurikije Icyiciro"
 
@@ -235,6 +265,9 @@ msgstr "Ibintu Byose"
 msgid "Revenue"
 msgstr "Amafaranga"
 
+msgid "Profit"
+msgstr "Inyungu"
+
 msgid "Detailed Sales"
 msgstr "Ubucuruzi Burambuye"
 
@@ -243,3 +276,6 @@ msgstr "Itariki & Igihe"
 
 msgid "No sales found for the selected criteria."
 msgstr "Nta bucuruzi bwabonetse ku byo wahisemo."
+
+msgid "Total"
+msgstr "Igiteranyo"

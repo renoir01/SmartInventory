@@ -89,13 +89,19 @@ class Product(db.Model):
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(200))
     category = db.Column(db.String(50), default='Uncategorized')
-    price = db.Column(db.Float, nullable=False)
+    purchase_price = db.Column(db.Float, default=0)  # Price at which product was purchased
+    price = db.Column(db.Float, nullable=False)      # Selling price
     stock = db.Column(db.Integer, default=0)
     low_stock_threshold = db.Column(db.Integer, default=10)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
     
     def is_low_stock(self):
         return self.stock <= self.low_stock_threshold
+    
+    def get_profit_margin(self):
+        if self.purchase_price > 0:
+            return ((self.price - self.purchase_price) / self.price) * 100
+        return 0
 
 class Sale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -157,21 +163,37 @@ def admin_dashboard():
         flash(_('Access denied. Admin privileges required.'), 'danger')
         return redirect(url_for('index'))
     
-    products = Product.query.all()
-    low_stock_products = [p for p in products if p.is_low_stock()]
+    # Get today's date
+    today = datetime.now().date()
     
-    today = datetime.utcnow().date()
+    # Count total products
+    total_products = Product.query.count()
+    
+    # Get low stock products
+    low_stock_products = Product.query.filter(Product.stock <= Product.low_stock_threshold).all()
+    
+    # Get today's sales
     today_sales = Sale.query.filter(
-        Sale.date_sold >= datetime(today.year, today.month, today.day)
+        db.func.date(Sale.date_sold) == today
     ).all()
     
+    # Calculate total sales and revenue for today
+    total_sales_count = len(today_sales)
     total_revenue = sum(sale.total_price for sale in today_sales)
     
+    # Calculate total profit for today
+    total_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in today_sales)
+    
+    # Get product categories for the chart
+    categories = db.session.query(Product.category, db.func.count(Product.id)).group_by(Product.category).all()
+    
     return render_template('admin_dashboard.html', 
-                           products=products, 
-                           low_stock_products=low_stock_products,
-                           today_sales=today_sales,
-                           total_revenue=total_revenue)
+                          total_products=total_products,
+                          low_stock_products=low_stock_products,
+                          total_sales=total_sales_count,
+                          total_revenue=total_revenue,
+                          total_profit=total_profit,
+                          categories=categories)
 
 @app.route('/admin/products')
 @login_required
@@ -195,6 +217,7 @@ def add_product():
         description = request.form.get('description')
         category = request.form.get('category')
         price = float(request.form.get('price'))
+        purchase_price = float(request.form.get('purchase_price'))
         stock = int(request.form.get('stock'))
         low_stock_threshold = int(request.form.get('low_stock_threshold'))
         
@@ -203,6 +226,7 @@ def add_product():
             description=description,
             category=category,
             price=price,
+            purchase_price=purchase_price,
             stock=stock,
             low_stock_threshold=low_stock_threshold
         )
@@ -229,6 +253,7 @@ def edit_product(product_id):
         product.description = request.form.get('description')
         product.category = request.form.get('category')
         product.price = float(request.form.get('price'))
+        product.purchase_price = float(request.form.get('purchase_price'))
         product.stock = int(request.form.get('stock'))
         product.low_stock_threshold = int(request.form.get('low_stock_threshold'))
         
@@ -267,63 +292,84 @@ def view_sales():
         flash(_('Access denied. Admin privileges required.'), 'danger')
         return redirect(url_for('index'))
     
-    # Get filter parameters
-    start_date_str = request.args.get('start_date')
-    end_date_str = request.args.get('end_date')
-    category = request.args.get('category')
+    # Get query parameters
+    start_date_str = request.args.get('start_date', '')
+    end_date_str = request.args.get('end_date', '')
+    category = request.args.get('category', '')
+    cashier_id = request.args.get('cashier_id', '')
     
-    # Base query
-    query = Sale.query
+    # Parse dates
+    try:
+        if start_date_str:
+            start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+            start_datetime = datetime.combine(start_date, datetime.min.time())
+        else:
+            # Default to beginning of current month
+            today = datetime.now().date()
+            start_date = datetime(today.year, today.month, 1).date()
+            start_datetime = datetime.combine(start_date, datetime.min.time())
+            start_date_str = start_date.strftime('%Y-%m-%d')
+            
+        if end_date_str:
+            end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+            end_datetime = datetime.combine(end_date, datetime.max.time())
+        else:
+            # Default to today
+            end_date = datetime.now().date()
+            end_datetime = datetime.combine(end_date, datetime.max.time())
+            end_date_str = end_date.strftime('%Y-%m-%d')
+    except ValueError:
+        flash(_('Invalid date format. Please use YYYY-MM-DD.'), 'danger')
+        return redirect(url_for('view_sales'))
     
-    # Apply date filters if provided
-    if start_date_str:
-        try:
-            start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
-            query = query.filter(Sale.date_sold >= start_date)
-        except ValueError:
-            flash('Invalid start date format. Please use YYYY-MM-DD.', 'warning')
+    # Build query
+    query = Sale.query.filter(Sale.date_sold.between(start_datetime, end_datetime))
     
-    if end_date_str:
-        try:
-            end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
-            # Add one day to include the end date
-            end_date = datetime(end_date.year, end_date.month, end_date.day, 23, 59, 59)
-            query = query.filter(Sale.date_sold <= end_date)
-        except ValueError:
-            flash('Invalid end date format. Please use YYYY-MM-DD.', 'warning')
-    
-    # Apply category filter if provided
     if category and category != 'all':
         query = query.join(Product).filter(Product.category == category)
+        
+    if cashier_id and cashier_id.isdigit():
+        query = query.filter(Sale.cashier_id == int(cashier_id))
     
-    # Get all sales based on the filters
+    # Execute query
     sales = query.order_by(Sale.date_sold.desc()).all()
     
     # Calculate total revenue
     total_revenue = sum(sale.total_price for sale in sales)
     
-    # Get unique categories for the filter dropdown
-    categories = db.session.query(Product.category).distinct().all()
-    categories = [cat[0] for cat in categories]
+    # Calculate total profit
+    total_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in sales)
     
-    # Group sales by category for the summary
+    # Get all cashiers for the filter dropdown
+    cashiers = User.query.filter_by(role='cashier').all()
+    
+    # Get all product categories for the filter dropdown
+    categories = db.session.query(Product.category).distinct().order_by(Product.category).all()
+    categories = [c[0] for c in categories]
+    
+    # Calculate sales by category
     category_summary = {}
     for sale in sales:
         category = sale.product.category
         if category not in category_summary:
             category_summary[category] = {
                 'count': 0,
-                'revenue': 0
+                'revenue': 0,
+                'profit': 0
             }
         category_summary[category]['count'] += sale.quantity
         category_summary[category]['revenue'] += sale.total_price
+        category_summary[category]['profit'] += (sale.total_price - (sale.product.purchase_price * sale.quantity))
     
     return render_template('view_sales.html', 
                            sales=sales, 
                            total_revenue=total_revenue,
+                           total_profit=total_profit,
                            categories=categories,
                            category_summary=category_summary,
                            selected_category=category,
+                           cashiers=cashiers,
+                           selected_cashier_id=cashier_id,
                            start_date=start_date_str,
                            end_date=end_date_str)
 

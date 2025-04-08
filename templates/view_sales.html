@@ -55,10 +55,21 @@
             </div>
         </form>
         
-        <div class="widget widget-success mb-3">
-            <h3 class="widget-title">{{ _('Total Revenue') }}</h3>
-            <div class="widget-value">RWF {{ "%.0f"|format(total_revenue) }}</div>
-            <p class="widget-description">{{ _('Total revenue for selected period') }}</p>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="widget widget-success mb-3">
+                    <h3 class="widget-title">{{ _('Total Revenue') }}</h3>
+                    <div class="widget-value">RWF {{ "%.0f"|format(total_revenue) }}</div>
+                    <p class="widget-description">{{ _('Total revenue for selected period') }}</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="widget widget-warning mb-3">
+                    <h3 class="widget-title">{{ _('Total Profit') }}</h3>
+                    <div class="widget-value">RWF {{ "%.0f"|format(total_profit) }}</div>
+                    <p class="widget-description">{{ _('Total profit for selected period') }}</p>
+                </div>
+            </div>
         </div>
         
         <!-- Category Summary -->
@@ -77,6 +88,14 @@
                             <div class="card-body">
                                 <p><strong>{{ _('Total Items') }}:</strong> {{ data.count }}</p>
                                 <p><strong>{{ _('Revenue') }}:</strong> RWF {{ "%.0f"|format(data.revenue) }}</p>
+                                <p><strong>{{ _('Profit') }}:</strong> RWF {{ "%.0f"|format(data.profit) }}</p>
+                                <p><strong>{{ _('Profit Margin') }}:</strong> 
+                                    {% if data.revenue > 0 %}
+                                        {{ "%.1f"|format((data.profit / data.revenue) * 100) }}%
+                                    {% else %}
+                                        0%
+                                    {% endif %}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -94,18 +113,26 @@
                     <th>{{ _('Product') }}</th>
                     <th>{{ _('Category') }}</th>
                     <th>{{ _('Quantity') }}</th>
-                    <th>{{ _('Price') }}</th>
+                    <th>{{ _('Purchase Price') }}</th>
+                    <th>{{ _('Selling Price') }}</th>
+                    <th>{{ _('Total') }}</th>
+                    <th>{{ _('Profit') }}</th>
                     <th>{{ _('Cashier') }}</th>
                 </tr>
             </thead>
             <tbody>
                 {% for sale in sales %}
+                {% set purchase_total = sale.product.purchase_price * sale.quantity %}
+                {% set profit = sale.total_price - purchase_total %}
                 <tr>
                     <td>{{ sale.date_sold.strftime('%Y-%m-%d %H:%M:%S') }}</td>
                     <td>{{ sale.product.name }}</td>
                     <td>{{ sale.product.category }}</td>
                     <td>{{ sale.quantity }}</td>
+                    <td>RWF {{ "%.0f"|format(sale.product.purchase_price) }}</td>
+                    <td>RWF {{ "%.0f"|format(sale.product.price) }}</td>
                     <td>RWF {{ "%.0f"|format(sale.total_price) }}</td>
+                    <td>RWF {{ "%.0f"|format(profit) }}</td>
                     <td>{{ sale.cashier.username }}</td>
                 </tr>
                 {% endfor %}

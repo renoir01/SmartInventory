@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %}Manage Products - Smart Inventory{% endblock %}
+{% block title %}{{ _('Manage Products') }} - {{ _('Smart Inventory') }}{% endblock %}
 
 {% block content %}
 <div class="card">
     <div class="card-header">
         <div class="header-flex">
-            <h2>Product Inventory</h2>
+            <h2>{{ _('Product Inventory') }}</h2>
             <a href="{{ url_for('add_product') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add New Product
+                <i class="fas fa-plus"></i> {{ _('Add New Product') }}
             </a>
         </div>
     </div>
@@ -17,13 +17,15 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>{{ _('Name') }}</th>
+                    <th>{{ _('Description') }}</th>
+                    <th>{{ _('Category') }}</th>
+                    <th>{{ _('Purchase Price') }}</th>
+                    <th>{{ _('Selling Price') }}</th>
+                    <th>{{ _('Profit Margin') }}</th>
+                    <th>{{ _('Stock') }}</th>
+                    <th>{{ _('Status') }}</th>
+                    <th>{{ _('Actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,29 +34,31 @@
                     <td>{{ product.name }}</td>
                     <td>{{ product.description }}</td>
                     <td>{{ product.category }}</td>
+                    <td>RWF {{ "%.0f"|format(product.purchase_price) }}</td>
                     <td>RWF {{ "%.0f"|format(product.price) }}</td>
+                    <td>{{ "%.1f"|format(product.get_profit_margin()) }}%</td>
                     <td {% if product.is_low_stock() %}class="low-stock"{% endif %}>
                         {{ product.stock }}
                     </td>
                     <td>
                         {% if product.is_low_stock() %}
                         <span class="text-danger">
-                            <i class="fas fa-exclamation-triangle"></i> Low Stock
+                            <i class="fas fa-exclamation-triangle"></i> {{ _('Low Stock') }}
                         </span>
                         {% else %}
                         <span class="text-success">
-                            <i class="fas fa-check"></i> In Stock
+                            <i class="fas fa-check"></i> {{ _('In Stock') }}
                         </span>
                         {% endif %}
                     </td>
                     <td>
                         <a href="{{ url_for('edit_product', product_id=product.id) }}" class="btn btn-primary">
-                            <i class="fas fa-edit"></i> Edit
+                            <i class="fas fa-edit"></i> {{ _('Edit') }}
                         </a>
                         <a href="{{ url_for('delete_product', product_id=product.id) }}" 
                            class="btn btn-danger"
-                           onclick="return confirm('Are you sure you want to delete this product?');">
-                            <i class="fas fa-trash"></i> Delete
+                           onclick="return confirm('{{ _('Are you sure you want to delete this product?') }}');">
+                            <i class="fas fa-trash"></i> {{ _('Delete') }}
                         </a>
                     </td>
                 </tr>
@@ -62,7 +66,7 @@
             </tbody>
         </table>
         {% else %}
-        <p>No products have been added yet.</p>
+        <p>{{ _('No products have been added yet.') }}</p>
         {% endif %}
     </div>
 </div>
