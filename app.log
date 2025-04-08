@@ -2886,3 +2886,51 @@ WHERE product.stock <= product.low_stock_threshold AND product.stock > ?]
 2025-04-08 19:13:12,708 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:13:12] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
 2025-04-08 19:13:12,714 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:13:12] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
 2025-04-08 19:13:12,722 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:13:12] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-04-08 19:19:15,748 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-08 19:19:15,749 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-08 19:19:15,752 - werkzeug - INFO -  * Restarting with stat
+2025-04-08 19:19:16,914 - werkzeug - WARNING -  * Debugger is active!
+2025-04-08 19:19:16,921 - werkzeug - INFO -  * Debugger PIN: 139-586-798
+2025-04-08 19:19:18,162 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:19:18] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-04-08 19:19:18,344 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:19:18] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 19:19:18,350 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:19:18] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-04-08 19:19:18,351 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:19:18] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-04-08 19:19:18,356 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:19:18] "GET /static/css/dashboard.css HTTP/1.1" 200 -
+2025-04-08 19:19:29,028 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:19:29] "GET / HTTP/1.1" 200 -
+2025-04-08 19:19:29,128 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:19:29] "GET /static/css/responsive-fixes.css HTTP/1.1" 200 -
+2025-04-08 19:19:29,128 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:19:29] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-08 19:19:29,130 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:19:29] "GET /static/js/category-progress.js HTTP/1.1" 200 -
+2025-04-08 19:20:04,802 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:04] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-04-08 19:20:04,834 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:04] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-04-08 19:20:04,911 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:04] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 19:20:04,931 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:04] "GET /static/css/dashboard.css HTTP/1.1" 200 -
+2025-04-08 19:20:04,932 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:04] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-04-08 19:20:04,935 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:04] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-04-08 19:20:05,147 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:05] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-08 19:20:10,191 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:10] "GET /admin/sales HTTP/1.1" 200 -
+2025-04-08 19:20:10,240 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:10] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 19:20:10,246 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:10] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-04-08 19:20:10,258 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:10] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-04-08 19:20:18,018 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:18] "GET /admin/products HTTP/1.1" 200 -
+2025-04-08 19:20:18,074 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:18] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 19:20:18,078 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:18] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-04-08 19:20:18,081 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:18] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-04-08 19:20:19,152 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:19] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-04-08 19:20:19,207 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:19] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 19:20:19,211 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:19] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-04-08 19:20:19,217 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:19] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-04-08 19:20:19,222 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:19] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-04-08 19:20:22,190 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:22] "GET /admin/sales HTTP/1.1" 200 -
+2025-04-08 19:20:22,233 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:22] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 19:20:22,240 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:22] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-04-08 19:20:22,242 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:22] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-04-08 19:20:30,576 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:30] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-04-08 19:20:30,621 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:30] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 19:20:30,628 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:30] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-04-08 19:20:30,629 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:30] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-04-08 19:20:30,633 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:30] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-04-08 19:20:33,568 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:33] "GET /admin/sales HTTP/1.1" 200 -
+2025-04-08 19:20:33,607 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:33] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 19:20:33,617 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:33] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-04-08 19:20:33,619 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 19:20:33] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
