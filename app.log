@@ -439,3 +439,23 @@
 2025-04-08 11:51:45,092 - __main__ - INFO - Flask-Babel initialized successfully
 2025-04-08 11:51:45,107 - werkzeug - WARNING -  * Debugger is active!
 2025-04-08 11:51:45,113 - werkzeug - INFO -  * Debugger PIN: 139-586-798
+2025-04-08 12:05:06,323 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 12:05:06] "[32mGET / HTTP/1.1[0m" 302 -
+2025-04-08 12:05:06,385 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 12:05:06] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-04-08 12:05:06,509 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 12:05:06] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 12:05:06,509 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 12:05:06] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-04-08 12:05:06,511 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 12:05:06] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-04-08 12:05:09,521 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 12:05:09] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-04-08 12:05:09,534 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 12:05:09] "GET /login HTTP/1.1" 200 -
+2025-04-08 12:05:09,554 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 12:05:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 12:05:09,555 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 12:05:09] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-04-08 12:05:17,509 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 12:05:17] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-04-08 12:05:17,521 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 12:05:17] "[32mGET / HTTP/1.1[0m" 302 -
+2025-04-08 12:05:17,542 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 12:05:17] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-04-08 12:05:17,561 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 12:05:17] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 12:05:17,562 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 12:05:17] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-04-08 12:05:17,563 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 12:05:17] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-04-08 12:08:44,615 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\CascadeProjects\\SmartInventory\\initialize_db.py', reloading
+2025-04-08 12:08:45,160 - werkzeug - INFO -  * Restarting with stat
+2025-04-08 12:08:45,809 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 12:08:45,822 - werkzeug - WARNING -  * Debugger is active!
+2025-04-08 12:08:45,828 - werkzeug - INFO -  * Debugger PIN: 139-586-798
