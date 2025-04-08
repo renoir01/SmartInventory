@@ -429,3 +429,8 @@
 2025-04-08 11:41:57,885 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 11:41:57] "GET /admin/products HTTP/1.1" 200 -
 2025-04-08 11:41:57,909 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 11:41:57] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
 2025-04-08 11:41:57,910 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 11:41:57] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-04-08 11:49:58,204 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\CascadeProjects\\SmartInventory\\pythonanywhere_fix.py', reloading
+2025-04-08 11:49:58,423 - werkzeug - INFO -  * Restarting with stat
+2025-04-08 11:49:59,220 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 11:49:59,239 - werkzeug - WARNING -  * Debugger is active!
+2025-04-08 11:49:59,249 - werkzeug - INFO -  * Debugger PIN: 139-586-798

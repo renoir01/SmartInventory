@@ -8,8 +8,8 @@ from werkzeug.security import generate_password_hash
 import sqlite3
 
 # Get the path to the database file on PythonAnywhere
-# This is typically in the same directory as your Flask app
-DB_PATH = 'inventory.db'  # Adjust this path if needed
+# This is typically in the instance directory
+DB_PATH = 'instance/inventory.db'  # Adjust this path if needed
 
 def fix_users():
     """Create or update admin and cashier users in the database."""
@@ -18,7 +18,27 @@ def fix_users():
     # Check if database file exists
     if not os.path.exists(DB_PATH):
         print(f"Database file not found at {DB_PATH}")
-        return False
+        # Try to find the database file
+        possible_paths = [
+            'inventory.db',
+            'instance/inventory.db',
+            '../inventory.db',
+            '../instance/inventory.db',
+            '/home/renoir01/SmartInventory/instance/inventory.db',
+            '/home/renoir01/inventory.db'
+        ]
+        
+        for path in possible_paths:
+            if os.path.exists(path):
+                print(f"Found database at {path}")
+                global DB_PATH
+                DB_PATH = path
+                break
+        else:
+            print("Could not find the database file. Please specify the correct path.")
+            return False
+    
+    print(f"Using database at: {DB_PATH}")
     
     # Connect to the database
     conn = sqlite3.connect(DB_PATH)
@@ -92,6 +112,8 @@ def fix_users():
             print("Adding 'purchase_price' column to the product table...")
             cursor.execute("ALTER TABLE product ADD COLUMN purchase_price FLOAT DEFAULT 0")
             print("Added purchase_price column to product table")
+        else:
+            print("purchase_price column already exists in the product table.")
         
         # Commit the transaction
         conn.commit()
