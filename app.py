@@ -95,13 +95,29 @@ class Product(db.Model):
     low_stock_threshold = db.Column(db.Integer, default=10)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
     
+    # New fields for package handling
+    is_packaged = db.Column(db.Boolean, default=False)
+    units_per_package = db.Column(db.Integer, default=1)
+    individual_price = db.Column(db.Float, default=0)
+    individual_stock = db.Column(db.Integer, default=0)
+    
     def is_low_stock(self):
+        if self.is_packaged:
+            # Consider both package stock and individual units
+            total_units = (self.stock * self.units_per_package) + self.individual_stock
+            return total_units <= self.low_stock_threshold
         return self.stock <= self.low_stock_threshold
     
     def get_profit_margin(self):
         if self.purchase_price > 0:
             return ((self.price - self.purchase_price) / self.price) * 100
         return 100  # If purchase price is 0, profit margin is 100%
+    
+    def get_total_units(self):
+        """Get the total number of units (both packaged and individual)"""
+        if self.is_packaged:
+            return (self.stock * self.units_per_package) + self.individual_stock
+        return self.stock
 
 class Sale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -274,6 +290,10 @@ def add_product():
         price = float(request.form.get('price'))
         stock = int(request.form.get('stock'))
         low_stock_threshold = int(request.form.get('low_stock_threshold'))
+        is_packaged = request.form.get('is_packaged') == 'on'
+        units_per_package = int(request.form.get('units_per_package', 1))
+        individual_price = float(request.form.get('individual_price', 0))
+        individual_stock = int(request.form.get('individual_stock', 0))
         
         product = Product(
             name=name,
@@ -282,7 +302,11 @@ def add_product():
             purchase_price=purchase_price,
             price=price,
             stock=stock,
-            low_stock_threshold=low_stock_threshold
+            low_stock_threshold=low_stock_threshold,
+            is_packaged=is_packaged,
+            units_per_package=units_per_package,
+            individual_price=individual_price,
+            individual_stock=individual_stock
         )
         
         db.session.add(product)
@@ -310,6 +334,10 @@ def edit_product(product_id):
         product.price = float(request.form.get('price'))
         product.stock = int(request.form.get('stock'))
         product.low_stock_threshold = int(request.form.get('low_stock_threshold'))
+        product.is_packaged = request.form.get('is_packaged') == 'on'
+        product.units_per_package = int(request.form.get('units_per_package', 1))
+        product.individual_price = float(request.form.get('individual_price', 0))
+        product.individual_stock = int(request.form.get('individual_stock', 0))
         
         db.session.commit()
         
@@ -523,16 +551,45 @@ def sell_product():
     if request.method == 'POST':
         product_id = request.form.get('product_id')
         quantity = int(request.form.get('quantity'))
+        sale_type = request.form.get('sale_type', 'package')  # Default to package if not specified
         
         product = Product.query.get_or_404(product_id)
         
-        # Check if enough stock is available
-        if product.stock < quantity:
-            flash(_('Not enough stock available. Only {0} units left.', product.stock), 'danger')
-            return redirect(url_for('sell_product'))
-        
-        # Calculate total price
-        total_price = product.price * quantity
+        # Handle packaged products differently based on sale type
+        if product.is_packaged:
+            if sale_type == 'package':
+                # Selling complete packages
+                if product.stock < quantity:
+                    flash(_('Not enough packages available. Only {0} packages left.', product.stock), 'danger')
+                    return redirect(url_for('cashier_dashboard'))
+                
+                # Calculate total price for packages
+                total_price = product.price * quantity
+                
+                # Update package stock
+                product.stock -= quantity
+            else:
+                # Selling individual units
+                if product.individual_stock < quantity:
+                    flash(_('Not enough individual units available. Only {0} units left.', product.individual_stock), 'danger')
+                    return redirect(url_for('cashier_dashboard'))
+                
+                # Calculate total price for individual units
+                total_price = product.individual_price * quantity
+                
+                # Update individual stock
+                product.individual_stock -= quantity
+        else:
+            # Regular non-packaged product
+            if product.stock < quantity:
+                flash(_('Not enough stock available. Only {0} units left.', product.stock), 'danger')
+                return redirect(url_for('cashier_dashboard'))
+            
+            # Calculate total price
+            total_price = product.price * quantity
+            
+            # Update product stock
+            product.stock -= quantity
         
         # Create sale record
         sale = Sale(
@@ -542,18 +599,14 @@ def sell_product():
             cashier_id=current_user.id
         )
         
-        # Update product stock
-        product.stock -= quantity
-        
         db.session.add(sale)
         db.session.commit()
         
         flash(_('Sale recorded successfully!'), 'success')
         return redirect(url_for('cashier_dashboard'))
     
-    # Get products with stock > 0
-    products = Product.query.filter(Product.stock > 0).all()
-    return render_template('sell_product.html', products=products)
+    # If GET request, redirect to cashier dashboard
+    return redirect(url_for('cashier_dashboard'))
 
 @app.route('/cashier/sales')
 @login_required

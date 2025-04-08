@@ -407,6 +407,20 @@ body {
   color: var(--text-secondary);
 }
 
+/* Package Options */
+.package-options {
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--divider-color);
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.package-options.hidden {
+  display: none;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .header-content {
