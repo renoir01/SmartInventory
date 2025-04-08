@@ -16,6 +16,8 @@ def fix_users():
     print("Starting user fix for PythonAnywhere...")
     
     # Check if database file exists
+    global DB_PATH  # Declare global at the beginning of the function
+    
     if not os.path.exists(DB_PATH):
         print(f"Database file not found at {DB_PATH}")
         # Try to find the database file
@@ -31,7 +33,6 @@ def fix_users():
         for path in possible_paths:
             if os.path.exists(path):
                 print(f"Found database at {path}")
-                global DB_PATH
                 DB_PATH = path
                 break
         else:
