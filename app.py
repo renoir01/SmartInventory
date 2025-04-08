@@ -416,13 +416,15 @@ def cashier_dashboard():
     search_query = request.args.get('search', '')
     
     # Get products in stock with optional search filter
+    products_query = Product.query.filter(Product.stock > 0)
+    
+    # Apply search filter if provided
     if search_query:
-        products = Product.query.filter(
-            Product.stock > 0,
-            Product.name.like(f'%{search_query}%')
-        ).all()
-    else:
-        products = Product.query.filter(Product.stock > 0).all()
+        search_term = f"%{search_query}%"
+        products_query = products_query.filter(Product.name.like(search_term))
+    
+    # Execute query
+    products = products_query.all()
     
     # Get today's sales for this cashier
     today_sales = Sale.query.filter(
