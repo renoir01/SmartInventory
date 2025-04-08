@@ -149,3 +149,50 @@
 2025-04-08 01:41:36,819 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:36] "GET /admin/dashboard HTTP/1.1" 200 -
 2025-04-08 01:41:36,872 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:36] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
 2025-04-08 01:41:36,875 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 01:41:36] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-04-08 09:43:49,777 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 09:43:49,803 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-08 09:43:49,803 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-08 09:43:49,804 - werkzeug - INFO -  * Restarting with stat
+2025-04-08 09:43:50,251 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 09:43:50,266 - werkzeug - WARNING -  * Debugger is active!
+2025-04-08 09:43:50,272 - werkzeug - INFO -  * Debugger PIN: 139-586-798
+2025-04-08 09:44:00,154 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 09:44:00] "[32mGET / HTTP/1.1[0m" 302 -
+2025-04-08 09:44:00,179 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 09:44:00] "[35m[1mGET /cashier/dashboard HTTP/1.1[0m" 500 -
+2025-04-08 09:44:00,266 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 09:44:00] "[36mGET /cashier/dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-04-08 09:44:00,267 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 09:44:00] "[36mGET /cashier/dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-04-08 09:44:00,310 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 09:44:00] "[36mGET /cashier/dashboard?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-04-08 09:44:21,670 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\CascadeProjects\\SmartInventory\\app.py', reloading
+2025-04-08 09:44:21,746 - werkzeug - INFO -  * Restarting with stat
+2025-04-08 09:44:22,234 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 09:44:22,247 - werkzeug - WARNING -  * Debugger is active!
+2025-04-08 09:44:22,251 - werkzeug - INFO -  * Debugger PIN: 139-586-798
+2025-04-08 09:44:37,206 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 09:44:37,227 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-08 09:44:37,228 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-08 09:44:37,228 - werkzeug - INFO -  * Restarting with stat
+2025-04-08 09:44:37,673 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 09:44:37,686 - werkzeug - WARNING -  * Debugger is active!
+2025-04-08 09:44:37,688 - werkzeug - INFO -  * Debugger PIN: 139-586-798
+2025-04-08 09:44:40,310 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 09:44:40] "[35m[1mGET /cashier/dashboard HTTP/1.1[0m" 500 -
+2025-04-08 09:44:40,371 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 09:44:40] "[36mGET /cashier/dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-04-08 09:44:40,371 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 09:44:40] "[36mGET /cashier/dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-04-08 09:44:40,378 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 09:44:40] "[36mGET /cashier/dashboard?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-04-08 09:45:09,531 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\CascadeProjects\\SmartInventory\\migrate_db.py', reloading
+2025-04-08 09:45:09,601 - werkzeug - INFO -  * Restarting with stat
+2025-04-08 09:45:10,083 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 09:45:10,096 - werkzeug - WARNING -  * Debugger is active!
+2025-04-08 09:45:10,099 - werkzeug - INFO -  * Debugger PIN: 139-586-798
+2025-04-08 09:45:30,715 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 09:45:30,736 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-08 09:45:30,736 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-08 09:45:30,737 - werkzeug - INFO -  * Restarting with stat
+2025-04-08 09:45:31,186 - __main__ - INFO - Flask-Babel initialized successfully
+2025-04-08 09:45:31,199 - werkzeug - WARNING -  * Debugger is active!
+2025-04-08 09:45:31,201 - werkzeug - INFO -  * Debugger PIN: 139-586-798
+2025-04-08 09:45:34,344 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 09:45:34] "GET /cashier/dashboard HTTP/1.1" 200 -
+2025-04-08 09:45:34,399 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 09:45:34] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-08 09:45:39,141 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 09:45:39] "GET /cashier/sales HTTP/1.1" 200 -
+2025-04-08 09:45:39,167 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 09:45:39] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -

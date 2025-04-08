@@ -451,7 +451,7 @@ def view_cashier_sales():
             start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
             query = query.filter(Sale.date_sold >= start_date)
         except ValueError:
-            flash('Invalid start date format. Please use YYYY-MM-DD.', 'warning')
+            flash(_('Invalid start date format. Please use YYYY-MM-DD.'), 'warning')
     
     if end_date_str:
         try:
@@ -460,7 +460,7 @@ def view_cashier_sales():
             end_date = datetime(end_date.year, end_date.month, end_date.day, 23, 59, 59)
             query = query.filter(Sale.date_sold <= end_date)
         except ValueError:
-            flash('Invalid end date format. Please use YYYY-MM-DD.', 'warning')
+            flash(_('Invalid end date format. Please use YYYY-MM-DD.'), 'warning')
     
     # Apply category filter if provided
     if category and category != 'all':
@@ -488,7 +488,7 @@ def view_cashier_sales():
         category_summary[category]['count'] += sale.quantity
         category_summary[category]['revenue'] += sale.total_price
     
-    return render_template('view_cashier_sales.html', 
+    return render_template('cashier_sales.html', 
                            sales=sales, 
                            total_revenue=total_revenue,
                            categories=categories,

@@ -5,7 +5,7 @@ import os
 DB_PATH = 'instance/inventory.db'
 
 def migrate_database():
-    """Add the category column to the product table if it doesn't exist."""
+    """Add the category and purchase_price columns to the product table if they don't exist."""
     print("Starting database migration...")
     
     # Check if database file exists
@@ -18,11 +18,12 @@ def migrate_database():
     cursor = conn.cursor()
     
     try:
-        # Check if the category column already exists
+        # Check if columns already exist
         cursor.execute("PRAGMA table_info(product)")
         columns = cursor.fetchall()
         column_names = [column[1] for column in columns]
         
+        # Add category column if it doesn't exist
         if 'category' not in column_names:
             print("Adding 'category' column to the product table...")
             cursor.execute("ALTER TABLE product ADD COLUMN category TEXT DEFAULT 'Uncategorized'")
@@ -30,6 +31,15 @@ def migrate_database():
             print("Migration successful: 'category' column added to the product table.")
         else:
             print("'category' column already exists in the product table.")
+        
+        # Add purchase_price column if it doesn't exist
+        if 'purchase_price' not in column_names:
+            print("Adding 'purchase_price' column to the product table...")
+            cursor.execute("ALTER TABLE product ADD COLUMN purchase_price FLOAT DEFAULT 0")
+            conn.commit()
+            print("Migration successful: 'purchase_price' column added to the product table.")
+        else:
+            print("'purchase_price' column already exists in the product table.")
         
         return True
     except Exception as e:
