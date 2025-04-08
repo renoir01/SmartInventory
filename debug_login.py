@@ -102,4 +102,4 @@ def create_debug_app():
 
 if __name__ == "__main__":
     app = create_debug_app()
-    app.run(debug=True)
+    app.run(debug=True, port=8080)
