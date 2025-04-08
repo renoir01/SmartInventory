@@ -2,7 +2,7 @@
 Script to initialize the database on PythonAnywhere with standard users and tables.
 """
 import os
-from app import app, db, User, Product, Category, Sale, SaleItem
+from app import app, db, User
 
 def initialize_database():
     """Initialize the database with tables and standard users."""
