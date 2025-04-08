@@ -412,8 +412,17 @@ def cashier_dashboard():
     today_start = datetime.combine(today, datetime.min.time())
     today_end = datetime.combine(today, datetime.max.time())
     
-    # Get products in stock
-    products = Product.query.filter(Product.stock > 0).all()
+    # Get search query
+    search_query = request.args.get('search', '')
+    
+    # Get products in stock with optional search filter
+    if search_query:
+        products = Product.query.filter(
+            Product.stock > 0,
+            Product.name.ilike(f'%{search_query}%')
+        ).all()
+    else:
+        products = Product.query.filter(Product.stock > 0).all()
     
     # Get today's sales for this cashier
     today_sales = Sale.query.filter(
@@ -427,7 +436,8 @@ def cashier_dashboard():
     return render_template('cashier_dashboard.html', 
                            products=products,
                            today_sales=today_sales,
-                           total_revenue=total_revenue)
+                           total_revenue=total_revenue,
+                           search_query=search_query)
 
 @app.route('/cashier/sell', methods=['GET', 'POST'])
 @login_required

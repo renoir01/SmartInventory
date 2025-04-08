@@ -24,6 +24,19 @@
         <h2>{{ _('Record New Sale') }}</h2>
     </div>
     <div class="card-body">
+        <!-- Product Search Form -->
+        <form method="GET" action="{{ url_for('cashier_dashboard') }}" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="{{ _('Search for products...') }}" value="{{ search_query }}">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">{{ _('Search') }}</button>
+                    {% if search_query %}
+                    <a href="{{ url_for('cashier_dashboard') }}" class="btn btn-secondary">{{ _('Clear') }}</a>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+        
         <form method="POST" action="{{ url_for('sell_product') }}">
             <div class="form-group">
                 <label for="product_id" class="form-label">{{ _('Select Product') }}</label>
@@ -35,6 +48,9 @@
                     </option>
                     {% endfor %}
                 </select>
+                {% if products|length == 0 %}
+                <small class="text-muted">{{ _('No products found matching your search.') }}</small>
+                {% endif %}
             </div>
             
             <div class="form-group">

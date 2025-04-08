@@ -474,3 +474,11 @@
 2025-04-08 12:32:46,780 - __main__ - INFO - Flask-Babel initialized successfully
 2025-04-08 12:32:46,796 - werkzeug - WARNING -  * Debugger is active!
 2025-04-08 12:32:46,809 - werkzeug - INFO -  * Debugger PIN: 139-586-798
+2025-04-08 13:41:05,322 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 13:41:05] "GET /admin/products HTTP/1.1" 200 -
+2025-04-08 15:26:44,510 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 15:26:44] "[32mGET /cashier/sales HTTP/1.1[0m" 302 -
+2025-04-08 15:26:44,600 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 15:26:44] "GET /login?next=/cashier/sales HTTP/1.1" 200 -
+2025-04-08 15:26:44,878 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 15:26:44] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-08 15:26:44,879 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 15:26:44] "GET /static/js/category-progress.js HTTP/1.1" 200 -
+2025-04-08 15:26:47,981 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 15:26:47] "POST /login HTTP/1.1" 200 -
+2025-04-08 15:26:48,031 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 15:26:48] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-08 15:26:48,032 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2025 15:26:48] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
