@@ -156,44 +156,81 @@ def logout():
 @app.route('/admin/dashboard')
 @login_required
 def admin_dashboard():
-    if current_user.role != 'admin':
-        flash(_('Access denied. Admin privileges required.'), 'danger')
+    try:
+        if current_user.role != 'admin':
+            flash(_('Access denied. Admin privileges required.'), 'danger')
+            return redirect(url_for('index'))
+        
+        # Get today's date
+        today = datetime.now().date()
+        today_start = datetime.combine(today, datetime.min.time())
+        today_end = datetime.combine(today, datetime.max.time())
+        
+        # Get counts
+        try:
+            total_products = Product.query.count()
+            low_stock_products = Product.query.filter(Product.stock <= Product.low_stock_threshold).count()
+            out_of_stock_products = Product.query.filter(Product.stock == 0).count()
+        except Exception as e:
+            logger.error(f"Error getting product counts: {str(e)}")
+            total_products = 0
+            low_stock_products = 0
+            out_of_stock_products = 0
+        
+        # Get today's sales
+        try:
+            today_sales = Sale.query.filter(Sale.date_sold.between(today_start, today_end)).all()
+            today_sales_count = len(today_sales)
+            
+            # Handle case where purchase_price might be None
+            total_revenue = sum(sale.total_price for sale in today_sales)
+            
+            # Calculate profit with error handling for each sale
+            total_profit = 0
+            for sale in today_sales:
+                try:
+                    purchase_price = sale.product.purchase_price or 0
+                    profit = sale.total_price - (purchase_price * sale.quantity)
+                    total_profit += profit
+                except Exception as e:
+                    logger.error(f"Error calculating profit for sale {sale.id}: {str(e)}")
+        except Exception as e:
+            logger.error(f"Error getting today's sales: {str(e)}")
+            today_sales = []
+            today_sales_count = 0
+            total_revenue = 0
+            total_profit = 0
+        
+        # Get recent sales
+        try:
+            recent_sales = Sale.query.order_by(Sale.date_sold.desc()).limit(5).all()
+        except Exception as e:
+            logger.error(f"Error getting recent sales: {str(e)}")
+            recent_sales = []
+        
+        # Get low stock products
+        try:
+            low_stock_items = Product.query.filter(
+                Product.stock <= Product.low_stock_threshold,
+                Product.stock > 0
+            ).all()
+        except Exception as e:
+            logger.error(f"Error getting low stock items: {str(e)}")
+            low_stock_items = []
+        
+        return render_template('admin_dashboard.html', 
+                               total_products=total_products,
+                               low_stock_products=low_stock_products,
+                               out_of_stock_products=out_of_stock_products,
+                               today_sales_count=today_sales_count,
+                               total_revenue=total_revenue,
+                               total_profit=total_profit,
+                               recent_sales=recent_sales,
+                               low_stock_items=low_stock_items)
+    except Exception as e:
+        logger.error(f"Unhandled error in admin_dashboard: {str(e)}")
+        flash(_('An error occurred while loading the dashboard. Please try again.'), 'danger')
         return redirect(url_for('index'))
-    
-    # Get today's date
-    today = datetime.now().date()
-    today_start = datetime.combine(today, datetime.min.time())
-    today_end = datetime.combine(today, datetime.max.time())
-    
-    # Get counts
-    total_products = Product.query.count()
-    low_stock_products = Product.query.filter(Product.stock <= Product.low_stock_threshold).count()
-    out_of_stock_products = Product.query.filter(Product.stock == 0).count()
-    
-    # Get today's sales
-    today_sales = Sale.query.filter(Sale.date_sold.between(today_start, today_end)).all()
-    today_sales_count = len(today_sales)
-    total_revenue = sum(sale.total_price for sale in today_sales)
-    total_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in today_sales)
-    
-    # Get recent sales
-    recent_sales = Sale.query.order_by(Sale.date_sold.desc()).limit(5).all()
-    
-    # Get low stock products
-    low_stock_items = Product.query.filter(
-        Product.stock <= Product.low_stock_threshold,
-        Product.stock > 0
-    ).all()
-    
-    return render_template('admin_dashboard.html', 
-                           total_products=total_products,
-                           low_stock_products=low_stock_products,
-                           out_of_stock_products=out_of_stock_products,
-                           today_sales_count=today_sales_count,
-                           total_revenue=total_revenue,
-                           total_profit=total_profit,
-                           recent_sales=recent_sales,
-                           low_stock_items=low_stock_items)
 
 @app.route('/admin/products')
 @login_required
@@ -403,43 +440,61 @@ def delete_sale(sale_id):
 @app.route('/cashier/dashboard')
 @login_required
 def cashier_dashboard():
-    if current_user.role != 'cashier':
-        flash(_('Access denied. Cashier privileges required.'), 'danger')
+    try:
+        if current_user.role != 'cashier':
+            flash(_('Access denied. Cashier privileges required.'), 'danger')
+            return redirect(url_for('index'))
+        
+        # Get today's date
+        today = datetime.now().date()
+        today_start = datetime.combine(today, datetime.min.time())
+        today_end = datetime.combine(today, datetime.max.time())
+        
+        # Get search query with error handling
+        try:
+            search_query = request.args.get('search', '')
+        except Exception as e:
+            logger.error(f"Error getting search query: {str(e)}")
+            search_query = ''
+        
+        # Get products in stock with optional search filter
+        try:
+            products_query = Product.query.filter(Product.stock > 0)
+            
+            # Apply search filter if provided
+            if search_query and search_query.strip():
+                search_term = "%" + search_query + "%"
+                products_query = products_query.filter(Product.name.like(search_term))
+            
+            # Execute query
+            products = products_query.all()
+        except Exception as e:
+            logger.error(f"Error in product search: {str(e)}")
+            products = Product.query.filter(Product.stock > 0).all()
+        
+        # Get today's sales for this cashier
+        try:
+            today_sales = Sale.query.filter(
+                Sale.date_sold.between(today_start, today_end),
+                Sale.cashier_id == current_user.id
+            ).all()
+            
+            # Calculate total revenue for today
+            total_revenue = sum(sale.total_price for sale in today_sales)
+        except Exception as e:
+            logger.error(f"Error getting sales: {str(e)}")
+            today_sales = []
+            total_revenue = 0
+        
+        return render_template('cashier_dashboard.html', 
+                            products=products,
+                            today_sales=today_sales,
+                            total_revenue=total_revenue,
+                            search_query=search_query)
+    except Exception as e:
+        logger.error(f"Unhandled error in cashier_dashboard: {str(e)}")
+        flash(_('An error occurred. Please try again.'), 'danger')
         return redirect(url_for('index'))
-    
-    # Get today's date
-    today = datetime.now().date()
-    today_start = datetime.combine(today, datetime.min.time())
-    today_end = datetime.combine(today, datetime.max.time())
-    
-    # Get search query
-    search_query = request.args.get('search', '')
-    
-    # Get products in stock with optional search filter
-    products_query = Product.query.filter(Product.stock > 0)
-    
-    # Apply search filter if provided
-    if search_query:
-        search_term = f"%{search_query}%"
-        products_query = products_query.filter(Product.name.like(search_term))
-    
-    # Execute query
-    products = products_query.all()
-    
-    # Get today's sales for this cashier
-    today_sales = Sale.query.filter(
-        Sale.date_sold.between(today_start, today_end),
-        Sale.cashier_id == current_user.id
-    ).all()
-    
-    # Calculate total revenue for today
-    total_revenue = sum(sale.total_price for sale in today_sales)
-    
-    return render_template('cashier_dashboard.html', 
-                           products=products,
-                           today_sales=today_sales,
-                           total_revenue=total_revenue,
-                           search_query=search_query)
 
 @app.route('/cashier/sell', methods=['GET', 'POST'])
 @login_required
