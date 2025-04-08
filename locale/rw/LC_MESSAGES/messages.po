@@ -279,3 +279,15 @@ msgstr "Nta bucuruzi bwabonetse ku byo wahisemo."
 
 msgid "Total"
 msgstr "Igiteranyo"
+
+msgid "Actions"
+msgstr "Ibikorwa"
+
+msgid "Delete"
+msgstr "Siba"
+
+msgid "Are you sure you want to delete this sale? This will restore the stock to the product."
+msgstr "Urashaka koko gusiba ubu bucuruzi? Ibi bizongerera igicuruzwa mu bubiko."
+
+msgid "Sale of %(quantity)d %(product)s by %(cashier)s on %(date)s has been deleted and stock has been restored."
+msgstr "Ubucuruzi bwa %(quantity)d %(product)s bwakozwe na %(cashier)s ku wa %(date)s bwasibwe kandi igicuruzwa cyasubijwe mu bubiko."

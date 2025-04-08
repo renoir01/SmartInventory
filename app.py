@@ -373,6 +373,34 @@ def view_sales():
                            start_date=start_date_str,
                            end_date=end_date_str)
 
+@app.route('/delete_sale/<int:sale_id>', methods=['POST'])
+@login_required
+def delete_sale(sale_id):
+    if current_user.role != 'admin':
+        flash(_('Access denied. Admin privileges required.'), 'danger')
+        return redirect(url_for('index'))
+    
+    sale = Sale.query.get_or_404(sale_id)
+    
+    # Return the stock to the product
+    product = sale.product
+    product.stock += sale.quantity
+    
+    # Store sale info for flash message
+    product_name = sale.product.name
+    quantity = sale.quantity
+    sale_date = sale.date_sold.strftime('%Y-%m-%d %H:%M')
+    cashier_name = sale.cashier.username
+    
+    # Delete the sale
+    db.session.delete(sale)
+    db.session.commit()
+    
+    flash(_('Sale of %(quantity)d %(product)s by %(cashier)s on %(date)s has been deleted and stock has been restored.', 
+            quantity=quantity, product=product_name, cashier=cashier_name, date=sale_date), 'success')
+    
+    return redirect(url_for('view_sales'))
+
 @app.route('/cashier/dashboard')
 @login_required
 def cashier_dashboard():
