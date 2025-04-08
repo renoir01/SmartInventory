@@ -120,31 +120,48 @@ def load_user(user_id):
 # Routes
 @app.route('/')
 def index():
-    if current_user.is_authenticated:
-        if current_user.role == 'admin':
-            return redirect(url_for('admin_dashboard'))
-        else:
-            return redirect(url_for('cashier_dashboard'))
-    return redirect(url_for('login'))
+    try:
+        if current_user.is_authenticated:
+            if current_user.role == 'admin':
+                return redirect(url_for('admin_dashboard'))
+            else:
+                return redirect(url_for('cashier_dashboard'))
+        return redirect(url_for('login'))
+    except Exception as e:
+        logger.error(f"Error in index route: {str(e)}")
+        # Break potential redirect loops by going directly to login template
+        return render_template('login.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+    try:
+        # Don't redirect if already authenticated to avoid loops
+        # Instead, check role and render appropriate dashboard
+        if current_user.is_authenticated:
+            if current_user.role == 'admin':
+                return redirect(url_for('admin_dashboard'))
+            else:
+                return redirect(url_for('cashier_dashboard'))
         
-        user = User.query.filter_by(username=username).first()
+        if request.method == 'POST':
+            username = request.form.get('username')
+            password = request.form.get('password')
+            
+            user = User.query.filter_by(username=username).first()
+            
+            if user and user.check_password(password):
+                login_user(user)
+                if user.role == 'admin':
+                    return redirect(url_for('admin_dashboard'))
+                else:
+                    return redirect(url_for('cashier_dashboard'))
+            else:
+                flash(_('Invalid username or password'), 'danger')
         
-        if user and user.check_password(password):
-            login_user(user)
-            return redirect(url_for('index'))
-        else:
-            flash(_('Invalid username or password'), 'danger')
-    
-    return render_template('login.html')
+        return render_template('login.html')
+    except Exception as e:
+        logger.error(f"Error in login route: {str(e)}")
+        return render_template('login.html')
 
 @app.route('/logout')
 @login_required
