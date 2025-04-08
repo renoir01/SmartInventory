@@ -419,7 +419,7 @@ def cashier_dashboard():
     if search_query:
         products = Product.query.filter(
             Product.stock > 0,
-            Product.name.ilike(f'%{search_query}%')
+            Product.name.like(f'%{search_query}%')
         ).all()
     else:
         products = Product.query.filter(Product.stock > 0).all()
