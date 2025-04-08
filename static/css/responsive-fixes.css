@@ -1,0 +1,139 @@
+/* Additional responsive fixes for Smart Inventory */
+
+/* Table responsive wrapper */
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Dashboard specific fixes */
+@media (max-width: 768px) {
+  /* Dashboard widgets grid */
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Product cards in cashier dashboard */
+  .product-card {
+    width: 100%;
+    margin-right: 0;
+  }
+  
+  /* Search form in cashier dashboard */
+  .search-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-form .form-control {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Sales form */
+  .sales-form {
+    padding: 0.75rem;
+  }
+  
+  /* Admin stats cards */
+  .stats-card {
+    margin-bottom: 1rem;
+  }
+  
+  /* Form layouts */
+  .form-row {
+    flex-direction: column;
+  }
+  
+  .form-row .form-group {
+    width: 100%;
+    padding: 0;
+  }
+  
+  /* Modal dialogs */
+  .modal-content {
+    width: 95%;
+    margin: 0 auto;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  /* Further reduce padding */
+  .card, .widget {
+    padding: 0.75rem;
+  }
+  
+  /* Adjust font sizes */
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.3rem;
+  }
+  
+  h3 {
+    font-size: 1.1rem;
+  }
+  
+  /* Simplify tables on very small screens */
+  .table th, .table td {
+    padding: 0.4rem;
+    font-size: 0.8rem;
+  }
+  
+  /* Optimize buttons for touch */
+  .btn {
+    min-height: 44px; /* Minimum touch target size */
+  }
+  
+  /* Adjust form controls */
+  select, input[type="date"] {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Fix for internationalization language selector */
+@media (max-width: 768px) {
+  .language-selector select {
+    height: 36px; /* Better touch target */
+    font-size: 16px;
+  }
+}
+
+/* Print styles for reports */
+@media print {
+  .header, .nav, .footer, .btn {
+    display: none !important;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
+  
+  .card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+  
+  body {
+    font-size: 12pt;
+    color: #000;
+    background: #fff;
+  }
+  
+  .table {
+    border-collapse: collapse;
+  }
+  
+  .table th, .table td {
+    border: 1px solid #000;
+  }
+}
