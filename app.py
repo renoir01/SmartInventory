@@ -173,16 +173,24 @@ def admin_dashboard():
         return redirect(url_for('login'))
     
     # Get today's date
-    today = datetime.utcnow().date()
+    today = datetime.now().date()
     
-    # Get today's sales
+    # Get today's sales using the local date (not UTC)
     today_sales = Sale.query.filter(
         func.date(Sale.date_sold) == today
     ).all()
     
-    # Calculate today's revenue and profit
+    # Debug log for today's sales
+    print(f"Admin Dashboard - Today's date: {today}")
+    print(f"Admin Dashboard - Today's sales count: {len(today_sales)}")
+    
+    # Calculate today's revenue and profit from actual sales
+    today_sales_count = len(today_sales)
     today_revenue = sum(sale.total_price for sale in today_sales)
-    today_profit = sum(sale.total_price - (sale.product.purchase_price * sale.quantity) for sale in today_sales)
+    today_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in today_sales)
+    
+    print(f"Admin Dashboard - Today's total revenue: RWF {today_revenue}")
+    print(f"Admin Dashboard - Today's total profit: RWF {today_profit}")
     
     # Get all cashiers
     cashiers = User.query.filter_by(role='cashier').all()
@@ -191,16 +199,23 @@ def admin_dashboard():
     not_cashed_out_sales = Sale.query.filter_by(is_cashed_out=False).all()
     not_cashed_out_by_cashier = {}
     
-    # Calculate total uncashed sales amount directly
-    total_uncashed_amount = 0
+    # Debug log for uncashed sales
+    print(f"Admin Dashboard - All uncashed sales: {len(not_cashed_out_sales)}")
     
+    # Calculate total uncashed sales amount
+    current_period_sales_count = len(not_cashed_out_sales)
+    current_period_revenue = sum(sale.total_price for sale in not_cashed_out_sales)
+    current_period_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in not_cashed_out_sales)
+    
+    print(f"Admin Dashboard - Current period revenue: RWF {current_period_revenue}")
+    
+    # Group sales by cashier
     for cashier in cashiers:
         cashier_sales = [sale for sale in not_cashed_out_sales if sale.cashier_id == cashier.id]
         cashier_total = sum(sale.total_price for sale in cashier_sales)
-        total_uncashed_amount += cashier_total
         
         # Debug log
-        print(f"Cashier {cashier.username}: {len(cashier_sales)} sales, total: RWF {cashier_total}")
+        print(f"Admin Dashboard - Cashier {cashier.username}: {len(cashier_sales)} sales, total: RWF {cashier_total}")
         
         not_cashed_out_by_cashier[cashier.id] = {
             'cashier': cashier,
@@ -208,37 +223,40 @@ def admin_dashboard():
             'total': cashier_total
         }
     
-    # Debug log for total
-    print(f"Total uncashed sales: {len(not_cashed_out_sales)}, total amount: RWF {total_uncashed_amount}")
-    
     # Get current period sales (uncashed sales only)
     current_period_sales = not_cashed_out_sales
     
-    # Calculate current period revenue and profit - use the directly calculated total
-    current_period_revenue = total_uncashed_amount
-    current_period_profit = sum(sale.total_price - (sale.product.purchase_price * sale.quantity) for sale in current_period_sales)
-    
     # Get all-time sales
-    all_sales = Sale.query.all()
+    all_time_sales = Sale.query.all()
+    all_time_revenue = sum(sale.total_price for sale in all_time_sales)
+    all_time_profit = sum(sale.total_price - (sale.product.purchase_price * sale.quantity) for sale in all_time_sales)
     
-    # Calculate all-time revenue and profit
-    all_time_revenue = sum(sale.total_price for sale in all_sales)
-    all_time_profit = sum(sale.total_price - (sale.product.purchase_price * sale.quantity) for sale in all_sales)
+    # Get all products
+    products = Product.query.all()
     
     # Get low stock products
     low_stock_products = Product.query.filter(Product.stock <= Product.low_stock_threshold).all()
     
-    # Calculate product performance metrics
+    # Get product sales
+    product_sales = Sale.query.all()
+    
+    # Create lists to store top products
     top_products_by_revenue = []
     top_products_by_revenue_today = []
     top_products_by_revenue_current_period = []
     
-    # Get all products that have sales - include all sales, not just uncashed ones
-    products_with_sales = db.session.query(Product).join(Sale.product).distinct().all()
+    top_products_by_quantity = []
+    top_products_by_quantity_today = []
+    top_products_by_quantity_current_period = []
     
-    for product in products_with_sales:
+    # Calculate top products by revenue and quantity
+    products_with_sales = []
+    for product in products:
         # Get all sales for this product
         product_sales = Sale.query.filter_by(product_id=product.id).all()
+        
+        if product_sales:
+            products_with_sales.append(product)
         
         # Get today's sales for this product
         product_sales_today = [sale for sale in product_sales if func.date(sale.date_sold) == today]
@@ -247,9 +265,9 @@ def admin_dashboard():
         product_sales_current_period = [sale for sale in product_sales if sale.is_cashed_out == False]
         
         # Double-check the calculations for uncashed sales
-        current_period_revenue = sum(sale.total_price for sale in product_sales_current_period)
+        current_period_revenue_product = sum(sale.total_price for sale in product_sales_current_period)
         current_period_quantity = sum(sale.quantity for sale in product_sales_current_period)
-        current_period_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in product_sales_current_period)
+        current_period_profit_product = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in product_sales_current_period)
         
         # Calculate total revenue, quantity, and profit for this product (all-time)
         total_revenue = sum(sale.total_price for sale in product_sales)
@@ -257,13 +275,20 @@ def admin_dashboard():
         total_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in product_sales)
         
         # Calculate today's metrics
-        today_revenue = sum(sale.total_price for sale in product_sales_today)
+        today_revenue_product = sum(sale.total_price for sale in product_sales_today)
         today_quantity = sum(sale.quantity for sale in product_sales_today)
-        today_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in product_sales_today)
+        today_profit_product = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in product_sales_today)
         
         # Add to our list of top products (all-time)
         if total_quantity > 0:
             top_products_by_revenue.append({
+                'product': product,
+                'revenue': total_revenue,
+                'quantity': total_quantity,
+                'profit': total_profit
+            })
+            
+            top_products_by_quantity.append({
                 'product': product,
                 'revenue': total_revenue,
                 'quantity': total_quantity,
@@ -274,53 +299,73 @@ def admin_dashboard():
         if today_quantity > 0:
             top_products_by_revenue_today.append({
                 'product': product,
-                'revenue': today_revenue,
+                'revenue': today_revenue_product,
                 'quantity': today_quantity,
-                'profit': today_profit
+                'profit': today_profit_product
+            })
+            
+            top_products_by_quantity_today.append({
+                'product': product,
+                'revenue': today_revenue_product,
+                'quantity': today_quantity,
+                'profit': today_profit_product
             })
         
         # Add to our list of top products (current period)
         if current_period_quantity > 0:
             top_products_by_revenue_current_period.append({
                 'product': product,
-                'revenue': current_period_revenue,
+                'revenue': current_period_revenue_product,
                 'quantity': current_period_quantity,
-                'profit': current_period_profit
+                'profit': current_period_profit_product
+            })
+            
+            top_products_by_quantity_current_period.append({
+                'product': product,
+                'revenue': current_period_revenue_product,
+                'quantity': current_period_quantity,
+                'profit': current_period_profit_product
             })
     
-    # Sort products by revenue (highest first)
+    # Sort the lists
     top_products_by_revenue = sorted(top_products_by_revenue, key=lambda x: x['revenue'], reverse=True)[:10]
-    top_products_by_revenue_today = sorted(top_products_by_revenue_today, key=lambda x: x['revenue'], reverse=True)[:10]
-    top_products_by_revenue_current_period = sorted(top_products_by_revenue_current_period, key=lambda x: x['revenue'], reverse=True)[:10]
+    top_products_by_quantity = sorted(top_products_by_quantity, key=lambda x: x['quantity'], reverse=True)[:10]
     
-    # Also prepare lists sorted by quantity and profit for different views
-    top_products_by_quantity = sorted(top_products_by_revenue.copy(), key=lambda x: x['quantity'], reverse=True)[:10]
-    top_products_by_profit = sorted(top_products_by_revenue.copy(), key=lambda x: x['profit'], reverse=True)[:10]
+    top_products_by_revenue_today = sorted(top_products_by_revenue_today, key=lambda x: x['revenue'], reverse=True)[:10]
+    top_products_by_quantity_today = sorted(top_products_by_quantity_today, key=lambda x: x['quantity'], reverse=True)[:10]
+    
+    top_products_by_revenue_current_period = sorted(top_products_by_revenue_current_period, key=lambda x: x['revenue'], reverse=True)[:10]
+    top_products_by_quantity_current_period = sorted(top_products_by_quantity_current_period, key=lambda x: x['quantity'], reverse=True)[:10]
     
     return render_template(
         'admin_dashboard.html',
         today=datetime.now(),
         today_sales=today_sales,
-        today_sales_count=len(today_sales),
+        today_sales_count=today_sales_count,
         today_revenue=today_revenue,
         today_profit=today_profit,
         current_period_sales=current_period_sales,
-        current_period_sales_count=len(current_period_sales),
+        current_period_sales_count=current_period_sales_count,
         current_period_revenue=current_period_revenue,
         current_period_profit=current_period_profit,
+        not_cashed_out_by_cashier=not_cashed_out_by_cashier,
+        all_time_sales=all_time_sales,
+        all_time_sales_count=len(all_time_sales),
         all_time_revenue=all_time_revenue,
         all_time_profit=all_time_profit,
-        all_sales_count=len(all_sales),
-        total_sales_count=len(all_sales),
-        total_products=Product.query.count(),
-        not_cashed_out_by_cashier=not_cashed_out_by_cashier,
+        products=products,
+        products_count=len(products),
         low_stock_products=low_stock_products,
+        low_stock_count=len(low_stock_products),
         top_products_by_revenue=top_products_by_revenue,
         top_products_by_quantity=top_products_by_quantity,
-        top_products_by_profit=top_products_by_profit,
         top_products_by_revenue_today=top_products_by_revenue_today,
+        top_products_by_quantity_today=top_products_by_quantity_today,
         top_products_by_revenue_current_period=top_products_by_revenue_current_period,
-        total_revenue=all_time_revenue  # Add total_revenue for backward compatibility
+        top_products_by_quantity_current_period=top_products_by_quantity_current_period,
+        total_revenue=all_time_revenue,  # Add for backward compatibility
+        total_sales_count=len(all_time_sales),  # Add for backward compatibility
+        total_products=len(products)  # Add for backward compatibility
     )
 
 @app.route('/admin/products')
@@ -395,12 +440,15 @@ def edit_product(product_id):
 @app.route('/cashier/dashboard')
 @login_required
 def cashier_dashboard():
-    if current_user.role != 'cashier':
-        flash(_('Access denied. Cashier privileges required.'), 'danger')
+    if not current_user.is_authenticated:
         return redirect(url_for('login'))
     
+    if current_user.role != 'cashier':
+        flash('You do not have permission to access this page.', 'danger')
+        return redirect(url_for('dashboard'))
+    
     # Get today's date
-    today = datetime.utcnow().date()
+    today = datetime.now().date()
     
     # Get today's sales for this cashier
     today_sales = Sale.query.filter(
@@ -410,51 +458,40 @@ def cashier_dashboard():
     
     # Calculate today's revenue
     today_revenue = sum(sale.total_price for sale in today_sales)
+    today_profit = sum(sale.total_price - (sale.product.purchase_price * sale.quantity) for sale in today_sales)
     
-    # Get last cashout for this cashier
-    last_cashout = Cashout.query.filter_by(
-        cashier_id=current_user.id
-    ).order_by(Cashout.date.desc()).first()
+    # Debug log
+    print(f"Cashier {current_user.username} dashboard - Today's sales: {len(today_sales)}, revenue: RWF {today_revenue}")
     
-    # Get sales since last cashout (or all if no cashout)
-    if last_cashout:
-        current_period_sales = Sale.query.filter(
-            Sale.cashier_id == current_user.id,
-            Sale.date_sold > last_cashout.date
-        ).all()
-        last_cashout_date = last_cashout.date
-    else:
-        current_period_sales = Sale.query.filter_by(
-            cashier_id=current_user.id
-        ).all()
-        last_cashout_date = None
-    
-    # Calculate current period revenue
-    current_period_revenue = sum(sale.total_price for sale in current_period_sales)
-    
-    # Get uncashed sales
-    not_cashed_out_sales = Sale.query.filter_by(
+    # Get uncashed sales for this cashier
+    uncashed_sales = Sale.query.filter_by(
         cashier_id=current_user.id,
         is_cashed_out=False
     ).all()
     
-    not_cashed_out_count = len(not_cashed_out_sales)
-    not_cashed_out_total = sum(sale.total_price for sale in not_cashed_out_sales)
+    # Calculate uncashed sales total
+    uncashed_total = sum(sale.total_price for sale in uncashed_sales)
     
-    # Get all products for the sale form
-    products = Product.query.filter(Product.stock > 0).all()
+    # Add current_period_revenue to fix the template error
+    current_period_revenue = uncashed_total
+    
+    # Add not_cashed_out_total to fix the template error
+    not_cashed_out_total = uncashed_total
+    not_cashed_out_count = len(uncashed_sales)
     
     return render_template(
         'cashier_dashboard.html',
-        today=today,
+        today=datetime.now(),
         today_sales=today_sales,
+        today_sales_count=len(today_sales),
         today_revenue=today_revenue,
-        current_period_sales=current_period_sales,
+        today_profit=today_profit,
+        uncashed_sales=uncashed_sales,
+        uncashed_sales_count=len(uncashed_sales),
+        uncashed_total=uncashed_total,
         current_period_revenue=current_period_revenue,
-        not_cashed_out_count=not_cashed_out_count,
         not_cashed_out_total=not_cashed_out_total,
-        last_cashout_date=last_cashout_date,
-        products=products
+        not_cashed_out_count=not_cashed_out_count
     )
 
 @app.route('/cashier/sell', methods=['POST'])
