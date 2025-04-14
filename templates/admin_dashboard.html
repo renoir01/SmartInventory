@@ -12,60 +12,145 @@
     <p class="dashboard-subtitle">{{ _('Overview of your inventory and sales') }}</p>
 </div>
 
-<div class="row">
-    <div class="col col-md-3">
-        <div class="widget widget-primary">
-            <i class="fas fa-box-open widget-icon"></i>
-            <h3 class="widget-title">{{ _('Total Products') }}</h3>
-            <div class="widget-value">{{ total_products }}</div>
-            <p class="widget-description">{{ _('Total products in inventory') }}</p>
-            <a href="{{ url_for('manage_products') }}" class="widget-link">{{ _('View all products') }} <i class="fas fa-arrow-right"></i></a>
-        </div>
+<div class="card mb-4">
+    <div class="card-header">
+        <h2>{{ _('Daily Summary') }} ({{ today.strftime('%Y-%m-%d') }})</h2>
     </div>
-    
-    <div class="col col-md-3">
-        <div class="widget widget-danger">
-            <i class="fas fa-exclamation-triangle widget-icon"></i>
-            <h3 class="widget-title">{{ _('Low Stock Items') }}</h3>
-            <div class="widget-value {% if low_stock_products|length > 0 %}text-danger{% endif %}">
-                {{ low_stock_products|length }}
+    <div class="card-body">
+        <div class="row">
+            <div class="col col-md-4">
+                <div class="widget widget-info">
+                    <i class="fas fa-shopping-cart widget-icon"></i>
+                    <h3 class="widget-title">{{ _('Today\'s Sales') }}</h3>
+                    <div class="widget-value">{{ today_sales_count }}</div>
+                    <p class="widget-description">{{ _('Sales made today') }}</p>
+                    <a href="{{ url_for('view_sales') }}?start_date={{ today.strftime('%Y-%m-%d') }}&end_date={{ today.strftime('%Y-%m-%d') }}" class="widget-link">{{ _('View today\'s sales') }} <i class="fas fa-arrow-right"></i></a>
+                </div>
             </div>
-            <p class="widget-description">{{ _('Products that need restocking') }}</p>
-            {% if low_stock_products|length > 0 %}
-            <a href="#low-stock-section" class="widget-link">{{ _('View details') }} <i class="fas fa-arrow-right"></i></a>
-            {% endif %}
-        </div>
-    </div>
-    
-    <div class="col col-md-3">
-        <div class="widget widget-info">
-            <i class="fas fa-shopping-cart widget-icon"></i>
-            <h3 class="widget-title">{{ _('Today\'s Sales') }}</h3>
-            <div class="widget-value">{{ total_sales }}</div>
-            <p class="widget-description">{{ _('Total sales made today') }}</p>
-            <a href="{{ url_for('view_sales') }}" class="widget-link">{{ _('View all sales') }} <i class="fas fa-arrow-right"></i></a>
-        </div>
-    </div>
-    
-    <div class="col col-md-3">
-        <div class="widget widget-success">
-            <i class="fas fa-money-bill-wave widget-icon"></i>
-            <h3 class="widget-title">{{ _('Today\'s Revenue') }}</h3>
-            <div class="widget-value">RWF {{ "%.0f"|format(total_revenue) }}</div>
-            <p class="widget-description">{{ _('Total revenue generated today') }}</p>
-            <a href="{{ url_for('view_sales') }}" class="widget-link">{{ _('View sales report') }} <i class="fas fa-arrow-right"></i></a>
+            
+            <div class="col col-md-4">
+                <div class="widget widget-success">
+                    <i class="fas fa-money-bill-wave widget-icon"></i>
+                    <h3 class="widget-title">{{ _('Today\'s Revenue') }}</h3>
+                    <div class="widget-value">RWF {{ "%.0f"|format(today_revenue) }}</div>
+                    <p class="widget-description">{{ _('Revenue generated today') }}</p>
+                    <a href="{{ url_for('view_sales') }}?start_date={{ today.strftime('%Y-%m-%d') }}&end_date={{ today.strftime('%Y-%m-%d') }}" class="widget-link">{{ _('View details') }} <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="col col-md-4">
+                <div class="widget widget-warning">
+                    <i class="fas fa-chart-line widget-icon"></i>
+                    <h3 class="widget-title">{{ _('Today\'s Profit') }}</h3>
+                    <div class="widget-value">RWF {{ "%.0f"|format(today_profit) }}</div>
+                    <p class="widget-description">{{ _('Profit generated today') }}</p>
+                    <a href="{{ url_for('view_sales') }}?start_date={{ today.strftime('%Y-%m-%d') }}&end_date={{ today.strftime('%Y-%m-%d') }}" class="widget-link">{{ _('View details') }} <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="row mt-4">
+<div class="card mb-4">
+    <div class="card-header">
+        <h2>{{ _('Current Period Summary') }} ({{ _('Since Last Cashout') }})</h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col col-md-4">
+                <div class="widget widget-info">
+                    <i class="fas fa-shopping-cart widget-icon"></i>
+                    <h3 class="widget-title">{{ _('Current Period Sales') }}</h3>
+                    <div class="widget-value">{{ current_period_sales_count }}</div>
+                    <p class="widget-description">{{ _('Sales since last cashout') }}</p>
+                    <a href="{{ url_for('admin_cashout') }}" class="widget-link">{{ _('View cashout details') }} <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="col col-md-4">
+                <div class="widget widget-success">
+                    <i class="fas fa-money-bill-wave widget-icon"></i>
+                    <h3 class="widget-title">{{ _('Current Period Revenue') }}</h3>
+                    <div class="widget-value">RWF {{ "%.0f"|format(current_period_revenue) }}</div>
+                    <p class="widget-description">{{ _('Revenue since last cashout') }}</p>
+                    <a href="{{ url_for('admin_cashout') }}" class="widget-link">{{ _('Manage cashouts') }} <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="col col-md-4">
+                <div class="widget widget-warning">
+                    <i class="fas fa-chart-line widget-icon"></i>
+                    <h3 class="widget-title">{{ _('Current Period Profit') }}</h3>
+                    <div class="widget-value">RWF {{ "%.0f"|format(current_period_profit) }}</div>
+                    <p class="widget-description">{{ _('Profit since last cashout') }}</p>
+                    <a href="{{ url_for('admin_cashout') }}" class="widget-link">{{ _('Manage cashouts') }} <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h2>{{ _('All-Time Summary') }}</h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col col-md-3">
+                <div class="widget widget-primary">
+                    <i class="fas fa-box-open widget-icon"></i>
+                    <h3 class="widget-title">{{ _('Total Products') }}</h3>
+                    <div class="widget-value">{{ total_products }}</div>
+                    <p class="widget-description">{{ _('Products in inventory') }}</p>
+                    <a href="{{ url_for('manage_products') }}" class="widget-link">{{ _('View all products') }} <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="col col-md-3">
+                <div class="widget widget-danger">
+                    <i class="fas fa-exclamation-triangle widget-icon"></i>
+                    <h3 class="widget-title">{{ _('Low Stock Items') }}</h3>
+                    <div class="widget-value {% if low_stock_products|length > 0 %}text-danger{% endif %}">
+                        {{ low_stock_products|length }}
+                    </div>
+                    <p class="widget-description">{{ _('Products that need restocking') }}</p>
+                    {% if low_stock_products|length > 0 %}
+                    <a href="#low-stock-section" class="widget-link">{{ _('View details') }} <i class="fas fa-arrow-right"></i></a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col col-md-3">
+                <div class="widget widget-info">
+                    <i class="fas fa-shopping-cart widget-icon"></i>
+                    <h3 class="widget-title">{{ _('All-Time Sales') }}</h3>
+                    <div class="widget-value">{{ total_sales_count }}</div>
+                    <p class="widget-description">{{ _('Total sales made all time') }}</p>
+                    <a href="{{ url_for('view_sales') }}" class="widget-link">{{ _('View all sales') }} <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="col col-md-3">
+                <div class="widget widget-success">
+                    <i class="fas fa-money-bill-wave widget-icon"></i>
+                    <h3 class="widget-title">{{ _('All-Time Revenue') }}</h3>
+                    <div class="widget-value">RWF {{ "%.0f"|format(total_revenue) }}</div>
+                    <p class="widget-description">{{ _('Total revenue all time') }}</p>
+                    <a href="{{ url_for('view_sales') }}" class="widget-link">{{ _('View sales report') }} <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
     <div class="col col-md-3">
-        <div class="widget widget-warning">
-            <i class="fas fa-chart-line widget-icon"></i>
-            <h3 class="widget-title">{{ _('Today\'s Profit') }}</h3>
-            <div class="widget-value">RWF {{ "%.0f"|format(total_profit) }}</div>
-            <p class="widget-description">{{ _('Total profit generated today') }}</p>
-            <a href="{{ url_for('view_sales') }}" class="widget-link">{{ _('View profit report') }} <i class="fas fa-arrow-right"></i></a>
+        <div class="widget widget-secondary">
+            <i class="fas fa-cash-register widget-icon"></i>
+            <h3 class="widget-title">{{ _('Cashout') }}</h3>
+            <div class="widget-value"><i class="fas fa-sync"></i></div>
+            <p class="widget-description">{{ _('Manage cashier payments') }}</p>
+            <a href="{{ url_for('admin_cashout') }}" class="widget-link">{{ _('Go to cashout') }} <i class="fas fa-arrow-right"></i></a>
         </div>
     </div>
     
@@ -168,6 +253,10 @@
                     <a href="{{ url_for('manage_products') }}" class="quick-action-btn">
                         <i class="fas fa-boxes"></i>
                         <span>{{ _('Manage Products') }}</span>
+                    </a>
+                    <a href="{{ url_for('admin_cashout') }}" class="quick-action-btn">
+                        <i class="fas fa-cash-register"></i>
+                        <span>{{ _('Cashout Management') }}</span>
                     </a>
                 </div>
             </div>

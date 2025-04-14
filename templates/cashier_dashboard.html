@@ -5,17 +5,76 @@
 {% block content %}
 <h1>{{ _('Cashier Dashboard') }}</h1>
 
-<div class="dashboard-widgets">
-    <div class="widget widget-info">
-        <h3 class="widget-title">{{ _('Today\'s Sales') }}</h3>
-        <div class="widget-value">{{ today_sales|length }}</div>
-        <p class="widget-description">{{ _('Sales you\'ve made today') }}</p>
+<div class="card mb-4">
+    <div class="card-header">
+        <h2>{{ _('Daily Summary') }} ({{ today.strftime('%Y-%m-%d') }})</h2>
     </div>
-    
-    <div class="widget widget-success">
-        <h3 class="widget-title">{{ _('Today\'s Revenue') }}</h3>
-        <div class="widget-value">RWF {{ "%.0f"|format(total_revenue) }}</div>
-        <p class="widget-description">{{ _('Revenue you\'ve generated today') }}</p>
+    <div class="card-body">
+        <div class="dashboard-widgets">
+            <div class="widget widget-info">
+                <h3 class="widget-title">{{ _('Today\'s Sales') }}</h3>
+                <div class="widget-value">{{ today_sales|length }}</div>
+                <p class="widget-description">{{ _('Sales you\'ve made today') }}</p>
+                <a href="{{ url_for('view_cashier_sales') }}?start_date={{ today.strftime('%Y-%m-%d') }}&end_date={{ today.strftime('%Y-%m-%d') }}" class="widget-link">{{ _('View details') }} <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="widget widget-success">
+                <h3 class="widget-title">{{ _('Today\'s Revenue') }}</h3>
+                <div class="widget-value">RWF {{ "%.0f"|format(today_revenue) }}</div>
+                <p class="widget-description">{{ _('Revenue you\'ve generated today') }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h2>{{ _('Current Period Summary') }} {% if last_cashout_date %}({{ _('Since') }} {{ last_cashout_date.strftime('%Y-%m-%d %H:%M') }}){% else %}({{ _('All Time') }}){% endif %}</h2>
+    </div>
+    <div class="card-body">
+        <div class="dashboard-widgets">
+            <div class="widget widget-info">
+                <h3 class="widget-title">{{ _('Current Period Sales') }}</h3>
+                <div class="widget-value">{{ current_period_sales_count }}</div>
+                <p class="widget-description">{{ _('Sales since last cashout') }}</p>
+                <a href="{{ url_for('cashier_sales_status') }}" class="widget-link">{{ _('View details') }} <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="widget widget-success">
+                <h3 class="widget-title">{{ _('Current Period Revenue') }}</h3>
+                <div class="widget-value">RWF {{ "%.0f"|format(current_period_revenue) }}</div>
+                <p class="widget-description">{{ _('Revenue since last cashout') }}</p>
+            </div>
+            
+            <div class="widget widget-warning">
+                <h3 class="widget-title">{{ _('Current Balance') }}</h3>
+                <div class="widget-value">RWF {{ "%.0f"|format(uncashed_amount) }}</div>
+                <p class="widget-description">{{ _('Amount to be paid to admin') }}</p>
+                <a href="{{ url_for('cashier_sales_status') }}" class="widget-link">{{ _('View balance details') }} <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h2>{{ _('All-Time Summary') }}</h2>
+    </div>
+    <div class="card-body">
+        <div class="dashboard-widgets">
+            <div class="widget widget-info">
+                <h3 class="widget-title">{{ _('All-Time Sales') }}</h3>
+                <div class="widget-value">{{ total_sales_count }}</div>
+                <p class="widget-description">{{ _('Total sales you\'ve made') }}</p>
+                <a href="{{ url_for('view_cashier_sales') }}" class="widget-link">{{ _('View all sales') }} <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="widget widget-success">
+                <h3 class="widget-title">{{ _('All-Time Revenue') }}</h3>
+                <div class="widget-value">RWF {{ "%.0f"|format(total_revenue) }}</div>
+                <p class="widget-description">{{ _('Total revenue you\'ve generated') }}</p>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -99,6 +158,7 @@
                     <th>{{ _('Product') }}</th>
                     <th>{{ _('Quantity') }}</th>
                     <th>{{ _('Price') }}</th>
+                    <th>{{ _('Status') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -108,6 +168,13 @@
                     <td>{{ sale.product.name }}</td>
                     <td>{{ sale.quantity }}</td>
                     <td>RWF {{ "%.0f"|format(sale.total_price) }}</td>
+                    <td>
+                        {% if sale.is_cashed_out %}
+                        <span class="badge badge-success">{{ _('Cashed Out') }}</span>
+                        {% else %}
+                        <span class="badge badge-warning">{{ _('Pending') }}</span>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -118,6 +185,7 @@
     </div>
     <div class="card-footer">
         <a href="{{ url_for('view_cashier_sales') }}" class="btn btn-primary">{{ _('View All My Sales') }}</a>
+        <a href="{{ url_for('cashier_sales_status') }}" class="btn btn-warning">{{ _('View Balance Status') }}</a>
     </div>
 </div>
 
@@ -201,7 +269,7 @@
                     const hiddenField = document.createElement('input');
                     hiddenField.type = 'hidden';
                     hiddenField.name = 'sale_type';
-                    hiddenField.value = 'package'; // Default to package
+                    hiddenField.value = 'package';
                     saleForm.appendChild(hiddenField);
                 }
             }

@@ -94,6 +94,16 @@ class Product(db.Model):
             return ((self.price - self.purchase_price) / self.price) * 100
         return 100  # If purchase price is 0, profit margin is 100%
 
+class Cashout(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    cashier_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    cashier = db.relationship('User', foreign_keys=[cashier_id], backref=db.backref('cashier_cashouts', lazy=True))
+    admin_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    admin = db.relationship('User', foreign_keys=[admin_id], backref=db.backref('admin_cashouts', lazy=True))
+    amount = db.Column(db.Float, nullable=False)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+    note = db.Column(db.String(200), nullable=True)
+
 class Sale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
@@ -103,6 +113,9 @@ class Sale(db.Model):
     cashier_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     cashier = db.relationship('User', backref=db.backref('sales', lazy=True))
     date_sold = db.Column(db.DateTime, default=datetime.utcnow)
+    is_cashed_out = db.Column(db.Boolean, default=False)
+    cashout_id = db.Column(db.Integer, db.ForeignKey('cashout.id'), nullable=True)
+    cashout = db.relationship('Cashout', backref=db.backref('sales', lazy=True))
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -157,37 +170,78 @@ def admin_dashboard():
     # Get low stock products
     low_stock_products = Product.query.filter(Product.stock <= Product.low_stock_threshold).all()
     
-    # Get total sales
-    total_sales = Sale.query.count()
+    # Get all products for category summary
+    products = Product.query.all()
     
-    # Get total revenue
-    total_revenue = db.session.query(db.func.sum(Sale.total_price)).scalar() or 0
-    
-    # Get sales for today
+    # Get today's date
     today = datetime.utcnow().date()
+    
+    # Get today's sales
     today_sales = Sale.query.filter(
         db.func.date(Sale.date_sold) == today
     ).all()
     
+    today_sales_count = len(today_sales)
     today_revenue = sum(sale.total_price for sale in today_sales)
     
-    # Calculate total profit (estimated based on product profit margins)
-    total_profit = 0
+    # Calculate today's profit
+    today_profit = 0
     for sale in today_sales:
         product = Product.query.get(sale.product_id)
         if product:
             profit_margin = product.get_profit_margin() / 100
-            total_profit += sale.total_price * profit_margin
+            today_profit += sale.total_price * profit_margin
+    
+    # Get all-time sales data
+    total_sales_count = Sale.query.count()
+    total_revenue = db.session.query(db.func.sum(Sale.total_price)).scalar() or 0
+    
+    # Get last cashout date for each cashier
+    cashiers = User.query.filter_by(role='cashier').all()
+    current_period_sales = []
+    current_period_revenue = 0
+    
+    for cashier in cashiers:
+        # Get last cashout for this cashier
+        last_cashout = Cashout.query.filter_by(cashier_id=cashier.id).order_by(Cashout.date.desc()).first()
+        
+        if last_cashout:
+            # Get sales since last cashout
+            since_last_cashout = Sale.query.filter(
+                Sale.cashier_id == cashier.id,
+                Sale.date_sold > last_cashout.date
+            ).all()
+        else:
+            # If no cashout yet, get all sales
+            since_last_cashout = Sale.query.filter_by(cashier_id=cashier.id).all()
+        
+        current_period_sales.extend(since_last_cashout)
+    
+    current_period_sales_count = len(current_period_sales)
+    current_period_revenue = sum(sale.total_price for sale in current_period_sales)
+    
+    # Calculate current period profit
+    current_period_profit = 0
+    for sale in current_period_sales:
+        product = Product.query.get(sale.product_id)
+        if product:
+            profit_margin = product.get_profit_margin() / 100
+            current_period_profit += sale.total_price * profit_margin
     
     return render_template(
         'admin_dashboard.html',
         total_products=total_products,
         low_stock_products=low_stock_products,
-        total_sales=total_sales,
-        total_revenue=total_revenue,
-        today_sales=len(today_sales),
+        products=products,
+        today=today,
+        today_sales_count=today_sales_count,
         today_revenue=today_revenue,
-        total_profit=total_profit
+        today_profit=today_profit,
+        total_sales_count=total_sales_count,
+        total_revenue=total_revenue,
+        current_period_sales_count=current_period_sales_count,
+        current_period_revenue=current_period_revenue,
+        current_period_profit=current_period_profit
     )
 
 @app.route('/admin/products')
@@ -276,20 +330,61 @@ def cashier_dashboard():
     else:
         products = Product.query.filter(Product.stock > 0).all()
     
+    # Get today's date
     today = datetime.utcnow().date()
+    
+    # Get today's sales
     today_sales = Sale.query.filter(
         Sale.cashier_id == current_user.id,
         db.func.date(Sale.date_sold) == today
     ).order_by(Sale.date_sold.desc()).all()
     
-    total_revenue = sum(sale.total_price for sale in today_sales)
+    today_revenue = sum(sale.total_price for sale in today_sales)
+    
+    # Get all-time sales for this cashier
+    all_sales = Sale.query.filter_by(cashier_id=current_user.id).all()
+    total_sales_count = len(all_sales)
+    total_revenue = sum(sale.total_price for sale in all_sales)
+    
+    # Get sales since last cashout
+    last_cashout = Cashout.query.filter_by(cashier_id=current_user.id).order_by(Cashout.date.desc()).first()
+    
+    if last_cashout:
+        # Get sales since last cashout
+        current_period_sales = Sale.query.filter(
+            Sale.cashier_id == current_user.id,
+            Sale.date_sold > last_cashout.date
+        ).all()
+        last_cashout_date = last_cashout.date
+    else:
+        # If no cashout yet, all sales are in current period
+        current_period_sales = all_sales
+        last_cashout_date = None
+    
+    current_period_sales_count = len(current_period_sales)
+    current_period_revenue = sum(sale.total_price for sale in current_period_sales)
+    
+    # Get uncashed sales amount (should be the same as current period)
+    uncashed_sales = Sale.query.filter_by(
+        cashier_id=current_user.id,
+        is_cashed_out=False
+    ).all()
+    
+    uncashed_amount = sum(sale.total_price for sale in uncashed_sales)
     
     return render_template(
         'cashier_dashboard.html',
         products=products,
+        today=today,
         today_sales=today_sales,
+        today_revenue=today_revenue,
+        total_sales_count=total_sales_count,
         total_revenue=total_revenue,
-        search_query=search_query
+        current_period_sales_count=current_period_sales_count,
+        current_period_revenue=current_period_revenue,
+        last_cashout_date=last_cashout_date,
+        search_query=search_query,
+        uncashed_amount=uncashed_amount
     )
 
 @app.route('/cashier/sell', methods=['POST'])
@@ -443,6 +538,185 @@ def view_cashier_sales():
         end_date='',
         selected_category='all'
     )
+
+@app.route('/admin/cashout', methods=['GET', 'POST'])
+@login_required
+def admin_cashout():
+    if current_user.role != 'admin':
+        flash('Access denied. Admin privileges required.', 'danger')
+        return redirect(url_for('login'))
+    
+    cashiers = User.query.filter_by(role='cashier').all()
+    
+    if request.method == 'POST':
+        cashier_id = request.form.get('cashier_id')
+        note = request.form.get('note', '')
+        
+        cashier = User.query.get_or_404(cashier_id)
+        
+        # Get all uncashed sales for this cashier
+        uncashed_sales = Sale.query.filter_by(
+            cashier_id=cashier_id,
+            is_cashed_out=False
+        ).all()
+        
+        if not uncashed_sales:
+            flash('No sales to cash out for this cashier.', 'warning')
+            return redirect(url_for('admin_cashout'))
+        
+        # Calculate total amount
+        total_amount = sum(sale.total_price for sale in uncashed_sales)
+        
+        # Create new cashout record
+        cashout = Cashout(
+            cashier_id=cashier_id,
+            admin_id=current_user.id,
+            amount=total_amount,
+            note=note
+        )
+        db.session.add(cashout)
+        db.session.flush()  # Get the cashout ID
+        
+        # Mark all sales as cashed out
+        for sale in uncashed_sales:
+            sale.is_cashed_out = True
+            sale.cashout_id = cashout.id
+        
+        db.session.commit()
+        
+        flash(f'Successfully cashed out {cashier.username} for RWF {total_amount:.0f}', 'success')
+        return redirect(url_for('admin_cashout'))
+    
+    # Get cashiers with pending sales
+    cashiers_with_sales = []
+    for cashier in cashiers:
+        # Get uncashed sales for this cashier
+        uncashed_sales = Sale.query.filter_by(
+            cashier_id=cashier.id,
+            is_cashed_out=False
+        ).all()
+        
+        if uncashed_sales:
+            total_amount = sum(sale.total_price for sale in uncashed_sales)
+            cashiers_with_sales.append({
+                'cashier': cashier,
+                'total_amount': total_amount,
+                'sales_count': len(uncashed_sales)
+            })
+    
+    # Get recent cashouts
+    recent_cashouts = Cashout.query.order_by(Cashout.date.desc()).limit(10).all()
+    
+    return render_template(
+        'admin_cashout.html',
+        cashiers_with_sales=cashiers_with_sales,
+        recent_cashouts=recent_cashouts
+    )
+
+@app.route('/admin/cashout/history')
+@login_required
+def cashout_history():
+    if current_user.role != 'admin':
+        flash('Access denied. Admin privileges required.', 'danger')
+        return redirect(url_for('login'))
+    
+    cashouts = Cashout.query.order_by(Cashout.date.desc()).all()
+    
+    # Calculate total amount cashed out
+    total_cashed_out = sum(cashout.amount for cashout in cashouts)
+    
+    return render_template(
+        'cashout_history.html',
+        cashouts=cashouts,
+        total_cashed_out=total_cashed_out
+    )
+
+@app.route('/admin/cashout/details/<int:cashout_id>')
+@login_required
+def cashout_details(cashout_id):
+    if current_user.role != 'admin':
+        flash('Access denied. Admin privileges required.', 'danger')
+        return redirect(url_for('login'))
+    
+    cashout = Cashout.query.get_or_404(cashout_id)
+    sales = Sale.query.filter_by(cashout_id=cashout_id).all()
+    
+    return render_template(
+        'cashout_details.html',
+        cashout=cashout,
+        sales=sales
+    )
+
+@app.route('/cashier/sales_status')
+@login_required
+def cashier_sales_status():
+    if current_user.role != 'cashier':
+        flash('Access denied. Cashier privileges required.', 'danger')
+        return redirect(url_for('login'))
+    
+    # Get all uncashed sales for this cashier
+    uncashed_sales = Sale.query.filter_by(
+        cashier_id=current_user.id,
+        is_cashed_out=False
+    ).order_by(Sale.date_sold.desc()).all()
+    
+    # Calculate total uncashed amount
+    total_uncashed = sum(sale.total_price for sale in uncashed_sales)
+    
+    # Get recent cashouts for this cashier
+    recent_cashouts = Cashout.query.filter_by(
+        cashier_id=current_user.id
+    ).order_by(Cashout.date.desc()).limit(5).all()
+    
+    # Get last cashout date
+    last_cashout = Cashout.query.filter_by(
+        cashier_id=current_user.id
+    ).order_by(Cashout.date.desc()).first()
+    
+    last_cashout_date = last_cashout.date if last_cashout else None
+    
+    # Enrich cashout objects with their associated sales
+    for cashout in recent_cashouts:
+        cashout_sales = Sale.query.filter_by(
+            cashout_id=cashout.id
+        ).all()
+        cashout.sales = cashout_sales
+    
+    return render_template(
+        'cashier_sales_status.html',
+        uncashed_sales=uncashed_sales,
+        total_uncashed=total_uncashed,
+        recent_cashouts=recent_cashouts,
+        last_cashout_date=last_cashout_date
+    )
+
+@app.route('/admin/delete_sale/<int:sale_id>', methods=['POST'])
+@login_required
+def delete_sale(sale_id):
+    if current_user.role != 'admin':
+        flash(_('Access denied. Admin privileges required.'), 'danger')
+        return redirect(url_for('login'))
+    
+    sale = Sale.query.get_or_404(sale_id)
+    
+    # Check if the sale is already cashed out
+    if sale.is_cashed_out:
+        flash(_('Cannot delete a sale that has been cashed out.'), 'danger')
+        return redirect(url_for('view_sales'))
+    
+    # Restore stock to product
+    product = sale.product
+    product.stock += sale.quantity
+    
+    # Log the deletion
+    logger.info(f"Admin {current_user.username} deleted sale ID {sale.id} for {sale.quantity} units of {product.name}")
+    
+    # Delete the sale
+    db.session.delete(sale)
+    db.session.commit()
+    
+    flash(_('Sale deleted successfully. Stock has been restored.'), 'success')
+    return redirect(url_for('view_sales'))
 
 def initialize_database():
     db.create_all()

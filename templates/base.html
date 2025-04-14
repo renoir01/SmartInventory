@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ g.lang_code }}">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,8 +43,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                    <a href="{{ url_for('view_sales') }}" class="nav-link {% if request.endpoint == 'view_sales' %}active{% endif %}">
                         <i class="fas fa-chart-line"></i> {{ _('Sales') }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('admin_cashout') }}" class="nav-link {% if request.endpoint == 'admin_cashout' or request.endpoint == 'cashout_history' or request.endpoint == 'cashout_details' %}active{% endif %}">
+                        <i class="fas fa-cash-register"></i> {{ _('Cashout') }}
                     </a>
                 </li>
                 {% elif current_user.role == 'cashier' %}
@@ -58,19 +63,24 @@
                         <i class="fas fa-chart-line"></i> {{ _('My Sales') }}
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('cashier_sales_status') }}" class="nav-link {% if request.endpoint == 'cashier_sales_status' %}active{% endif %}">
+                        <i class="fas fa-money-bill-wave"></i> {{ _('Balance') }}
+                    </a>
+                </li>
                 {% endif %}
             </ul>
         </div>
     
-                        <div class="language-selector">
-                            <form action="{{ url_for('set_language', language='en') }}" method="GET" style="display: inline;">
-                                <button type="submit" class="btn btn-sm btn-outline-secondary">English</button>
-                            </form>
-                            <form action="{{ url_for('set_language', language='rw') }}" method="GET" style="display: inline;">
-                                <button type="submit" class="btn btn-sm btn-outline-secondary">Kinyarwanda</button>
-                            </form>
-                        </div>
-                        </nav>
+        <div class="language-selector">
+            <form action="{{ url_for('set_language', language='en') }}" method="GET" class="d-inline">
+                <button type="submit" class="btn btn-sm btn-outline-secondary">English</button>
+            </form>
+            <form action="{{ url_for('set_language', language='rw') }}" method="GET" class="d-inline">
+                <button type="submit" class="btn btn-sm btn-outline-secondary">Kinyarwanda</button>
+            </form>
+        </div>
+    </nav>
     {% endif %}
     
     <main class="main-content">
@@ -103,8 +113,12 @@
                         {% if current_user.role == 'admin' %}
                             <li><a href="{{ url_for('admin_dashboard') }}">{{ _('Dashboard') }}</a></li>
                             <li><a href="{{ url_for('manage_products') }}">{{ _('Products') }}</a></li>
+                            <li><a href="{{ url_for('view_sales') }}">{{ _('Sales') }}</a></li>
+                            <li><a href="{{ url_for('admin_cashout') }}">{{ _('Cashout') }}</a></li>
                         {% elif current_user.role == 'cashier' %}
                             <li><a href="{{ url_for('cashier_dashboard') }}">{{ _('Dashboard') }}</a></li>
+                            <li><a href="{{ url_for('view_cashier_sales') }}">{{ _('My Sales') }}</a></li>
+                            <li><a href="{{ url_for('cashier_sales_status') }}">{{ _('Balance') }}</a></li>
                         {% endif %}
                     {% endif %}
                 </ul>
@@ -150,6 +164,8 @@
         });
     </script>
     <script src="{{ url_for('static', filename='js/category-progress.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
