@@ -191,19 +191,31 @@ def admin_dashboard():
     not_cashed_out_sales = Sale.query.filter_by(is_cashed_out=False).all()
     not_cashed_out_by_cashier = {}
     
+    # Calculate total uncashed sales amount directly
+    total_uncashed_amount = 0
+    
     for cashier in cashiers:
         cashier_sales = [sale for sale in not_cashed_out_sales if sale.cashier_id == cashier.id]
+        cashier_total = sum(sale.total_price for sale in cashier_sales)
+        total_uncashed_amount += cashier_total
+        
+        # Debug log
+        print(f"Cashier {cashier.username}: {len(cashier_sales)} sales, total: RWF {cashier_total}")
+        
         not_cashed_out_by_cashier[cashier.id] = {
             'cashier': cashier,
             'sales': cashier_sales,
-            'total': sum(sale.total_price for sale in cashier_sales)
+            'total': cashier_total
         }
+    
+    # Debug log for total
+    print(f"Total uncashed sales: {len(not_cashed_out_sales)}, total amount: RWF {total_uncashed_amount}")
     
     # Get current period sales (uncashed sales only)
     current_period_sales = not_cashed_out_sales
     
-    # Calculate current period revenue and profit
-    current_period_revenue = sum(sale.total_price for sale in current_period_sales)
+    # Calculate current period revenue and profit - use the directly calculated total
+    current_period_revenue = total_uncashed_amount
     current_period_profit = sum(sale.total_price - (sale.product.purchase_price * sale.quantity) for sale in current_period_sales)
     
     # Get all-time sales
@@ -234,6 +246,11 @@ def admin_dashboard():
         # Get current period sales for this product (since last cashout)
         product_sales_current_period = [sale for sale in product_sales if sale.is_cashed_out == False]
         
+        # Double-check the calculations for uncashed sales
+        current_period_revenue = sum(sale.total_price for sale in product_sales_current_period)
+        current_period_quantity = sum(sale.quantity for sale in product_sales_current_period)
+        current_period_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in product_sales_current_period)
+        
         # Calculate total revenue, quantity, and profit for this product (all-time)
         total_revenue = sum(sale.total_price for sale in product_sales)
         total_quantity = sum(sale.quantity for sale in product_sales)
@@ -243,11 +260,6 @@ def admin_dashboard():
         today_revenue = sum(sale.total_price for sale in product_sales_today)
         today_quantity = sum(sale.quantity for sale in product_sales_today)
         today_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in product_sales_today)
-        
-        # Calculate current period metrics
-        current_period_revenue = sum(sale.total_price for sale in product_sales_current_period)
-        current_period_quantity = sum(sale.quantity for sale in product_sales_current_period)
-        current_period_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in product_sales_current_period)
         
         # Add to our list of top products (all-time)
         if total_quantity > 0:
