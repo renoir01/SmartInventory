@@ -229,12 +229,12 @@ def admin_dashboard():
     # Calculate product performance metrics
     top_products_by_revenue = []
     
-    # Get all products that have sales
-    products_with_sales = db.session.query(Product).join(Sale.product).filter(Sale.is_cashed_out == False).distinct().all()
+    # Get all products that have sales - include all sales, not just uncashed ones
+    products_with_sales = db.session.query(Product).join(Sale.product).distinct().all()
     
     for product in products_with_sales:
-        # Get all uncashed sales for this product
-        product_sales = Sale.query.filter_by(product_id=product.id, is_cashed_out=False).all()
+        # Get all sales for this product
+        product_sales = Sale.query.filter_by(product_id=product.id).all()
         
         # Calculate total revenue, quantity, and profit for this product
         total_revenue = sum(sale.total_price for sale in product_sales)

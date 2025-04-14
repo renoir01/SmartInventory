@@ -151,115 +151,68 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <!-- Top Products by Revenue -->
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-header bg-success text-white">
-                                <h3>{{ _('Top Revenue Generators') }}</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>{{ _('Product') }}</th>
-                                                <th>{{ _('Revenue') }}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for product_data in top_products_by_revenue %}
-                                            <tr>
-                                                <td>{{ product_data.product.name }}</td>
-                                                <td>RWF {{ "%.0f"|format(product_data.revenue) }}</td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                    <div class="col-md-6">
+                        <h4>{{ _('By Quantity Sold') }}</h4>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>{{ _('Product') }}</th>
+                                        <th>{{ _('Quantity Sold') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in top_products_by_quantity %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ product.product.name }}</td>
+                                        <td>{{ product.quantity }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    
-                    <!-- Top Products by Quantity -->
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-header bg-primary text-white">
-                                <h3>{{ _('Most Popular Items') }}</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>{{ _('Product') }}</th>
-                                                <th>{{ _('Units Sold') }}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for product_data in top_products_by_quantity %}
-                                            <tr>
-                                                <td>{{ product_data.product.name }}</td>
-                                                <td>{{ product_data.quantity }}</td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Top Products by Profit -->
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-header bg-info text-white">
-                                <h3>{{ _('Highest Profit Items') }}</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>{{ _('Product') }}</th>
-                                                <th>{{ _('Profit') }}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for product_data in top_products_by_profit %}
-                                            <tr>
-                                                <td>{{ product_data.product.name }}</td>
-                                                <td>RWF {{ "%.0f"|format(product_data.profit) }}</td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                    <div class="col-md-6">
+                        <h4>{{ _('By Revenue') }}</h4>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>{{ _('Product') }}</th>
+                                        <th>{{ _('Revenue') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in top_products_by_revenue %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ product.product.name }}</td>
+                                        <td>RWF {{ "%.0f"|format(product.revenue) }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Product Performance Chart -->
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3>{{ _('Product Performance Visualization') }}</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h4>{{ _('Revenue & Profit') }}</h4>
-                                        <canvas id="productPerformanceChart" height="300"></canvas>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h4>{{ _('Quantity Sold') }}</h4>
-                                        <canvas id="productQuantityChart" height="300"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Hidden element to store product data - keeping for backward compatibility -->
+                <div id="product-data" class="hidden-data">
+                    {
+                        "labels": [{% for product in top_products_by_quantity %}"{{ product.product.name }}"{% if not loop.last %},{% endif %}{% endfor %}],
+                        "revenueData": [{% for product in top_products_by_revenue %}{{ product.revenue }}{% if not loop.last %},{% endif %}{% endfor %}],
+                        "profitData": [{% for product in top_products_by_profit %}{{ product.profit }}{% if not loop.last %},{% endif %}{% endfor %}],
+                        "quantityData": [{% for product in top_products_by_quantity %}{{ product.quantity }}{% if not loop.last %},{% endif %}{% endfor %}],
+                        "revenueLabel": "{{ _('Revenue (RWF)') }}",
+                        "profitLabel": "{{ _('Profit (RWF)') }}",
+                        "quantityLabel": "{{ _('Quantity Sold') }}",
+                        "xAxisLabel": "{{ _('Products') }}",
+                        "yAxisLabel": "{{ _('Amount (RWF)') }}",
+                        "quantityAxisLabel": "{{ _('Units Sold') }}",
+                        "quantityUnit": "{{ _('units') }}"
+                    }
                 </div>
             </div>
         </div>
@@ -415,18 +368,15 @@
             productChartData.revenueData = productData.revenueData;
             productChartData.profitData = productData.profitData;
             productChartData.quantityData = productData.quantityData;
+            productChartData.revenueLabel = productData.revenueLabel;
+            productChartData.profitLabel = productData.profitLabel;
+            productChartData.quantityLabel = productData.quantityLabel;
+            productChartData.xAxisLabel = productData.xAxisLabel;
+            productChartData.yAxisLabel = productData.yAxisLabel;
+            productChartData.quantityAxisLabel = productData.quantityAxisLabel;
+            productChartData.quantityUnit = productData.quantityUnit;
         }
     });
 </script>
 <script src="{{ url_for('static', filename='js/product-performance.js') }}"></script>
-
-<!-- Hidden element with product data -->
-<script id="product-data" type="application/json">
-{
-    "labels": [{% for product in top_products_by_revenue %}"{{ product.product.name }}"{% if not loop.last %},{% endif %}{% endfor %}],
-    "revenueData": [{% for product in top_products_by_revenue %}{{ product.revenue }}{% if not loop.last %},{% endif %}{% endfor %}],
-    "profitData": [{% for product in top_products_by_revenue %}{{ product.profit }}{% if not loop.last %},{% endif %}{% endfor %}],
-    "quantityData": [{% for product in top_products_by_revenue %}{{ product.quantity }}{% if not loop.last %},{% endif %}{% endfor %}]
-}
-</script>
 {% endblock %}

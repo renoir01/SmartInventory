@@ -21,6 +21,27 @@
     margin-right: 0;
   }
   
+  /* Widget responsiveness */
+  .widget {
+    height: auto;
+    min-height: 150px;
+  }
+  
+  .widget-value {
+    font-size: 1.5rem;
+  }
+  
+  /* Column adjustments for small screens */
+  .col-md-3, .col-md-4, .col-md-6 {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  /* Chart containers */
+  .chart-container {
+    height: 300px !important;
+  }
+  
   /* Search form in cashier dashboard */
   .search-form {
     flex-direction: column;
@@ -58,6 +79,18 @@
     margin: 0 auto;
     max-height: 90vh;
     overflow-y: auto;
+  }
+}
+
+/* Medium screens */
+@media (min-width: 769px) and (max-width: 992px) {
+  .widget-value {
+    font-size: 1.7rem;
+  }
+  
+  .col-md-3 {
+    width: 50%;
+    float: left;
   }
 }
 
@@ -104,6 +137,24 @@
     height: 36px; /* Better touch target */
     font-size: 16px;
   }
+}
+
+/* Fix for widget heights to maintain consistency */
+.widget {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.widget-body {
+  flex: 1;
+}
+
+/* Fix for statistics display */
+.widget-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Print styles for reports */

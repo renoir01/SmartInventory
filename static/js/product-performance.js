@@ -10,16 +10,18 @@ function initProductPerformanceChart(chartData) {
                 {
                     label: chartData.revenueLabel,
                     data: chartData.revenueData,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.7)',
                     borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
+                    borderWidth: 1,
+                    order: 2
                 },
                 {
                     label: chartData.profitLabel,
                     data: chartData.profitData,
-                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    backgroundColor: 'rgba(153, 102, 255, 0.7)',
                     borderColor: 'rgba(153, 102, 255, 1)',
-                    borderWidth: 1
+                    borderWidth: 1,
+                    order: 1
                 }
             ]
         },
@@ -32,6 +34,11 @@ function initProductPerformanceChart(chartData) {
                     title: {
                         display: true,
                         text: chartData.yAxisLabel
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return value.toLocaleString() + ' RWF';
+                        }
                     }
                 },
                 x: {
@@ -69,7 +76,7 @@ function initProductQuantityChart(chartData) {
                 {
                     label: chartData.quantityLabel,
                     data: chartData.quantityData,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
                 }
@@ -78,15 +85,16 @@ function initProductQuantityChart(chartData) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            indexAxis: 'y',  // Horizontal bar chart for better readability
             scales: {
-                y: {
+                x: {
                     beginAtZero: true,
                     title: {
                         display: true,
                         text: chartData.quantityAxisLabel
                     }
                 },
-                x: {
+                y: {
                     title: {
                         display: true,
                         text: chartData.xAxisLabel
@@ -111,10 +119,45 @@ function initProductQuantityChart(chartData) {
 
 // Initialize all charts when document is ready
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if the global data variable exists
-    if (typeof productChartData !== 'undefined') {
-        // Initialize charts with the global data
-        initProductPerformanceChart(productChartData);
-        initProductQuantityChart(productChartData);
+    try {
+        console.log('Initializing product performance charts...');
+        
+        // Check if the elements exist
+        if (!document.getElementById('productPerformanceChart') || 
+            !document.getElementById('productQuantityChart')) {
+            console.error('Chart canvas elements not found');
+            return;
+        }
+        
+        if (!document.getElementById('product-data')) {
+            console.error('Product data element not found');
+            return;
+        }
+        
+        // Parse data from hidden element
+        var dataElement = document.getElementById('product-data');
+        var productData;
+        
+        try {
+            productData = JSON.parse(dataElement.textContent);
+            console.log('Parsed product data:', productData);
+        } catch (e) {
+            console.error('Error parsing product data JSON:', e);
+            return;
+        }
+        
+        // Check if we have data to display
+        if (!productData.labels || productData.labels.length === 0) {
+            console.warn('No product labels available for charts');
+            return;
+        }
+        
+        // Initialize charts
+        initProductPerformanceChart(productData);
+        initProductQuantityChart(productData);
+        console.log('Charts initialized successfully');
+        
+    } catch (error) {
+        console.error('Error initializing charts:', error);
     }
 });

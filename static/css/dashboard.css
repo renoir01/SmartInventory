@@ -100,6 +100,10 @@
     padding: 1rem;
 }
 
+.hidden-data {
+    display: none;
+}
+
 .category-header {
     margin-bottom: 0.5rem;
 }
@@ -140,6 +144,12 @@
     font-weight: 500;
     width: 40px;
     text-align: right;
+}
+
+.chart-container {
+    position: relative;
+    height: 300px;
+    margin-bottom: 2rem;
 }
 
 /* Quick Actions */
