@@ -53,7 +53,7 @@
 
 <div class="card mb-4">
     <div class="card-header">
-        <h2>{{ _('Current Period Summary') }} ({{ _('Since Last Cashout') }})</h2>
+        <h2>{{ _('Current Period Summary') }} ({{ _('Uncashed Sales') }})</h2>
     </div>
     <div class="card-body">
         <div class="row">
@@ -61,8 +61,8 @@
                 <div class="widget widget-info">
                     <i class="fas fa-shopping-cart widget-icon"></i>
                     <h3 class="widget-title">{{ _('Current Period Sales') }}</h3>
-                    <div class="widget-value">{{ current_period_sales_count }}</div>
-                    <p class="widget-description">{{ _('Sales since last cashout') }}</p>
+                    <div class="widget-value">{{ current_period_sales|length }}</div>
+                    <p class="widget-description">{{ _('Uncashed sales') }}</p>
                     <a href="{{ url_for('admin_cashout') }}" class="widget-link">{{ _('View cashout details') }} <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                     <i class="fas fa-money-bill-wave widget-icon"></i>
                     <h3 class="widget-title">{{ _('Current Period Revenue') }}</h3>
                     <div class="widget-value">RWF {{ "%.0f"|format(current_period_revenue) }}</div>
-                    <p class="widget-description">{{ _('Revenue since last cashout') }}</p>
+                    <p class="widget-description">{{ _('Revenue from uncashed sales') }}</p>
                     <a href="{{ url_for('admin_cashout') }}" class="widget-link">{{ _('Manage cashouts') }} <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                     <i class="fas fa-chart-line widget-icon"></i>
                     <h3 class="widget-title">{{ _('Current Period Profit') }}</h3>
                     <div class="widget-value">RWF {{ "%.0f"|format(current_period_profit) }}</div>
-                    <p class="widget-description">{{ _('Profit since last cashout') }}</p>
+                    <p class="widget-description">{{ _('Profit from uncashed sales') }}</p>
                     <a href="{{ url_for('admin_cashout') }}" class="widget-link">{{ _('Manage cashouts') }} <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
@@ -157,7 +157,7 @@
                                 <button class="nav-link active" id="today-tab" data-bs-toggle="tab" data-bs-target="#today" type="button" role="tab" aria-controls="today" aria-selected="true">{{ _('Today') }}</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="current-period-tab" data-bs-toggle="tab" data-bs-target="#current-period" type="button" role="tab" aria-controls="current-period" aria-selected="false">{{ _('Current Period') }}</button>
+                                <button class="nav-link" id="current-period-tab" data-bs-toggle="tab" data-bs-target="#current-period" type="button" role="tab" aria-controls="current-period" aria-selected="false">{{ _('Uncashed Sales') }}</button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="all-time-tab" data-bs-toggle="tab" data-bs-target="#all-time" type="button" role="tab" aria-controls="all-time" aria-selected="false">{{ _('All Time') }}</button>
@@ -235,7 +235,7 @@
                     <div class="tab-pane fade" id="current-period" role="tabpanel" aria-labelledby="current-period-tab">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4>{{ _('By Quantity Sold (Current Period)') }}</h4>
+                                <h4>{{ _('By Quantity Sold (Uncashed Sales)') }}</h4>
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <thead>
@@ -256,7 +256,7 @@
                                                 {% endfor %}
                                             {% else %}
                                                 <tr>
-                                                    <td colspan="3" class="text-center">{{ _('No sales recorded in current period') }}</td>
+                                                    <td colspan="3" class="text-center">{{ _('No uncashed sales recorded') }}</td>
                                                 </tr>
                                             {% endif %}
                                         </tbody>
@@ -264,7 +264,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <h4>{{ _('By Revenue (Current Period)') }}</h4>
+                                <h4>{{ _('By Revenue (Uncashed Sales)') }}</h4>
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <thead>
@@ -285,7 +285,7 @@
                                                 {% endfor %}
                                             {% else %}
                                                 <tr>
-                                                    <td colspan="3" class="text-center">{{ _('No sales recorded in current period') }}</td>
+                                                    <td colspan="3" class="text-center">{{ _('No uncashed sales recorded') }}</td>
                                                 </tr>
                                             {% endif %}
                                         </tbody>

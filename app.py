@@ -199,18 +199,8 @@ def admin_dashboard():
             'total': sum(sale.total_price for sale in cashier_sales)
         }
     
-    # Get current period sales (since last cashout for each cashier)
-    current_period_sales = []
-    for cashier in cashiers:
-        last_cashout = Cashout.query.filter_by(cashier_id=cashier.id).order_by(Cashout.date.desc()).first()
-        if last_cashout:
-            since_last_cashout = Sale.query.filter(
-                Sale.cashier_id == cashier.id,
-                Sale.date_sold > last_cashout.date
-            ).all()
-        else:
-            since_last_cashout = Sale.query.filter_by(cashier_id=cashier.id).all()
-        current_period_sales.extend(since_last_cashout)
+    # Get current period sales (uncashed sales only)
+    current_period_sales = not_cashed_out_sales
     
     # Calculate current period revenue and profit
     current_period_revenue = sum(sale.total_price for sale in current_period_sales)
@@ -242,13 +232,7 @@ def admin_dashboard():
         product_sales_today = [sale for sale in product_sales if func.date(sale.date_sold) == today]
         
         # Get current period sales for this product (since last cashout)
-        product_sales_current_period = []
-        for sale in product_sales:
-            last_cashout = Cashout.query.filter_by(cashier_id=sale.cashier_id).order_by(Cashout.date.desc()).first()
-            if last_cashout and sale.date_sold > last_cashout.date:
-                product_sales_current_period.append(sale)
-            elif not last_cashout:
-                product_sales_current_period.append(sale)
+        product_sales_current_period = [sale for sale in product_sales if sale.is_cashed_out == False]
         
         # Calculate total revenue, quantity, and profit for this product (all-time)
         total_revenue = sum(sale.total_price for sale in product_sales)
