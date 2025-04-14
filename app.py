@@ -228,6 +228,8 @@ def admin_dashboard():
     
     # Calculate product performance metrics
     top_products_by_revenue = []
+    top_products_by_revenue_today = []
+    top_products_by_revenue_current_period = []
     
     # Get all products that have sales - include all sales, not just uncashed ones
     products_with_sales = db.session.query(Product).join(Sale.product).distinct().all()
@@ -236,21 +238,64 @@ def admin_dashboard():
         # Get all sales for this product
         product_sales = Sale.query.filter_by(product_id=product.id).all()
         
-        # Calculate total revenue, quantity, and profit for this product
+        # Get today's sales for this product
+        product_sales_today = [sale for sale in product_sales if func.date(sale.date_sold) == today]
+        
+        # Get current period sales for this product (since last cashout)
+        product_sales_current_period = []
+        for sale in product_sales:
+            last_cashout = Cashout.query.filter_by(cashier_id=sale.cashier_id).order_by(Cashout.date.desc()).first()
+            if last_cashout and sale.date_sold > last_cashout.date:
+                product_sales_current_period.append(sale)
+            elif not last_cashout:
+                product_sales_current_period.append(sale)
+        
+        # Calculate total revenue, quantity, and profit for this product (all-time)
         total_revenue = sum(sale.total_price for sale in product_sales)
         total_quantity = sum(sale.quantity for sale in product_sales)
         total_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in product_sales)
         
-        # Add to our list of top products
-        top_products_by_revenue.append({
-            'product': product,
-            'revenue': total_revenue,
-            'quantity': total_quantity,
-            'profit': total_profit
-        })
+        # Calculate today's metrics
+        today_revenue = sum(sale.total_price for sale in product_sales_today)
+        today_quantity = sum(sale.quantity for sale in product_sales_today)
+        today_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in product_sales_today)
+        
+        # Calculate current period metrics
+        current_period_revenue = sum(sale.total_price for sale in product_sales_current_period)
+        current_period_quantity = sum(sale.quantity for sale in product_sales_current_period)
+        current_period_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in product_sales_current_period)
+        
+        # Add to our list of top products (all-time)
+        if total_quantity > 0:
+            top_products_by_revenue.append({
+                'product': product,
+                'revenue': total_revenue,
+                'quantity': total_quantity,
+                'profit': total_profit
+            })
+        
+        # Add to our list of top products (today)
+        if today_quantity > 0:
+            top_products_by_revenue_today.append({
+                'product': product,
+                'revenue': today_revenue,
+                'quantity': today_quantity,
+                'profit': today_profit
+            })
+        
+        # Add to our list of top products (current period)
+        if current_period_quantity > 0:
+            top_products_by_revenue_current_period.append({
+                'product': product,
+                'revenue': current_period_revenue,
+                'quantity': current_period_quantity,
+                'profit': current_period_profit
+            })
     
     # Sort products by revenue (highest first)
     top_products_by_revenue = sorted(top_products_by_revenue, key=lambda x: x['revenue'], reverse=True)[:10]
+    top_products_by_revenue_today = sorted(top_products_by_revenue_today, key=lambda x: x['revenue'], reverse=True)[:10]
+    top_products_by_revenue_current_period = sorted(top_products_by_revenue_current_period, key=lambda x: x['revenue'], reverse=True)[:10]
     
     # Also prepare lists sorted by quantity and profit for different views
     top_products_by_quantity = sorted(top_products_by_revenue.copy(), key=lambda x: x['quantity'], reverse=True)[:10]
@@ -277,6 +322,8 @@ def admin_dashboard():
         top_products_by_revenue=top_products_by_revenue,
         top_products_by_quantity=top_products_by_quantity,
         top_products_by_profit=top_products_by_profit,
+        top_products_by_revenue_today=top_products_by_revenue_today,
+        top_products_by_revenue_current_period=top_products_by_revenue_current_period,
         total_revenue=all_time_revenue  # Add total_revenue for backward compatibility
     )
 

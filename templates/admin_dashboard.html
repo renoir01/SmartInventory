@@ -151,68 +151,201 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-6">
-                        <h4>{{ _('By Quantity Sold') }}</h4>
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>{{ _('Product') }}</th>
-                                        <th>{{ _('Quantity Sold') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for product in top_products_by_quantity %}
-                                    <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td>{{ product.product.name }}</td>
-                                        <td>{{ product.quantity }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <h4>{{ _('By Revenue') }}</h4>
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>{{ _('Product') }}</th>
-                                        <th>{{ _('Revenue') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for product in top_products_by_revenue %}
-                                    <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td>{{ product.product.name }}</td>
-                                        <td>RWF {{ "%.0f"|format(product.revenue) }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="col-md-12 mb-3">
+                        <ul class="nav nav-tabs" id="productPerformanceTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="today-tab" data-bs-toggle="tab" data-bs-target="#today" type="button" role="tab" aria-controls="today" aria-selected="true">{{ _('Today') }}</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="current-period-tab" data-bs-toggle="tab" data-bs-target="#current-period" type="button" role="tab" aria-controls="current-period" aria-selected="false">{{ _('Current Period') }}</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="all-time-tab" data-bs-toggle="tab" data-bs-target="#all-time" type="button" role="tab" aria-controls="all-time" aria-selected="false">{{ _('All Time') }}</button>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <!-- Hidden element to store product data - keeping for backward compatibility -->
-                <div id="product-data" class="hidden-data">
-                    {
-                        "labels": [{% for product in top_products_by_quantity %}"{{ product.product.name }}"{% if not loop.last %},{% endif %}{% endfor %}],
-                        "revenueData": [{% for product in top_products_by_revenue %}{{ product.revenue }}{% if not loop.last %},{% endif %}{% endfor %}],
-                        "profitData": [{% for product in top_products_by_profit %}{{ product.profit }}{% if not loop.last %},{% endif %}{% endfor %}],
-                        "quantityData": [{% for product in top_products_by_quantity %}{{ product.quantity }}{% if not loop.last %},{% endif %}{% endfor %}],
-                        "revenueLabel": "{{ _('Revenue (RWF)') }}",
-                        "profitLabel": "{{ _('Profit (RWF)') }}",
-                        "quantityLabel": "{{ _('Quantity Sold') }}",
-                        "xAxisLabel": "{{ _('Products') }}",
-                        "yAxisLabel": "{{ _('Amount (RWF)') }}",
-                        "quantityAxisLabel": "{{ _('Units Sold') }}",
-                        "quantityUnit": "{{ _('units') }}"
-                    }
+                
+                <div class="tab-content" id="productPerformanceTabContent">
+                    <!-- Today's Performance -->
+                    <div class="tab-pane fade show active" id="today" role="tabpanel" aria-labelledby="today-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>{{ _('By Quantity Sold Today') }}</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>{{ _('Product') }}</th>
+                                                <th>{{ _('Quantity Sold') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% if top_products_by_revenue_today %}
+                                                {% for product in top_products_by_revenue_today|sort(attribute='quantity', reverse=true) %}
+                                                <tr>
+                                                    <td>{{ loop.index }}</td>
+                                                    <td>{{ product.product.name }}</td>
+                                                    <td>{{ product.quantity }}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            {% else %}
+                                                <tr>
+                                                    <td colspan="3" class="text-center">{{ _('No sales recorded today') }}</td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>{{ _('By Revenue Today') }}</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>{{ _('Product') }}</th>
+                                                <th>{{ _('Revenue') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% if top_products_by_revenue_today %}
+                                                {% for product in top_products_by_revenue_today %}
+                                                <tr>
+                                                    <td>{{ loop.index }}</td>
+                                                    <td>{{ product.product.name }}</td>
+                                                    <td>RWF {{ "%.0f"|format(product.revenue) }}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            {% else %}
+                                                <tr>
+                                                    <td colspan="3" class="text-center">{{ _('No sales recorded today') }}</td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Current Period Performance -->
+                    <div class="tab-pane fade" id="current-period" role="tabpanel" aria-labelledby="current-period-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>{{ _('By Quantity Sold (Current Period)') }}</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>{{ _('Product') }}</th>
+                                                <th>{{ _('Quantity Sold') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% if top_products_by_revenue_current_period %}
+                                                {% for product in top_products_by_revenue_current_period|sort(attribute='quantity', reverse=true) %}
+                                                <tr>
+                                                    <td>{{ loop.index }}</td>
+                                                    <td>{{ product.product.name }}</td>
+                                                    <td>{{ product.quantity }}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            {% else %}
+                                                <tr>
+                                                    <td colspan="3" class="text-center">{{ _('No sales recorded in current period') }}</td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>{{ _('By Revenue (Current Period)') }}</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>{{ _('Product') }}</th>
+                                                <th>{{ _('Revenue') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% if top_products_by_revenue_current_period %}
+                                                {% for product in top_products_by_revenue_current_period %}
+                                                <tr>
+                                                    <td>{{ loop.index }}</td>
+                                                    <td>{{ product.product.name }}</td>
+                                                    <td>RWF {{ "%.0f"|format(product.revenue) }}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            {% else %}
+                                                <tr>
+                                                    <td colspan="3" class="text-center">{{ _('No sales recorded in current period') }}</td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- All-Time Performance -->
+                    <div class="tab-pane fade" id="all-time" role="tabpanel" aria-labelledby="all-time-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>{{ _('By Quantity Sold (All-Time)') }}</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>{{ _('Product') }}</th>
+                                                <th>{{ _('Quantity Sold') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for product in top_products_by_quantity %}
+                                            <tr>
+                                                <td>{{ loop.index }}</td>
+                                                <td>{{ product.product.name }}</td>
+                                                <td>{{ product.quantity }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>{{ _('By Revenue (All-Time)') }}</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>{{ _('Product') }}</th>
+                                                <th>{{ _('Revenue') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for product in top_products_by_revenue %}
+                                            <tr>
+                                                <td>{{ loop.index }}</td>
+                                                <td>{{ product.product.name }}</td>
+                                                <td>RWF {{ "%.0f"|format(product.revenue) }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
