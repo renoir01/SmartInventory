@@ -120,18 +120,18 @@
                                     <!-- Current Period -->
                                     <tr class="table-warning">
                                         <td><strong>{{ _('Current Period') }}</strong></td>
-                                        <td>{% if last_cashout_date %}{{ last_cashout_date.strftime('%Y-%m-%d %H:%M') }}{% else %}{{ _('All Time') }}{% endif %}</td>
+                                        <td>{% if last_cashout_date %}{{ last_cashout_date.strftime('%Y-%m-%d %H:%M') }}{% else %}{{ _('First Period') }}{% endif %}</td>
                                         <td>{{ _('Present') }}</td>
                                         <td>{{ uncashed_sales|length }}</td>
                                         <td>RWF {{ "%.0f"|format(total_uncashed) }}</td>
                                         <td><span class="badge badge-warning">{{ _('Pending') }}</span></td>
                                     </tr>
                                     
-                                    <!-- Previous Periods -->
+                                    <!-- Previous Periods (limited to most recent) -->
                                     {% for cashout in recent_cashouts %}
                                     <tr>
                                         <td>{{ _('Period') }} #{{ loop.index }}</td>
-                                        <td>{% if loop.index < recent_cashouts|length %}{{ recent_cashouts[loop.index].date.strftime('%Y-%m-%d %H:%M') }}{% else %}{{ _('Start') }}{% endif %}</td>
+                                        <td>{% if loop.index < recent_cashouts|length %}{{ recent_cashouts[loop.index].date.strftime('%Y-%m-%d %H:%M') }}{% else %}{{ _('Previous Period') }}{% endif %}</td>
                                         <td>{{ cashout.date.strftime('%Y-%m-%d %H:%M') }}</td>
                                         <td>{{ cashout.sales|length }}</td>
                                         <td>RWF {{ "%.0f"|format(cashout.amount) }}</td>
