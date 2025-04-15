@@ -94,6 +94,12 @@ class Product(db.Model):
     low_stock_threshold = db.Column(db.Integer, default=10)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
     
+    # Add fields for packaged products
+    is_packaged = db.Column(db.Boolean, default=False)
+    units_per_package = db.Column(db.Integer, default=1)
+    individual_price = db.Column(db.Float, default=0)
+    individual_stock = db.Column(db.Integer, default=0)
+    
     def is_low_stock(self):
         return self.stock <= self.low_stock_threshold
     
@@ -447,6 +453,9 @@ def cashier_dashboard():
         flash('You do not have permission to access this page.', 'danger')
         return redirect(url_for('dashboard'))
     
+    # Get search query if provided
+    search_query = request.args.get('search', '')
+    
     # Get today's date
     today = datetime.now().date()
     
@@ -479,6 +488,37 @@ def cashier_dashboard():
     not_cashed_out_total = uncashed_total
     not_cashed_out_count = len(uncashed_sales)
     
+    # Get all products for the sale form with search functionality
+    if search_query:
+        # Search by product name
+        products = Product.query.filter(
+            Product.name.ilike(f'%{search_query}%'),
+            Product.stock > 0
+        ).all()
+    else:
+        # Get all products with stock
+        products = Product.query.filter(Product.stock > 0).all()
+    
+    # Get last cashout for this cashier
+    last_cashout = Cashout.query.filter_by(
+        cashier_id=current_user.id
+    ).order_by(Cashout.date.desc()).first()
+    
+    # Get current period sales (since last cashout)
+    if last_cashout:
+        current_period_sales = Sale.query.filter(
+            Sale.cashier_id == current_user.id,
+            Sale.date_sold > last_cashout.date
+        ).all()
+        last_cashout_date = last_cashout.date
+    else:
+        current_period_sales = Sale.query.filter_by(
+            cashier_id=current_user.id
+        ).all()
+        last_cashout_date = None
+    
+    current_period_sales_count = len(current_period_sales)
+    
     return render_template(
         'cashier_dashboard.html',
         today=datetime.now(),
@@ -491,7 +531,12 @@ def cashier_dashboard():
         uncashed_total=uncashed_total,
         current_period_revenue=current_period_revenue,
         not_cashed_out_total=not_cashed_out_total,
-        not_cashed_out_count=not_cashed_out_count
+        not_cashed_out_count=not_cashed_out_count,
+        products=products,
+        search_query=search_query,
+        current_period_sales=current_period_sales,
+        current_period_sales_count=current_period_sales_count,
+        last_cashout_date=last_cashout_date
     )
 
 @app.route('/cashier/sell', methods=['POST'])

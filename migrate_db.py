@@ -1,11 +1,12 @@
 import sqlite3
 import os
+from datetime import datetime
 
 # Path to the database file
-DB_PATH = 'instance/new_inventory.db'
+DB_PATH = 'instance/inventory.db'
 
 def migrate_database():
-    """Add necessary columns to tables if they don't exist."""
+    """Migrate the database to add new fields for packaged products."""
     print("Starting database migration...")
     
     # Check if database file exists
@@ -18,83 +19,39 @@ def migrate_database():
     cursor = conn.cursor()
     
     try:
-        # Check if columns already exist in product table
+        # Check if the columns already exist
         cursor.execute("PRAGMA table_info(product)")
-        columns = cursor.fetchall()
-        column_names = [column[1] for column in columns]
+        columns = [column[1] for column in cursor.fetchall()]
         
-        # Add category column if it doesn't exist
-        if 'category' not in column_names:
-            print("Adding 'category' column to the product table...")
-            cursor.execute("ALTER TABLE product ADD COLUMN category TEXT DEFAULT 'Uncategorized'")
-            conn.commit()
-            print("Migration successful: 'category' column added to the product table.")
-        else:
-            print("'category' column already exists in the product table.")
+        # Add new columns if they don't exist
+        if 'is_packaged' not in columns:
+            print("Adding 'is_packaged' column to product table...")
+            cursor.execute("ALTER TABLE product ADD COLUMN is_packaged BOOLEAN DEFAULT 0")
         
-        # Add purchase_price column if it doesn't exist
-        if 'purchase_price' not in column_names:
-            print("Adding 'purchase_price' column to the product table...")
-            cursor.execute("ALTER TABLE product ADD COLUMN purchase_price FLOAT DEFAULT 0")
-            conn.commit()
-            print("Migration successful: 'purchase_price' column added to the product table.")
-        else:
-            print("'purchase_price' column already exists in the product table.")
+        if 'units_per_package' not in columns:
+            print("Adding 'units_per_package' column to product table...")
+            cursor.execute("ALTER TABLE product ADD COLUMN units_per_package INTEGER DEFAULT 1")
         
-        # Check if columns already exist in sale table
-        cursor.execute("PRAGMA table_info(sale)")
-        sale_columns = cursor.fetchall()
-        sale_column_names = [column[1] for column in sale_columns]
+        if 'individual_price' not in columns:
+            print("Adding 'individual_price' column to product table...")
+            cursor.execute("ALTER TABLE product ADD COLUMN individual_price FLOAT DEFAULT 0")
         
-        # Add is_cashed_out column if it doesn't exist
-        if 'is_cashed_out' not in sale_column_names:
-            print("Adding 'is_cashed_out' column to the sale table...")
-            cursor.execute("ALTER TABLE sale ADD COLUMN is_cashed_out BOOLEAN DEFAULT 0")
-            conn.commit()
-            print("Migration successful: 'is_cashed_out' column added to the sale table.")
-        else:
-            print("'is_cashed_out' column already exists in the sale table.")
+        if 'individual_stock' not in columns:
+            print("Adding 'individual_stock' column to product table...")
+            cursor.execute("ALTER TABLE product ADD COLUMN individual_stock INTEGER DEFAULT 0")
         
-        # Add cashout_id column if it doesn't exist
-        if 'cashout_id' not in sale_column_names:
-            print("Adding 'cashout_id' column to the sale table...")
-            cursor.execute("ALTER TABLE sale ADD COLUMN cashout_id INTEGER")
-            conn.commit()
-            print("Migration successful: 'cashout_id' column added to the sale table.")
-        else:
-            print("'cashout_id' column already exists in the sale table.")
-        
-        # Check if cashout table exists
-        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='cashout'")
-        if not cursor.fetchone():
-            print("Creating 'cashout' table...")
-            cursor.execute('''
-                CREATE TABLE cashout (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    cashier_id INTEGER NOT NULL,
-                    admin_id INTEGER NOT NULL,
-                    amount FLOAT NOT NULL,
-                    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    note TEXT,
-                    FOREIGN KEY (cashier_id) REFERENCES user (id),
-                    FOREIGN KEY (admin_id) REFERENCES user (id)
-                )
-            ''')
-            conn.commit()
-            print("Migration successful: 'cashout' table created.")
-        else:
-            print("'cashout' table already exists.")
-        
+        # Commit the changes
+        conn.commit()
+        print("Database migration completed successfully!")
         return True
+    
     except Exception as e:
-        print(f"Migration failed: {str(e)}")
+        print(f"Error during migration: {str(e)}")
+        conn.rollback()
         return False
+    
     finally:
         conn.close()
 
-if __name__ == "__main__":
-    success = migrate_database()
-    if success:
-        print("Database migration completed successfully.")
-    else:
-        print("Database migration failed.")
+if __name__ == '__main__':
+    migrate_database()
