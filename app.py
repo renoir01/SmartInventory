@@ -393,27 +393,38 @@ def add_product():
     
     if request.method == 'POST':
         name = request.form.get('name')
-        description = request.form.get('description')
-        category = request.form.get('category')
-        purchase_price = float(request.form.get('purchase_price'))
-        price = float(request.form.get('price'))
-        stock = int(request.form.get('stock'))
-        low_stock_threshold = int(request.form.get('low_stock_threshold'))
+        description = request.form.get('description', '')
+        category = request.form.get('category', 'Uncategorized')
+        purchase_price = float(request.form.get('purchase_price', 0))
+        price = float(request.form.get('price', 0))
+        stock = int(request.form.get('stock', 0))
+        low_stock_threshold = int(request.form.get('low_stock_threshold', 10))
         
-        product = Product(
+        # Handle packaged product fields
+        is_packaged = 'is_packaged' in request.form
+        units_per_package = int(request.form.get('units_per_package', 1))
+        individual_price = float(request.form.get('individual_price', 0))
+        individual_stock = int(request.form.get('individual_stock', 0))
+        
+        # Create new product
+        new_product = Product(
             name=name,
             description=description,
             category=category,
             purchase_price=purchase_price,
             price=price,
             stock=stock,
-            low_stock_threshold=low_stock_threshold
+            low_stock_threshold=low_stock_threshold,
+            is_packaged=is_packaged,
+            units_per_package=units_per_package,
+            individual_price=individual_price,
+            individual_stock=individual_stock
         )
         
-        db.session.add(product)
+        db.session.add(new_product)
         db.session.commit()
         
-        flash(_('Product added successfully!'), 'success')
+        flash(_('Product added successfully.'), 'success')
         return redirect(url_for('manage_products'))
     
     return render_template('add_product.html')
@@ -429,16 +440,22 @@ def edit_product(product_id):
     
     if request.method == 'POST':
         product.name = request.form.get('name')
-        product.description = request.form.get('description')
-        product.category = request.form.get('category')
-        product.purchase_price = float(request.form.get('purchase_price'))
-        product.price = float(request.form.get('price'))
-        product.stock = int(request.form.get('stock'))
-        product.low_stock_threshold = int(request.form.get('low_stock_threshold'))
+        product.description = request.form.get('description', '')
+        product.category = request.form.get('category', 'Uncategorized')
+        product.purchase_price = float(request.form.get('purchase_price', 0))
+        product.price = float(request.form.get('price', 0))
+        product.stock = int(request.form.get('stock', 0))
+        product.low_stock_threshold = int(request.form.get('low_stock_threshold', 10))
+        
+        # Handle packaged product fields
+        product.is_packaged = 'is_packaged' in request.form
+        product.units_per_package = int(request.form.get('units_per_package', 1))
+        product.individual_price = float(request.form.get('individual_price', 0))
+        product.individual_stock = int(request.form.get('individual_stock', 0))
         
         db.session.commit()
         
-        flash(_('Product updated successfully!'), 'success')
+        flash(_('Product updated successfully.'), 'success')
         return redirect(url_for('manage_products'))
     
     return render_template('edit_product.html', product=product)
@@ -547,24 +564,36 @@ def sell_product():
         return redirect(url_for('login'))
     
     product_id = request.form.get('product_id')
-    quantity = int(request.form.get('quantity'))
+    quantity = int(request.form.get('quantity', 1))
+    sale_type = request.form.get('sale_type', 'package')  # Default to package if not specified
     
     product = Product.query.get_or_404(product_id)
     
-    if product.stock < quantity:
-        flash(_('Not enough stock available. Only {} units left.'), 'danger')
-        return redirect(url_for('cashier_dashboard'))
+    # Handle different sale types for packaged products
+    if product.is_packaged and sale_type == 'individual':
+        # Selling individual units
+        if product.individual_stock < quantity:
+            flash(_('Not enough individual units available. Only {} units left.').format(product.individual_stock), 'danger')
+            return redirect(url_for('cashier_dashboard'))
+        
+        total_price = product.individual_price * quantity
+        product.individual_stock -= quantity
+    else:
+        # Selling as package or non-packaged product
+        if product.stock < quantity:
+            flash(_('Not enough stock available. Only {} units left.').format(product.stock), 'danger')
+            return redirect(url_for('cashier_dashboard'))
+        
+        total_price = product.price * quantity
+        product.stock -= quantity
     
-    total_price = product.price * quantity
-    
+    # Create the sale record
     sale = Sale(
         product_id=product_id,
         quantity=quantity,
         total_price=total_price,
         cashier_id=current_user.id
     )
-    
-    product.stock -= quantity
     
     db.session.add(sale)
     db.session.commit()

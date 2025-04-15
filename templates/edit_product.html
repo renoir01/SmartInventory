@@ -37,7 +37,7 @@
             <!-- Package Options -->
             <div class="form-group">
                 <div class="form-check">
-                    <input type="checkbox" id="is_packaged" style="display:none;" style="display:none;" name="is_packaged" class="form-check-input" {% if product.is_packaged %}checked{% endif %}>
+                    <input type="checkbox" id="is_packaged" name="is_packaged" class="form-check-input" {% if product.is_packaged %}checked{% endif %}>
                     <label for="is_packaged" class="form-check-label">{{ _('This product is sold in packages but can also be sold individually') }}</label>
                 </div>
             </div>
@@ -45,7 +45,7 @@
             <div id="package-options" class="package-options">
                 <div class="form-group">
                     <label for="units_per_package" class="form-label">{{ _('Units Per Package') }}</label>
-                    <input type="number" id="units_per_package" style="display:none;" style="display:none;" name="units_per_package" class="form-control" min="1" value="{{ product.units_per_package }}">
+                    <input type="number" id="units_per_package" name="units_per_package" class="form-control" min="1" value="{{ product.units_per_package }}">
                     <small class="form-text text-muted">{{ _('How many individual units are in each package') }}</small>
                 </div>
                 
@@ -53,14 +53,14 @@
                     <label for="individual_price" class="form-label">{{ _('Individual Unit Price') }}</label>
                     <div class="input-group">
                         <span class="input-group-text">RWF</span>
-                        <input type="number" id="individual_price" style="display:none;" style="display:none;" name="individual_price" class="form-control" step="1" min="0" value="{{ product.individual_price }}">
+                        <input type="number" id="individual_price" name="individual_price" class="form-control" step="1" min="0" value="{{ product.individual_price }}">
                     </div>
                     <small class="form-text text-muted">{{ _('The price when selling a single unit (not the whole package)') }}</small>
                 </div>
                 
                 <div class="form-group">
                     <label for="individual_stock" class="form-label">{{ _('Individual Units Stock') }}</label>
-                    <input type="number" id="individual_stock" style="display:none;" style="display:none;" name="individual_stock" class="form-control" min="0" value="{{ product.individual_stock }}">
+                    <input type="number" id="individual_stock" name="individual_stock" class="form-control" min="0" value="{{ product.individual_stock }}">
                     <small class="form-text text-muted">{{ _('How many individual units (not packages) you have in stock') }}</small>
                 </div>
             </div>
