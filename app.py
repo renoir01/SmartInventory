@@ -832,6 +832,41 @@ def cashout_details(cashout_id):
         sales=sales
     )
 
+@app.route('/admin/cashout/reverse/<int:cashout_id>', methods=['POST'])
+@login_required
+def reverse_cashout(cashout_id):
+    if current_user.role != 'admin':
+        flash(_('Access denied. Admin privileges required.'), 'danger')
+        return redirect(url_for('login'))
+    
+    # Get the cashout record
+    cashout = Cashout.query.get_or_404(cashout_id)
+    
+    # Get all sales associated with this cashout
+    sales = Sale.query.filter_by(cashout_id=cashout_id).all()
+    
+    if not sales:
+        flash(_('No sales found for this cashout.'), 'warning')
+        return redirect(url_for('cashout_details', cashout_id=cashout_id))
+    
+    try:
+        # Mark all sales as not cashed out
+        for sale in sales:
+            sale.is_cashed_out = False
+            sale.cashout_id = None
+        
+        # Add a note to the cashout record indicating it was reversed
+        cashout.note = f"{cashout.note or ''} [REVERSED: {datetime.now().strftime('%Y-%m-%d %H:%M')}]"
+        
+        db.session.commit()
+        
+        flash(_('Cashout successfully reversed. All associated sales have been marked as not cashed out.'), 'success')
+        return redirect(url_for('admin_cashout'))
+    except Exception as e:
+        db.session.rollback()
+        flash(_('Error reversing cashout: {}').format(str(e)), 'danger')
+        return redirect(url_for('cashout_details', cashout_id=cashout_id))
+
 @app.route('/cashier/sales_status')
 @login_required
 def cashier_sales_status():
