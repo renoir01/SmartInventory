@@ -94,11 +94,11 @@ class Product(db.Model):
     low_stock_threshold = db.Column(db.Integer, default=10)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
     
-    # Add fields for packaged products
-    is_packaged = db.Column(db.Boolean, default=False)
-    units_per_package = db.Column(db.Integer, default=1)
-    individual_price = db.Column(db.Float, default=0)
-    individual_stock = db.Column(db.Integer, default=0)
+    # Note: Packaged product fields are commented out to match existing database schema
+    # is_packaged = db.Column(db.Boolean, default=False)
+    # units_per_package = db.Column(db.Integer, default=1)
+    # individual_price = db.Column(db.Float, default=0)
+    # individual_stock = db.Column(db.Integer, default=0)
     
     def is_low_stock(self):
         return self.stock <= self.low_stock_threshold
@@ -729,6 +729,10 @@ def admin_cashout():
     
     cashiers = User.query.filter_by(role='cashier').all()
     
+    # Debug logging
+    print(f"Request method: {request.method}")
+    print(f"Form data: {request.form}")
+    
     if request.method == 'POST':
         cashier_id = request.form.get('cashier_id')
         note = request.form.get('note', '')
@@ -917,6 +921,15 @@ def initialize_database():
         db.session.add(cashier)
     
     db.session.commit()
+
+@app.route('/test/cashout')
+@login_required
+def test_cashout():
+    if current_user.role != 'admin':
+        flash(_('Access denied. Admin privileges required.'), 'danger')
+        return redirect(url_for('login'))
+    
+    return render_template('test_cashout.html')
 
 if __name__ == '__main__':
     with app.app_context():
