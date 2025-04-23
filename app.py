@@ -94,11 +94,11 @@ class Product(db.Model):
     low_stock_threshold = db.Column(db.Integer, default=10)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
     
-    # Note: Packaged product fields are commented out to match existing database schema
-    # is_packaged = db.Column(db.Boolean, default=False)
-    # units_per_package = db.Column(db.Integer, default=1)
-    # individual_price = db.Column(db.Float, default=0)
-    # individual_stock = db.Column(db.Integer, default=0)
+    # Packaged product fields
+    is_packaged = db.Column(db.Boolean, default=False)
+    units_per_package = db.Column(db.Integer, default=1)
+    individual_price = db.Column(db.Float, default=0)
+    individual_stock = db.Column(db.Integer, default=0)
     
     def is_low_stock(self):
         return self.stock <= self.low_stock_threshold
