@@ -78,13 +78,13 @@
                         {% if recent_cashouts|length > 0 %}
                         <ul class="list-group">
                             {% for cashout in recent_cashouts %}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong>{{ cashout.date.strftime('%Y-%m-%d') }}</strong><br>
-                                    <small>{{ _('Admin') }}: {{ cashout.admin.username }}</small>
-                                </div>
-                                <span class="badge badge-success badge-pill">RWF {{ "%.0f"|format(cashout.amount) }}</span>
-                            </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{{ cashout.date.strftime('%Y-%m-%d') }}</strong><br>
+                                        <small>{{ _('Admin') }}: {{ cashout.admin.username }}</small>
+                                    </div>
+                                    <span class="badge badge-success badge-pill">RWF {{ "%.0f"|format(cashout.amount) }}</span>
+                                </li>
                             {% endfor %}
                         </ul>
                         {% else %}

@@ -11,8 +11,36 @@
                 <i class="fas fa-plus"></i> {{ _('Add New Product') }}
             </a>
         </div>
+        <div class="search-container mt-3">
+            <form action="{{ url_for('manage_products') }}" method="get" class="search-form">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="{{ _('Search by name, description or category...') }}" value="{{ search_query }}">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> {{ _('Search') }}
+                        </button>
+                        {% if search_query %}
+                        <a href="{{ url_for('manage_products') }}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> {{ _('Clear') }}
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
     <div class="card-body">
+        {% if search_query %}
+        <div class="search-results-info">
+            <i class="fas fa-search"></i> 
+            {% if products|length > 0 %}
+                {{ _('Found') }} <strong>{{ products|length }}</strong> {{ _('results for') }} "<strong>{{ search_query }}</strong>"
+            {% else %}
+                {{ _('No results found for') }} "<strong>{{ search_query }}</strong>"
+            {% endif %}
+        </div>
+        {% endif %}
+        
         {% if products|length > 0 %}
         <table class="table">
             <thead>

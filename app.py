@@ -4,13 +4,12 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import os
+from dotenv import load_dotenv
 import logging
-from flask_babel import Babel, gettext as _
-from sqlalchemy import func
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
         logging.FileHandler("app.log"),
@@ -19,56 +18,58 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Load environment variables
+load_dotenv()
+
 # Initialize Flask app
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'emergency-fix-key-change-in-production'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'default-secret-key')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///new_inventory.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['BABEL_DEFAULT_LOCALE'] = 'en'
+app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'locale'
 
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
 
 # Initialize LoginManager
-login_manager = LoginManager()
-login_manager.init_app(app)
+login_manager = LoginManager(app)
 login_manager.login_view = 'login'
-login_manager.session_protection = None  # Disable session protection temporarily
 
-# Internationalization setup
+# Helper function for translations
+def _(text, **variables):
+    return text % variables if variables else text
+
+# Try to initialize Babel with error handling
 try:
-    babel = Babel(app)
+    from flask_babel import Babel
     
-    # Simple locale selector function
-    def get_locale():
-        # First check if language is set in session
-        if 'language' in session:
-            return session['language']
-        # Otherwise use browser's preferred language
-        return request.accept_languages.best_match(['en', 'rw'])
-    
-    # Configure Babel with the locale selector
-    babel.init_app(app, locale_selector=get_locale)
-
     @app.route('/set_language/<language>')
     def set_language(language):
         session['language'] = language
         return redirect(request.referrer or url_for('index'))
-
-    # Make the translation function available to templates
-    @app.context_processor
-    def inject_globals():
-        return dict(_=_)
-
-except ImportError:
-    # Fallback translation function if Flask-Babel is not available
-    def _(text, **variables):
-        return text % variables if variables else text
-
-    # Make the fallback translation function available to templates
-    @app.context_processor
-    def inject_globals():
-        return dict(_=_)
-
+    
+    def get_locale():
+        return session.get('language', 'en')
+    
+    # Initialize Babel with the locale selector
+    babel = Babel(app, locale_selector=get_locale)
+    
+    # Import gettext after Babel is initialized
+    from flask_babel import gettext as flask_gettext
+    _ = flask_gettext
+    
+    @app.before_request
+    def before_request():
+        g._ = _
+    
+    has_babel = True
+    logger.info("Flask-Babel initialized successfully")
+    
+except Exception as e:
+    logger.warning(f"Flask-Babel initialization failed: {str(e)}")
+    has_babel = False
+    # Use the fallback translation function defined above
 
 # Database models
 class User(db.Model, UserMixin):
@@ -94,29 +95,29 @@ class Product(db.Model):
     low_stock_threshold = db.Column(db.Integer, default=10)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
     
-    # Packaged product fields
+    # New fields for package handling
     is_packaged = db.Column(db.Boolean, default=False)
     units_per_package = db.Column(db.Integer, default=1)
     individual_price = db.Column(db.Float, default=0)
     individual_stock = db.Column(db.Integer, default=0)
     
     def is_low_stock(self):
+        if self.is_packaged:
+            # Consider both package stock and individual units
+            total_units = (self.stock * self.units_per_package) + self.individual_stock
+            return total_units <= self.low_stock_threshold
         return self.stock <= self.low_stock_threshold
     
     def get_profit_margin(self):
         if self.purchase_price > 0:
             return ((self.price - self.purchase_price) / self.price) * 100
         return 100  # If purchase price is 0, profit margin is 100%
-
-class Cashout(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    cashier_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    cashier = db.relationship('User', foreign_keys=[cashier_id], backref=db.backref('cashier_cashouts', lazy=True))
-    admin_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    admin = db.relationship('User', foreign_keys=[admin_id], backref=db.backref('admin_cashouts', lazy=True))
-    amount = db.Column(db.Float, nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
-    note = db.Column(db.String(200), nullable=True)
+    
+    def get_total_units(self):
+        """Get the total number of units (both packaged and individual)"""
+        if self.is_packaged:
+            return (self.stock * self.units_per_package) + self.individual_stock
+        return self.stock
 
 class Sale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -127,9 +128,18 @@ class Sale(db.Model):
     cashier_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     cashier = db.relationship('User', backref=db.backref('sales', lazy=True))
     date_sold = db.Column(db.DateTime, default=datetime.utcnow)
-    is_cashed_out = db.Column(db.Boolean, default=False)
-    cashout_id = db.Column(db.Integer, db.ForeignKey('cashout.id'), nullable=True)
-    cashout = db.relationship('Cashout', backref=db.backref('sales', lazy=True))
+
+class MonthlyProfit(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    year = db.Column(db.Integer, nullable=False)
+    month = db.Column(db.Integer, nullable=False)  # 1-12 for Jan-Dec
+    total_revenue = db.Column(db.Float, default=0.0)
+    total_cost = db.Column(db.Float, default=0.0)
+    total_profit = db.Column(db.Float, default=0.0)
+    sale_count = db.Column(db.Integer, default=0)
+    
+    # Ensure year and month combination is unique
+    __table_args__ = (db.UniqueConstraint('year', 'month', name='unique_year_month'),)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -138,276 +148,211 @@ def load_user(user_id):
 # Routes
 @app.route('/')
 def index():
-    return render_template('login.html')
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    # Clear any existing session
-    session.clear()
-    
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        
-        user = User.query.filter_by(username=username).first()
-        
-        if user and user.check_password(password):
-            login_user(user)
-            flash('Login successful!', 'success')
-            
-            if user.role == 'admin':
+    try:
+        if current_user.is_authenticated:
+            if current_user.role == 'admin':
                 return redirect(url_for('admin_dashboard'))
             else:
                 return redirect(url_for('cashier_dashboard'))
-        else:
-            flash('Invalid username or password', 'danger')
-    
-    return render_template('login.html')
+        return redirect(url_for('login'))
+    except Exception as e:
+        logger.error(f"Error in index route: {str(e)}")
+        # Break potential redirect loops by going directly to login template
+        return render_template('login.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    try:
+        # Don't redirect if already authenticated to avoid loops
+        # Instead, check role and render appropriate dashboard
+        if current_user.is_authenticated:
+            if current_user.role == 'admin':
+                return redirect(url_for('admin_dashboard'))
+            else:
+                return redirect(url_for('cashier_dashboard'))
+        
+        if request.method == 'POST':
+            username = request.form.get('username')
+            password = request.form.get('password')
+            
+            user = User.query.filter_by(username=username).first()
+            
+            if user and user.check_password(password):
+                login_user(user)
+                if user.role == 'admin':
+                    return redirect(url_for('admin_dashboard'))
+                else:
+                    return redirect(url_for('cashier_dashboard'))
+            else:
+                flash(_('Invalid username or password'), 'danger')
+        
+        return render_template('login.html')
+    except Exception as e:
+        logger.error(f"Error in login route: {str(e)}")
+        return render_template('login.html')
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
-    session.clear()
-    flash('You have been logged out', 'info')
+    flash(_('You have been logged out.'), 'info')
     return redirect(url_for('login'))
 
 @app.route('/admin/dashboard')
 @login_required
 def admin_dashboard():
-    if current_user.role != 'admin':
-        flash(_('Access denied. Admin privileges required.'), 'danger')
-        return redirect(url_for('login'))
-    
-    # Get today's date
-    today = datetime.now().date()
-    
-    # Get today's sales using the local date (not UTC)
-    today_sales = Sale.query.filter(
-        func.date(Sale.date_sold) == today
-    ).all()
-    
-    # Debug log for today's sales
-    print(f"Admin Dashboard - Today's date: {today}")
-    print(f"Admin Dashboard - Today's sales count: {len(today_sales)}")
-    
-    # Calculate today's revenue and profit from actual sales
-    today_sales_count = len(today_sales)
-    today_revenue = sum(sale.total_price for sale in today_sales)
-    today_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in today_sales)
-    
-    print(f"Admin Dashboard - Today's total revenue: RWF {today_revenue}")
-    print(f"Admin Dashboard - Today's total profit: RWF {today_profit}")
-    
-    # Get all cashiers
-    cashiers = User.query.filter_by(role='cashier').all()
-    
-    # Get all sales that haven't been cashed out
-    not_cashed_out_sales = Sale.query.filter_by(is_cashed_out=False).all()
-    not_cashed_out_by_cashier = {}
-    
-    # Debug log for uncashed sales
-    print(f"Admin Dashboard - All uncashed sales: {len(not_cashed_out_sales)}")
-    
-    # Calculate total uncashed sales amount
-    current_period_sales_count = len(not_cashed_out_sales)
-    current_period_revenue = sum(sale.total_price for sale in not_cashed_out_sales)
-    current_period_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in not_cashed_out_sales)
-    
-    print(f"Admin Dashboard - Current period revenue: RWF {current_period_revenue}")
-    
-    # Group sales by cashier
-    for cashier in cashiers:
-        cashier_sales = [sale for sale in not_cashed_out_sales if sale.cashier_id == cashier.id]
-        cashier_total = sum(sale.total_price for sale in cashier_sales)
+    try:
+        if current_user.role != 'admin':
+            flash(_('Access denied. Admin privileges required.'), 'danger')
+            return redirect(url_for('index'))
         
-        # Debug log
-        print(f"Admin Dashboard - Cashier {cashier.username}: {len(cashier_sales)} sales, total: RWF {cashier_total}")
+        # Get today's date
+        today = datetime.now().date()
+        today_start = datetime.combine(today, datetime.min.time())
+        today_end = datetime.combine(today, datetime.max.time())
         
-        not_cashed_out_by_cashier[cashier.id] = {
-            'cashier': cashier,
-            'sales': cashier_sales,
-            'total': cashier_total
-        }
-    
-    # Get current period sales (uncashed sales only)
-    current_period_sales = not_cashed_out_sales
-    
-    # Get all-time sales
-    all_time_sales = Sale.query.all()
-    all_time_revenue = sum(sale.total_price for sale in all_time_sales)
-    all_time_profit = sum(sale.total_price - (sale.product.purchase_price * sale.quantity) for sale in all_time_sales)
-    
-    # Get all products
-    products = Product.query.all()
-    
-    # Get low stock products
-    low_stock_products = Product.query.filter(Product.stock <= Product.low_stock_threshold).all()
-    
-    # Get product sales
-    product_sales = Sale.query.all()
-    
-    # Create lists to store top products
-    top_products_by_revenue = []
-    top_products_by_revenue_today = []
-    top_products_by_revenue_current_period = []
-    
-    top_products_by_quantity = []
-    top_products_by_quantity_today = []
-    top_products_by_quantity_current_period = []
-    
-    # Calculate top products by revenue and quantity
-    products_with_sales = []
-    for product in products:
-        # Get all sales for this product
-        product_sales = Sale.query.filter_by(product_id=product.id).all()
+        # Get counts
+        try:
+            total_products = Product.query.count()
+            low_stock_products = Product.query.filter(Product.stock <= Product.low_stock_threshold).count()
+            out_of_stock_products = Product.query.filter(Product.stock == 0).count()
+        except Exception as e:
+            logger.error(f"Error getting product counts: {str(e)}")
+            total_products = 0
+            low_stock_products = 0
+            out_of_stock_products = 0
         
-        if product_sales:
-            products_with_sales.append(product)
-        
-        # Get today's sales for this product
-        product_sales_today = [sale for sale in product_sales if func.date(sale.date_sold) == today]
-        
-        # Get current period sales for this product (since last cashout)
-        product_sales_current_period = [sale for sale in product_sales if sale.is_cashed_out == False]
-        
-        # Double-check the calculations for uncashed sales
-        current_period_revenue_product = sum(sale.total_price for sale in product_sales_current_period)
-        current_period_quantity = sum(sale.quantity for sale in product_sales_current_period)
-        current_period_profit_product = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in product_sales_current_period)
-        
-        # Calculate total revenue, quantity, and profit for this product (all-time)
-        total_revenue = sum(sale.total_price for sale in product_sales)
-        total_quantity = sum(sale.quantity for sale in product_sales)
-        total_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in product_sales)
-        
-        # Calculate today's metrics
-        today_revenue_product = sum(sale.total_price for sale in product_sales_today)
-        today_quantity = sum(sale.quantity for sale in product_sales_today)
-        today_profit_product = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in product_sales_today)
-        
-        # Add to our list of top products (all-time)
-        if total_quantity > 0:
-            top_products_by_revenue.append({
-                'product': product,
-                'revenue': total_revenue,
-                'quantity': total_quantity,
-                'profit': total_profit
-            })
+        # Get today's sales
+        try:
+            today_sales = Sale.query.filter(Sale.date_sold.between(today_start, today_end)).all()
+            today_sales_count = len(today_sales)
             
-            top_products_by_quantity.append({
-                'product': product,
-                'revenue': total_revenue,
-                'quantity': total_quantity,
-                'profit': total_profit
-            })
-        
-        # Add to our list of top products (today)
-        if today_quantity > 0:
-            top_products_by_revenue_today.append({
-                'product': product,
-                'revenue': today_revenue_product,
-                'quantity': today_quantity,
-                'profit': today_profit_product
-            })
+            # Handle case where purchase_price might be None
+            total_revenue = sum(sale.total_price for sale in today_sales)
             
-            top_products_by_quantity_today.append({
-                'product': product,
-                'revenue': today_revenue_product,
-                'quantity': today_quantity,
-                'profit': today_profit_product
-            })
+            # Calculate profit with error handling for each sale
+            total_profit = 0
+            for sale in today_sales:
+                try:
+                    purchase_price = sale.product.purchase_price or 0
+                    profit = sale.total_price - (purchase_price * sale.quantity)
+                    total_profit += profit
+                except Exception as e:
+                    logger.error(f"Error calculating profit for sale {sale.id}: {str(e)}")
+        except Exception as e:
+            logger.error(f"Error getting today's sales: {str(e)}")
+            today_sales = []
+            today_sales_count = 0
+            total_revenue = 0
+            total_profit = 0
         
-        # Add to our list of top products (current period)
-        if current_period_quantity > 0:
-            top_products_by_revenue_current_period.append({
-                'product': product,
-                'revenue': current_period_revenue_product,
-                'quantity': current_period_quantity,
-                'profit': current_period_profit_product
-            })
+        # Get recent sales
+        try:
+            recent_sales = Sale.query.order_by(Sale.date_sold.desc()).limit(5).all()
+        except Exception as e:
+            logger.error(f"Error getting recent sales: {str(e)}")
+            recent_sales = []
+        
+        # Get low stock products
+        try:
+            low_stock_items = Product.query.filter(
+                Product.stock <= Product.low_stock_threshold,
+                Product.stock > 0
+            ).all()
+        except Exception as e:
+            logger.error(f"Error getting low stock items: {str(e)}")
+            low_stock_items = []
+        
+        # Get latest monthly profit data
+        try:
+            latest_monthly_profit = MonthlyProfit.query.order_by(
+                MonthlyProfit.year.desc(), 
+                MonthlyProfit.month.desc()
+            ).first()
             
-            top_products_by_quantity_current_period.append({
-                'product': product,
-                'revenue': current_period_revenue_product,
-                'quantity': current_period_quantity,
-                'profit': current_period_profit_product
-            })
-    
-    # Sort the lists
-    top_products_by_revenue = sorted(top_products_by_revenue, key=lambda x: x['revenue'], reverse=True)[:10]
-    top_products_by_quantity = sorted(top_products_by_quantity, key=lambda x: x['quantity'], reverse=True)[:10]
-    
-    top_products_by_revenue_today = sorted(top_products_by_revenue_today, key=lambda x: x['revenue'], reverse=True)[:10]
-    top_products_by_quantity_today = sorted(top_products_by_quantity_today, key=lambda x: x['quantity'], reverse=True)[:10]
-    
-    top_products_by_revenue_current_period = sorted(top_products_by_revenue_current_period, key=lambda x: x['revenue'], reverse=True)[:10]
-    top_products_by_quantity_current_period = sorted(top_products_by_quantity_current_period, key=lambda x: x['quantity'], reverse=True)[:10]
-    
-    return render_template(
-        'admin_dashboard.html',
-        today=datetime.now(),
-        today_sales=today_sales,
-        today_sales_count=today_sales_count,
-        today_revenue=today_revenue,
-        today_profit=today_profit,
-        current_period_sales=current_period_sales,
-        current_period_sales_count=current_period_sales_count,
-        current_period_revenue=current_period_revenue,
-        current_period_profit=current_period_profit,
-        not_cashed_out_by_cashier=not_cashed_out_by_cashier,
-        all_time_sales=all_time_sales,
-        all_time_sales_count=len(all_time_sales),
-        all_time_revenue=all_time_revenue,
-        all_time_profit=all_time_profit,
-        products=products,
-        products_count=len(products),
-        low_stock_products=low_stock_products,
-        low_stock_count=len(low_stock_products),
-        top_products_by_revenue=top_products_by_revenue,
-        top_products_by_quantity=top_products_by_quantity,
-        top_products_by_revenue_today=top_products_by_revenue_today,
-        top_products_by_quantity_today=top_products_by_quantity_today,
-        top_products_by_revenue_current_period=top_products_by_revenue_current_period,
-        top_products_by_quantity_current_period=top_products_by_quantity_current_period,
-        total_revenue=all_time_revenue,  # Add for backward compatibility
-        total_sales_count=len(all_time_sales),  # Add for backward compatibility
-        total_products=len(products)  # Add for backward compatibility
-    )
+            # Get current month's profit data
+            current_month = today.month
+            current_year = today.year
+            current_month_profit = MonthlyProfit.query.filter_by(
+                year=current_year, 
+                month=current_month
+            ).first()
+            
+            # Calculate month-to-date profit if current month data exists
+            if current_month_profit:
+                month_to_date_profit = current_month_profit.total_profit
+                month_to_date_revenue = current_month_profit.total_revenue
+            else:
+                month_to_date_profit = 0
+                month_to_date_revenue = 0
+        except Exception as e:
+            logger.error(f"Error getting monthly profit data: {str(e)}")
+            latest_monthly_profit = None
+            month_to_date_profit = 0
+            month_to_date_revenue = 0
+        
+        return render_template('admin_dashboard.html', 
+                               total_products=total_products,
+                               low_stock_products=low_stock_products,
+                               out_of_stock_products=out_of_stock_products,
+                               today_sales_count=today_sales_count,
+                               total_revenue=total_revenue,
+                               total_profit=total_profit,
+                               recent_sales=recent_sales,
+                               low_stock_items=low_stock_items,
+                               latest_monthly_profit=latest_monthly_profit,
+                               month_to_date_profit=month_to_date_profit,
+                               month_to_date_revenue=month_to_date_revenue)
+    except Exception as e:
+        logger.error(f"Unhandled error in admin_dashboard: {str(e)}")
+        flash(_('An error occurred while loading the dashboard. Please try again.'), 'danger')
+        return redirect(url_for('index'))
 
-@app.route('/admin/products')
+@app.route('/admin/products', methods=['GET'])
 @login_required
 def manage_products():
     if current_user.role != 'admin':
         flash(_('Access denied. Admin privileges required.'), 'danger')
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
     
-    products = Product.query.all()
-    return render_template('manage_products.html', products=products)
+    search_query = request.args.get('search', '')
+    
+    if search_query:
+        # Search in name, description, and category fields
+        search_term = f'%{search_query}%'
+        products = Product.query.filter(
+            db.or_(
+                Product.name.ilike(search_term),
+                Product.description.ilike(search_term),
+                Product.category.ilike(search_term)
+            )
+        ).order_by(Product.name).all()
+    else:
+        products = Product.query.order_by(Product.name).all()
+    
+    return render_template('manage_products.html', products=products, search_query=search_query)
 
 @app.route('/admin/products/add', methods=['GET', 'POST'])
 @login_required
 def add_product():
     if current_user.role != 'admin':
         flash(_('Access denied. Admin privileges required.'), 'danger')
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
     
     if request.method == 'POST':
         name = request.form.get('name')
-        description = request.form.get('description', '')
-        category = request.form.get('category', 'Uncategorized')
+        description = request.form.get('description')
+        category = request.form.get('category')
         purchase_price = float(request.form.get('purchase_price', 0))
-        price = float(request.form.get('price', 0))
-        stock = int(request.form.get('stock', 0))
-        low_stock_threshold = int(request.form.get('low_stock_threshold', 10))
-        
-        # Handle packaged product fields
-        is_packaged = 'is_packaged' in request.form
+        price = float(request.form.get('price'))
+        stock = int(request.form.get('stock'))
+        low_stock_threshold = int(request.form.get('low_stock_threshold'))
+        is_packaged = request.form.get('is_packaged') == 'on'
         units_per_package = int(request.form.get('units_per_package', 1))
         individual_price = float(request.form.get('individual_price', 0))
         individual_stock = int(request.form.get('individual_stock', 0))
         
-        # Create new product
-        new_product = Product(
+        product = Product(
             name=name,
             description=description,
             category=category,
@@ -421,10 +366,10 @@ def add_product():
             individual_stock=individual_stock
         )
         
-        db.session.add(new_product)
+        db.session.add(product)
         db.session.commit()
         
-        flash(_('Product added successfully.'), 'success')
+        flash(_('Product added successfully!'), 'success')
         return redirect(url_for('manage_products'))
     
     return render_template('add_product.html')
@@ -434,184 +379,42 @@ def add_product():
 def edit_product(product_id):
     if current_user.role != 'admin':
         flash(_('Access denied. Admin privileges required.'), 'danger')
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
     
     product = Product.query.get_or_404(product_id)
     
     if request.method == 'POST':
         product.name = request.form.get('name')
-        product.description = request.form.get('description', '')
-        product.category = request.form.get('category', 'Uncategorized')
+        product.description = request.form.get('description')
+        product.category = request.form.get('category')
         product.purchase_price = float(request.form.get('purchase_price', 0))
-        product.price = float(request.form.get('price', 0))
-        product.stock = int(request.form.get('stock', 0))
-        product.low_stock_threshold = int(request.form.get('low_stock_threshold', 10))
-        
-        # Handle packaged product fields
-        product.is_packaged = 'is_packaged' in request.form
+        product.price = float(request.form.get('price'))
+        product.stock = int(request.form.get('stock'))
+        product.low_stock_threshold = int(request.form.get('low_stock_threshold'))
+        product.is_packaged = request.form.get('is_packaged') == 'on'
         product.units_per_package = int(request.form.get('units_per_package', 1))
         product.individual_price = float(request.form.get('individual_price', 0))
         product.individual_stock = int(request.form.get('individual_stock', 0))
         
         db.session.commit()
         
-        flash(_('Product updated successfully.'), 'success')
+        flash(_('Product updated successfully!'), 'success')
         return redirect(url_for('manage_products'))
     
     return render_template('edit_product.html', product=product)
-
-@app.route('/cashier/dashboard')
-@login_required
-def cashier_dashboard():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login'))
-    
-    if current_user.role != 'cashier':
-        flash('You do not have permission to access this page.', 'danger')
-        return redirect(url_for('dashboard'))
-    
-    # Get search query if provided
-    search_query = request.args.get('search', '')
-    
-    # Get today's date
-    today = datetime.now().date()
-    
-    # Get today's sales for this cashier
-    today_sales = Sale.query.filter(
-        Sale.cashier_id == current_user.id,
-        func.date(Sale.date_sold) == today
-    ).all()
-    
-    # Calculate today's revenue
-    today_revenue = sum(sale.total_price for sale in today_sales)
-    today_profit = sum(sale.total_price - (sale.product.purchase_price * sale.quantity) for sale in today_sales)
-    
-    # Debug log
-    print(f"Cashier {current_user.username} dashboard - Today's sales: {len(today_sales)}, revenue: RWF {today_revenue}")
-    
-    # Get uncashed sales for this cashier
-    uncashed_sales = Sale.query.filter_by(
-        cashier_id=current_user.id,
-        is_cashed_out=False
-    ).all()
-    
-    # Calculate uncashed sales total
-    uncashed_total = sum(sale.total_price for sale in uncashed_sales)
-    
-    # Add current_period_revenue to fix the template error
-    current_period_revenue = uncashed_total
-    
-    # Add not_cashed_out_total to fix the template error
-    not_cashed_out_total = uncashed_total
-    not_cashed_out_count = len(uncashed_sales)
-    
-    # Get all products for the sale form with search functionality
-    if search_query:
-        # Search by product name
-        products = Product.query.filter(
-            Product.name.ilike(f'%{search_query}%'),
-            Product.stock > 0
-        ).all()
-    else:
-        # Get all products with stock
-        products = Product.query.filter(Product.stock > 0).all()
-    
-    # Get last cashout for this cashier
-    last_cashout = Cashout.query.filter_by(
-        cashier_id=current_user.id
-    ).order_by(Cashout.date.desc()).first()
-    
-    # Get current period sales (since last cashout)
-    if last_cashout:
-        current_period_sales = Sale.query.filter(
-            Sale.cashier_id == current_user.id,
-            Sale.date_sold > last_cashout.date
-        ).all()
-        last_cashout_date = last_cashout.date
-    else:
-        current_period_sales = Sale.query.filter_by(
-            cashier_id=current_user.id
-        ).all()
-        last_cashout_date = None
-    
-    current_period_sales_count = len(current_period_sales)
-    
-    return render_template(
-        'cashier_dashboard.html',
-        today=datetime.now(),
-        today_sales=today_sales,
-        today_sales_count=len(today_sales),
-        today_revenue=today_revenue,
-        today_profit=today_profit,
-        uncashed_sales=uncashed_sales,
-        uncashed_sales_count=len(uncashed_sales),
-        uncashed_total=uncashed_total,
-        current_period_revenue=current_period_revenue,
-        not_cashed_out_total=not_cashed_out_total,
-        not_cashed_out_count=not_cashed_out_count,
-        products=products,
-        search_query=search_query,
-        current_period_sales=current_period_sales,
-        current_period_sales_count=current_period_sales_count,
-        last_cashout_date=last_cashout_date
-    )
-
-@app.route('/cashier/sell', methods=['POST'])
-@login_required
-def sell_product():
-    if current_user.role != 'cashier':
-        flash(_('Access denied. Cashier privileges required.'), 'danger')
-        return redirect(url_for('login'))
-    
-    product_id = request.form.get('product_id')
-    quantity = int(request.form.get('quantity', 1))
-    sale_type = request.form.get('sale_type', 'package')  # Default to package if not specified
-    
-    product = Product.query.get_or_404(product_id)
-    
-    # Handle different sale types for packaged products
-    if product.is_packaged and sale_type == 'individual':
-        # Selling individual units
-        if product.individual_stock < quantity:
-            flash(_('Not enough individual units available. Only {} units left.').format(product.individual_stock), 'danger')
-            return redirect(url_for('cashier_dashboard'))
-        
-        total_price = product.individual_price * quantity
-        product.individual_stock -= quantity
-    else:
-        # Selling as package or non-packaged product
-        if product.stock < quantity:
-            flash(_('Not enough stock available. Only {} units left.').format(product.stock), 'danger')
-            return redirect(url_for('cashier_dashboard'))
-        
-        total_price = product.price * quantity
-        product.stock -= quantity
-    
-    # Create the sale record
-    sale = Sale(
-        product_id=product_id,
-        quantity=quantity,
-        total_price=total_price,
-        cashier_id=current_user.id
-    )
-    
-    db.session.add(sale)
-    db.session.commit()
-    
-    flash(_('Sale recorded successfully!'), 'success')
-    return redirect(url_for('cashier_dashboard'))
 
 @app.route('/admin/products/delete/<int:product_id>', methods=['GET', 'POST'])
 @login_required
 def delete_product(product_id):
     if current_user.role != 'admin':
         flash(_('Access denied. Admin privileges required.'), 'danger')
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
     
     product = Product.query.get_or_404(product_id)
     
+    # Check if product has associated sales
     if Sale.query.filter_by(product_id=product_id).first():
-        flash(_('Cannot delete product with sales records.'), 'danger')
+        flash(_('Cannot delete product "{0}" because it has associated sales records. Consider updating the product instead.', product.name), 'danger')
         return redirect(url_for('manage_products'))
     
     db.session.delete(product)
@@ -625,349 +428,455 @@ def delete_product(product_id):
 def view_sales():
     if current_user.role != 'admin':
         flash(_('Access denied. Admin privileges required.'), 'danger')
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
     
-    # Get all sales
-    sales = Sale.query.order_by(Sale.date_sold.desc()).all()
+    # Get query parameters
+    start_date_str = request.args.get('start_date', '')
+    end_date_str = request.args.get('end_date', '')
+    category = request.args.get('category', '')
+    cashier_id = request.args.get('cashier_id', '')
+    
+    # Parse dates
+    try:
+        if start_date_str:
+            start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+            start_datetime = datetime.combine(start_date, datetime.min.time())
+        else:
+            # Default to beginning of current month
+            today = datetime.now().date()
+            start_date = datetime(today.year, today.month, 1).date()
+            start_datetime = datetime.combine(start_date, datetime.min.time())
+            start_date_str = start_date.strftime('%Y-%m-%d')
+            
+        if end_date_str:
+            end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+            end_datetime = datetime.combine(end_date, datetime.max.time())
+        else:
+            # Default to today
+            end_date = datetime.now().date()
+            end_datetime = datetime.combine(end_date, datetime.max.time())
+            end_date_str = end_date.strftime('%Y-%m-%d')
+    except ValueError:
+        flash(_('Invalid date format. Please use YYYY-MM-DD.'), 'danger')
+        return redirect(url_for('view_sales'))
+    
+    # Build query
+    query = Sale.query.filter(Sale.date_sold.between(start_datetime, end_datetime))
+    
+    if category and category != 'all':
+        query = query.join(Product).filter(Product.category == category)
+        
+    if cashier_id and cashier_id.isdigit():
+        query = query.filter(Sale.cashier_id == int(cashier_id))
+    
+    # Execute query
+    sales = query.order_by(Sale.date_sold.desc()).all()
     
     # Calculate total revenue
     total_revenue = sum(sale.total_price for sale in sales)
     
-    # Calculate total profit (estimated based on product profit margins)
-    total_profit = 0
+    # Calculate total profit
+    total_profit = sum((sale.total_price - (sale.product.purchase_price * sale.quantity)) for sale in sales)
     
-    # Create category summary
+    # Get all cashiers for the filter dropdown
+    cashiers = User.query.filter_by(role='cashier').all()
+    
+    # Get all product categories for the filter dropdown
+    categories = db.session.query(Product.category).distinct().order_by(Product.category).all()
+    categories = [c[0] for c in categories]
+    
+    # Calculate sales by category
     category_summary = {}
-    categories = []
-    
     for sale in sales:
-        product = Product.query.get(sale.product_id)
-        if product:
-            # Calculate profit for this sale
-            profit_margin = product.get_profit_margin() / 100
-            sale_profit = sale.total_price * profit_margin
-            total_profit += sale_profit
-            
-            # Add to category summary
-            category = product.category or 'Uncategorized'
-            if category not in categories:
-                categories.append(category)
-            
-            if category not in category_summary:
-                category_summary[category] = {'count': 0, 'revenue': 0, 'profit': 0}
-            
-            category_summary[category]['count'] += sale.quantity
-            category_summary[category]['revenue'] += sale.total_price
-            category_summary[category]['profit'] += sale_profit
+        category = sale.product.category
+        if category not in category_summary:
+            category_summary[category] = {
+                'count': 0,
+                'revenue': 0,
+                'profit': 0
+            }
+        category_summary[category]['count'] += sale.quantity
+        category_summary[category]['revenue'] += sale.total_price
+        category_summary[category]['profit'] += (sale.total_price - (sale.product.purchase_price * sale.quantity))
     
-    return render_template(
-        'view_sales.html',
-        sales=sales,
-        total_revenue=total_revenue,
-        total_profit=total_profit,
-        category_summary=category_summary,
-        categories=categories,
-        start_date='',
-        end_date='',
-        selected_category='all'
-    )
+    return render_template('view_sales.html', 
+                           sales=sales, 
+                           total_revenue=total_revenue,
+                           total_profit=total_profit,
+                           categories=categories,
+                           category_summary=category_summary,
+                           selected_category=category,
+                           cashiers=cashiers,
+                           selected_cashier_id=cashier_id,
+                           start_date=start_date_str,
+                           end_date=end_date_str)
+
+@app.route('/delete_sale/<int:sale_id>', methods=['POST'])
+@login_required
+def delete_sale(sale_id):
+    if current_user.role != 'admin':
+        flash(_('Access denied. Admin privileges required.'), 'danger')
+        return redirect(url_for('index'))
+    
+    sale = Sale.query.get_or_404(sale_id)
+    
+    # Return the stock to the product
+    product = sale.product
+    product.stock += sale.quantity
+    
+    # Store sale info for flash message
+    product_name = sale.product.name
+    quantity = sale.quantity
+    sale_date = sale.date_sold.strftime('%Y-%m-%d %H:%M')
+    cashier_name = sale.cashier.username
+    
+    # Delete the sale
+    db.session.delete(sale)
+    db.session.commit()
+    
+    flash(_('Sale of %(quantity)d %(product)s by %(cashier)s on %(date)s has been deleted and stock has been restored.', 
+            quantity=quantity, product=product_name, cashier=cashier_name, date=sale_date), 'success')
+    
+    return redirect(url_for('view_sales'))
+
+@app.route('/cashier/dashboard')
+@login_required
+def cashier_dashboard():
+    try:
+        if current_user.role != 'cashier':
+            flash(_('Access denied. Cashier privileges required.'), 'danger')
+            return redirect(url_for('index'))
+        
+        # Get today's date
+        today = datetime.now().date()
+        today_start = datetime.combine(today, datetime.min.time())
+        today_end = datetime.combine(today, datetime.max.time())
+        
+        # Get search query with error handling
+        try:
+            search_query = request.args.get('search', '')
+        except Exception as e:
+            logger.error(f"Error getting search query: {str(e)}")
+            search_query = ''
+        
+        # Get products in stock with optional search filter
+        try:
+            products_query = Product.query.filter(Product.stock > 0)
+            
+            # Apply search filter if provided
+            if search_query and search_query.strip():
+                search_term = "%" + search_query + "%"
+                products_query = products_query.filter(Product.name.like(search_term))
+            
+            # Execute query
+            products = products_query.all()
+        except Exception as e:
+            logger.error(f"Error in product search: {str(e)}")
+            products = Product.query.filter(Product.stock > 0).all()
+        
+        # Get today's sales for this cashier
+        try:
+            today_sales = Sale.query.filter(
+                Sale.date_sold.between(today_start, today_end),
+                Sale.cashier_id == current_user.id
+            ).all()
+            
+            # Calculate total revenue for today
+            total_revenue = sum(sale.total_price for sale in today_sales)
+        except Exception as e:
+            logger.error(f"Error getting sales: {str(e)}")
+            today_sales = []
+            total_revenue = 0
+        
+        return render_template('cashier_dashboard.html', 
+                            products=products,
+                            today_sales=today_sales,
+                            total_revenue=total_revenue,
+                            search_query=search_query)
+    except Exception as e:
+        logger.error(f"Unhandled error in cashier_dashboard: {str(e)}")
+        flash(_('An error occurred. Please try again.'), 'danger')
+        return redirect(url_for('index'))
+
+@app.route('/cashier/sell', methods=['GET', 'POST'])
+@login_required
+def sell_product():
+    if current_user.role != 'cashier':
+        flash(_('Access denied. Cashier privileges required.'), 'danger')
+        return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        product_id = request.form.get('product_id')
+        quantity = int(request.form.get('quantity'))
+        sale_type = request.form.get('sale_type', 'package')  # Default to package if not specified
+        
+        product = Product.query.get_or_404(product_id)
+        
+        # Handle packaged products differently based on sale type
+        if product.is_packaged:
+            if sale_type == 'package':
+                # Selling complete packages
+                if product.stock < quantity:
+                    flash(_('Not enough packages available. Only {0} packages left.', product.stock), 'danger')
+                    return redirect(url_for('cashier_dashboard'))
+                
+                # Calculate total price for packages
+                total_price = product.price * quantity
+                
+                # Update package stock
+                product.stock -= quantity
+            else:
+                # Selling individual units
+                if product.individual_stock < quantity:
+                    flash(_('Not enough individual units available. Only {0} units left.', product.individual_stock), 'danger')
+                    return redirect(url_for('cashier_dashboard'))
+                
+                # Calculate total price for individual units
+                total_price = product.individual_price * quantity
+                
+                # Update individual stock
+                product.individual_stock -= quantity
+        else:
+            # Regular non-packaged product
+            if product.stock < quantity:
+                flash(_('Not enough stock available. Only {0} units left.', product.stock), 'danger')
+                return redirect(url_for('cashier_dashboard'))
+            
+            # Calculate total price
+            total_price = product.price * quantity
+            
+            # Update product stock
+            product.stock -= quantity
+        
+        # Create sale record
+        sale = Sale(
+            product_id=product_id,
+            quantity=quantity,
+            total_price=total_price,
+            cashier_id=current_user.id
+        )
+        
+        db.session.add(sale)
+        db.session.commit()
+        
+        # Update monthly profit data
+        update_monthly_profit(sale)
+        
+        flash(_('Sale recorded successfully!'), 'success')
+        return redirect(url_for('cashier_dashboard'))
+    
+    # If GET request, redirect to cashier dashboard
+    return redirect(url_for('cashier_dashboard'))
 
 @app.route('/cashier/sales')
 @login_required
 def view_cashier_sales():
     if current_user.role != 'cashier':
         flash(_('Access denied. Cashier privileges required.'), 'danger')
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
     
-    # Get all sales for this cashier
-    sales = Sale.query.filter_by(cashier_id=current_user.id).order_by(Sale.date_sold.desc()).all()
+    # Get filter parameters
+    start_date_str = request.args.get('start_date')
+    end_date_str = request.args.get('end_date')
+    category = request.args.get('category')
+    
+    # Base query - only show sales by the current cashier
+    query = Sale.query.filter(Sale.cashier_id == current_user.id)
+    
+    # Apply date filters if provided
+    if start_date_str:
+        try:
+            start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
+            query = query.filter(Sale.date_sold >= start_date)
+        except ValueError:
+            flash(_('Invalid start date format. Please use YYYY-MM-DD.'), 'warning')
+    
+    if end_date_str:
+        try:
+            end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
+            # Add one day to include the end date
+            end_date = datetime(end_date.year, end_date.month, end_date.day, 23, 59, 59)
+            query = query.filter(Sale.date_sold <= end_date)
+        except ValueError:
+            flash(_('Invalid end date format. Please use YYYY-MM-DD.'), 'warning')
+    
+    # Apply category filter if provided
+    if category and category != 'all':
+        query = query.join(Product).filter(Product.category == category)
+    
+    # Get all sales based on the filters
+    sales = query.order_by(Sale.date_sold.desc()).all()
     
     # Calculate total revenue
     total_revenue = sum(sale.total_price for sale in sales)
     
-    # Get today's sales
-    today = datetime.utcnow().date()
-    today_sales = [sale for sale in sales if sale.date_sold.date() == today]
-    today_revenue = sum(sale.total_price for sale in today_sales)
+    # Get unique categories for the filter dropdown
+    categories = db.session.query(Product.category).distinct().all()
+    categories = [cat[0] for cat in categories]
     
-    # Create category summary
+    # Group sales by category for the summary
     category_summary = {}
-    categories = []
-    
     for sale in sales:
-        product = Product.query.get(sale.product_id)
-        if product:
-            category = product.category or 'Uncategorized'
-            if category not in categories:
-                categories.append(category)
-            
-            if category not in category_summary:
-                category_summary[category] = {'count': 0, 'revenue': 0}
-            
-            category_summary[category]['count'] += sale.quantity
-            category_summary[category]['revenue'] += sale.total_price
+        category = sale.product.category
+        if category not in category_summary:
+            category_summary[category] = {
+                'count': 0,
+                'revenue': 0
+            }
+        category_summary[category]['count'] += sale.quantity
+        category_summary[category]['revenue'] += sale.total_price
     
-    return render_template(
-        'cashier_sales.html',
-        sales=sales,
-        total_revenue=total_revenue,
-        today_sales=today_sales,
-        today_revenue=today_revenue,
-        category_summary=category_summary,
-        categories=categories,
-        start_date='',
-        end_date='',
-        selected_category='all'
-    )
+    return render_template('cashier_sales.html', 
+                           sales=sales, 
+                           total_revenue=total_revenue,
+                           categories=categories,
+                           category_summary=category_summary,
+                           selected_category=category,
+                           start_date=start_date_str,
+                           end_date=end_date_str)
 
-@app.route('/admin/cashout', methods=['GET', 'POST'])
-@login_required
-def admin_cashout():
-    if current_user.role != 'admin':
-        flash(_('Access denied. Admin privileges required.'), 'danger')
-        return redirect(url_for('login'))
-    
-    cashiers = User.query.filter_by(role='cashier').all()
-    
-    # Debug logging
-    print(f"Request method: {request.method}")
-    print(f"Form data: {request.form}")
-    
-    if request.method == 'POST':
-        cashier_id = request.form.get('cashier_id')
-        note = request.form.get('note', '')
-        
-        cashier = User.query.get_or_404(cashier_id)
-        
-        # Get all uncashed sales for this cashier
-        uncashed_sales = Sale.query.filter_by(
-            cashier_id=cashier_id,
-            is_cashed_out=False
-        ).all()
-        
-        if not uncashed_sales:
-            flash(_('No sales to cash out for this cashier.'), 'warning')
-            return redirect(url_for('admin_cashout'))
-        
-        # Calculate total amount
-        total_amount = sum(sale.total_price for sale in uncashed_sales)
-        
-        # Create new cashout record
-        cashout = Cashout(
-            cashier_id=cashier_id,
-            admin_id=current_user.id,
-            amount=total_amount,
-            note=note
-        )
-        db.session.add(cashout)
-        db.session.flush()  # Get the cashout ID
-        
-        # Mark all sales as cashed out
-        for sale in uncashed_sales:
-            sale.is_cashed_out = True
-            sale.cashout_id = cashout.id
-        
-        db.session.commit()
-        
-        flash(_('Successfully cashed out {} for RWF {:.0f}').format(cashier.username, total_amount), 'success')
-        return redirect(url_for('admin_cashout'))
-    
-    # Get cashiers with pending sales
-    cashiers_with_sales = []
-    for cashier in cashiers:
-        # Get uncashed sales for this cashier
-        uncashed_sales = Sale.query.filter_by(
-            cashier_id=cashier.id,
-            is_cashed_out=False
-        ).all()
-        
-        if uncashed_sales:
-            total_amount = sum(sale.total_price for sale in uncashed_sales)
-            cashiers_with_sales.append({
-                'cashier': cashier,
-                'total_amount': total_amount,
-                'sales_count': len(uncashed_sales)
-            })
-    
-    # Get recent cashouts
-    recent_cashouts = Cashout.query.order_by(Cashout.date.desc()).limit(10).all()
-    
-    return render_template(
-        'admin_cashout.html',
-        cashiers_with_sales=cashiers_with_sales,
-        recent_cashouts=recent_cashouts
-    )
-
-@app.route('/admin/cashout/history')
-@login_required
-def cashout_history():
-    if current_user.role != 'admin':
-        flash(_('Access denied. Admin privileges required.'), 'danger')
-        return redirect(url_for('login'))
-    
-    cashouts = Cashout.query.order_by(Cashout.date.desc()).all()
-    
-    # Calculate total amount cashed out
-    total_cashed_out = sum(cashout.amount for cashout in cashouts)
-    
-    return render_template(
-        'cashout_history.html',
-        cashouts=cashouts,
-        total_cashed_out=total_cashed_out
-    )
-
-@app.route('/admin/cashout/details/<int:cashout_id>')
-@login_required
-def cashout_details(cashout_id):
-    if current_user.role != 'admin':
-        flash(_('Access denied. Admin privileges required.'), 'danger')
-        return redirect(url_for('login'))
-    
-    cashout = Cashout.query.get_or_404(cashout_id)
-    sales = Sale.query.filter_by(cashout_id=cashout_id).all()
-    
-    return render_template(
-        'cashout_details.html',
-        cashout=cashout,
-        sales=sales
-    )
-
-@app.route('/admin/cashout/reverse/<int:cashout_id>', methods=['POST'])
-@login_required
-def reverse_cashout(cashout_id):
-    if current_user.role != 'admin':
-        flash(_('Access denied. Admin privileges required.'), 'danger')
-        return redirect(url_for('login'))
-    
-    # Get the cashout record
-    cashout = Cashout.query.get_or_404(cashout_id)
-    
-    # Get all sales associated with this cashout
-    sales = Sale.query.filter_by(cashout_id=cashout_id).all()
-    
-    if not sales:
-        flash(_('No sales found for this cashout.'), 'warning')
-        return redirect(url_for('cashout_details', cashout_id=cashout_id))
-    
-    try:
-        # Mark all sales as not cashed out
-        for sale in sales:
-            sale.is_cashed_out = False
-            sale.cashout_id = None
-        
-        # Add a note to the cashout record indicating it was reversed
-        cashout.note = f"{cashout.note or ''} [REVERSED: {datetime.now().strftime('%Y-%m-%d %H:%M')}]"
-        
-        db.session.commit()
-        
-        flash(_('Cashout successfully reversed. All associated sales have been marked as not cashed out.'), 'success')
-        return redirect(url_for('admin_cashout'))
-    except Exception as e:
-        db.session.rollback()
-        flash(_('Error reversing cashout: {}').format(str(e)), 'danger')
-        return redirect(url_for('cashout_details', cashout_id=cashout_id))
-
-@app.route('/cashier/sales_status')
-@login_required
-def cashier_sales_status():
-    if current_user.role != 'cashier':
-        flash(_('Access denied. Cashier privileges required.'), 'danger')
-        return redirect(url_for('login'))
-    
-    # Get all uncashed sales for this cashier
-    uncashed_sales = Sale.query.filter_by(
-        cashier_id=current_user.id,
-        is_cashed_out=False
-    ).order_by(Sale.date_sold.desc()).all()
-    
-    # Calculate total uncashed amount
-    total_uncashed = sum(sale.total_price for sale in uncashed_sales)
-    
-    # Get recent cashouts for this cashier
-    recent_cashouts = Cashout.query.filter_by(
-        cashier_id=current_user.id
-    ).order_by(Cashout.date.desc()).limit(5).all()
-    
-    # Get last cashout date
-    last_cashout = Cashout.query.filter_by(
-        cashier_id=current_user.id
-    ).order_by(Cashout.date.desc()).first()
-    
-    last_cashout_date = last_cashout.date if last_cashout else None
-    
-    # Enrich cashout objects with their associated sales
-    for cashout in recent_cashouts:
-        cashout_sales = Sale.query.filter_by(
-            cashout_id=cashout.id
-        ).all()
-        cashout.sales = cashout_sales
-    
-    return render_template(
-        'cashier_sales_status.html',
-        uncashed_sales=uncashed_sales,
-        total_uncashed=total_uncashed,
-        recent_cashouts=recent_cashouts,
-        last_cashout_date=last_cashout_date
-    )
-
-@app.route('/admin/delete_sale/<int:sale_id>', methods=['POST'])
-@login_required
-def delete_sale(sale_id):
-    if current_user.role != 'admin':
-        flash(_('Access denied. Admin privileges required.'), 'danger')
-        return redirect(url_for('login'))
-    
-    sale = Sale.query.get_or_404(sale_id)
-    
-    # Check if the sale is already cashed out
-    if sale.is_cashed_out:
-        flash(_('Cannot delete a sale that has been cashed out.'), 'danger')
-        return redirect(url_for('view_sales'))
-    
-    # Restore stock to product
-    product = sale.product
-    product.stock += sale.quantity
-    
-    # Log the deletion
-    logger.info(_('Admin {} deleted sale ID {} for {} units of {}').format(current_user.username, sale.id, sale.quantity, product.name))
-    
-    # Delete the sale
-    db.session.delete(sale)
-    db.session.commit()
-    
-    flash(_('Sale deleted successfully. Stock has been restored.'), 'success')
-    return redirect(url_for('view_sales'))
-
-def initialize_database():
+# Initialize the database and create an admin user
+def init_db_command():
+    """Initialize the database and create admin and cashier users if they don't exist."""
+    print("Creating database tables...")
     db.create_all()
     
     # Check if admin user exists
-    admin = User.query.filter_by(username='renoir01').first()
+    admin = User.query.filter_by(username='admin').first()
     if not admin:
-        admin = User(username='renoir01', role='admin')
-        admin.set_password('Renoir@654')
+        admin = User(username='admin', role='admin')
+        admin.set_password('admin123')
         db.session.add(admin)
+        print("Created admin user with username 'admin' and password 'admin123'")
+    else:
+        print("Admin user already exists.")
     
     # Check if cashier user exists
-    cashier = User.query.filter_by(username='epi').first()
+    cashier = User.query.filter_by(username='cashier').first()
     if not cashier:
-        cashier = User(username='epi', role='cashier')
-        cashier.set_password('Epi@654')
+        cashier = User(username='cashier', role='cashier')
+        cashier.set_password('cashier123')
         db.session.add(cashier)
+        print("Created cashier user with username 'cashier' and password 'cashier123'")
+    else:
+        print("Cashier user already exists.")
     
     db.session.commit()
+    print("Database initialization complete.")
+    
+    return True
 
-@app.route('/test/cashout')
+# Function to update monthly profit data when a sale is made
+def update_monthly_profit(sale):
+    try:
+        # Get the year and month from the sale date
+        year = sale.date_sold.year
+        month = sale.date_sold.month
+        
+        # Calculate the profit for this sale
+        purchase_price = sale.product.purchase_price or 0
+        cost = purchase_price * sale.quantity
+        profit = sale.total_price - cost
+        
+        # Find or create the monthly profit record
+        monthly_profit = MonthlyProfit.query.filter_by(year=year, month=month).first()
+        
+        if monthly_profit:
+            # Update existing record
+            monthly_profit.total_revenue += sale.total_price
+            monthly_profit.total_cost += cost
+            monthly_profit.total_profit += profit
+            monthly_profit.sale_count += 1
+        else:
+            # Create new record
+            monthly_profit = MonthlyProfit(
+                year=year,
+                month=month,
+                total_revenue=sale.total_price,
+                total_cost=cost,
+                total_profit=profit,
+                sale_count=1
+            )
+            db.session.add(monthly_profit)
+        
+        db.session.commit()
+        logger.info(f"Updated monthly profit for {year}-{month}")
+    except Exception as e:
+        logger.error(f"Error updating monthly profit: {str(e)}")
+        db.session.rollback()
+
+# Function to recalculate all monthly profits from sales data
+def recalculate_monthly_profits():
+    try:
+        # Clear existing monthly profit data
+        MonthlyProfit.query.delete()
+        db.session.commit()
+        
+        # Get all sales ordered by date
+        sales = Sale.query.order_by(Sale.date_sold).all()
+        
+        # Process each sale to update monthly profits
+        for sale in sales:
+            update_monthly_profit(sale)
+            
+        logger.info("Successfully recalculated all monthly profits")
+        return True
+    except Exception as e:
+        logger.error(f"Error recalculating monthly profits: {str(e)}")
+        db.session.rollback()
+        return False
+
+@app.route('/admin/monthly_profits')
 @login_required
-def test_cashout():
+def view_monthly_profits():
     if current_user.role != 'admin':
         flash(_('Access denied. Admin privileges required.'), 'danger')
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
     
-    return render_template('test_cashout.html')
+    # Get all monthly profit records ordered by year and month (most recent first)
+    monthly_profits = MonthlyProfit.query.order_by(MonthlyProfit.year.desc(), MonthlyProfit.month.desc()).all()
+    
+    # Calculate totals
+    total_revenue = sum(mp.total_revenue for mp in monthly_profits)
+    total_cost = sum(mp.total_cost for mp in monthly_profits)
+    total_profit = sum(mp.total_profit for mp in monthly_profits)
+    total_sales = sum(mp.sale_count for mp in monthly_profits)
+    
+    # Calculate average monthly profit
+    avg_monthly_profit = total_profit / len(monthly_profits) if monthly_profits else 0
+    
+    # Get month names for display
+    month_names = [
+        _('January'), _('February'), _('March'), _('April'), _('May'), _('June'),
+        _('July'), _('August'), _('September'), _('October'), _('November'), _('December')
+    ]
+    
+    return render_template(
+        'monthly_profits.html',
+        monthly_profits=monthly_profits,
+        month_names=month_names,
+        total_revenue=total_revenue,
+        total_cost=total_cost,
+        total_profit=total_profit,
+        total_sales=total_sales,
+        avg_monthly_profit=avg_monthly_profit
+    )
+
+@app.route('/admin/recalculate_profits', methods=['POST'])
+@login_required
+def admin_recalculate_profits():
+    if current_user.role != 'admin':
+        flash(_('Access denied. Admin privileges required.'), 'danger')
+        return redirect(url_for('index'))
+    
+    if recalculate_monthly_profits():
+        flash(_('Monthly profits have been recalculated successfully.'), 'success')
+    else:
+        flash(_('An error occurred while recalculating monthly profits.'), 'danger')
+    
+    return redirect(url_for('view_monthly_profits'))
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        initialize_database()
     app.run(debug=True)

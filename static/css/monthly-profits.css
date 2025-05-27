@@ -1,0 +1,84 @@
+.profit-summary {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.profit-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.profit-margin-container {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.profit-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.profit-table th, 
+.profit-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.profit-table th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+}
+
+.profit-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.progress {
+    height: 20px;
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.progress-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    transition: width 0.6s ease;
+}
+
+.bg-success {
+    background-color: #28a745;
+}
+
+.bg-info {
+    background-color: #17a2b8;
+}
+
+.bg-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+@media (max-width: 768px) {
+    .profit-table th, 
+    .profit-table td {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+    
+    .profit-card {
+        padding: 10px;
+    }
+}

@@ -1,12 +1,11 @@
 import sqlite3
 import os
-from datetime import datetime
 
 # Path to the database file
 DB_PATH = 'instance/inventory.db'
 
 def migrate_database():
-    """Migrate the database to add new fields for packaged products."""
+    """Add the category and purchase_price columns to the product table if they don't exist."""
     print("Starting database migration...")
     
     # Check if database file exists
@@ -19,39 +18,35 @@ def migrate_database():
     cursor = conn.cursor()
     
     try:
-        # Check if the columns already exist
+        # Check if columns already exist
         cursor.execute("PRAGMA table_info(product)")
-        columns = [column[1] for column in cursor.fetchall()]
+        columns = cursor.fetchall()
+        column_names = [column[1] for column in columns]
         
-        # Add new columns if they don't exist
-        if 'is_packaged' not in columns:
-            print("Adding 'is_packaged' column to product table...")
-            cursor.execute("ALTER TABLE product ADD COLUMN is_packaged BOOLEAN DEFAULT 0")
+        # Add category column if it doesn't exist
+        if 'category' not in column_names:
+            print("Adding 'category' column to the product table...")
+            cursor.execute("ALTER TABLE product ADD COLUMN category TEXT DEFAULT 'Uncategorized'")
+            conn.commit()
+            print("Migration successful: 'category' column added to the product table.")
+        else:
+            print("'category' column already exists in the product table.")
         
-        if 'units_per_package' not in columns:
-            print("Adding 'units_per_package' column to product table...")
-            cursor.execute("ALTER TABLE product ADD COLUMN units_per_package INTEGER DEFAULT 1")
+        # Add purchase_price column if it doesn't exist
+        if 'purchase_price' not in column_names:
+            print("Adding 'purchase_price' column to the product table...")
+            cursor.execute("ALTER TABLE product ADD COLUMN purchase_price FLOAT DEFAULT 0")
+            conn.commit()
+            print("Migration successful: 'purchase_price' column added to the product table.")
+        else:
+            print("'purchase_price' column already exists in the product table.")
         
-        if 'individual_price' not in columns:
-            print("Adding 'individual_price' column to product table...")
-            cursor.execute("ALTER TABLE product ADD COLUMN individual_price FLOAT DEFAULT 0")
-        
-        if 'individual_stock' not in columns:
-            print("Adding 'individual_stock' column to product table...")
-            cursor.execute("ALTER TABLE product ADD COLUMN individual_stock INTEGER DEFAULT 0")
-        
-        # Commit the changes
-        conn.commit()
-        print("Database migration completed successfully!")
         return True
-    
     except Exception as e:
-        print(f"Error during migration: {str(e)}")
-        conn.rollback()
+        print(f"Migration failed: {str(e)}")
         return False
-    
     finally:
         conn.close()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     migrate_database()

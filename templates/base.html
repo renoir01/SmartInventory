@@ -6,7 +6,8 @@
     <title>{% block title %}{{ _('Smart Inventory') }}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive-fixes.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-ui.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     {% block extra_css %}{% endblock %}
 </head>
@@ -31,54 +32,40 @@
     <nav class="nav">
         <div class="container">
             <ul class="nav-list">
-                {% if current_user.role == 'admin' %}
-                <li class="nav-item">
-                    <a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
-                        <i class="fas fa-tachometer-alt"></i> {{ _('Dashboard') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url_for('manage_products') }}" class="nav-link {% if request.endpoint == 'manage_products' %}active{% endif %}">
-                        <i class="fas fa-box"></i> {{ _('Products') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url_for('view_sales') }}" class="nav-link {% if request.endpoint == 'view_sales' %}active{% endif %}">
-                        <i class="fas fa-chart-line"></i> {{ _('Sales') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url_for('admin_cashout') }}" class="nav-link {% if request.endpoint == 'admin_cashout' or request.endpoint == 'cashout_history' or request.endpoint == 'cashout_details' %}active{% endif %}">
-                        <i class="fas fa-cash-register"></i> {{ _('Cashout') }}
-                    </a>
-                </li>
-                {% elif current_user.role == 'cashier' %}
-                <li class="nav-item">
-                    <a href="{{ url_for('cashier_dashboard') }}" class="nav-link {% if request.endpoint == 'cashier_dashboard' %}active{% endif %}">
-                        <i class="fas fa-tachometer-alt"></i> {{ _('Dashboard') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url_for('view_cashier_sales') }}" class="nav-link {% if request.endpoint == 'view_cashier_sales' %}active{% endif %}">
-                        <i class="fas fa-chart-line"></i> {{ _('My Sales') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url_for('cashier_sales_status') }}" class="nav-link {% if request.endpoint == 'cashier_sales_status' %}active{% endif %}">
-                        <i class="fas fa-money-bill-wave"></i> {{ _('Balance') }}
-                    </a>
-                </li>
-                {% endif %}
+                {% if current_user.role == 'admin' -%}
+                    <li class="nav-item">
+                        <a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                            <i class="fas fa-tachometer-alt"></i> {{ _('Dashboard') }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('manage_products') }}" class="nav-link {% if request.endpoint == 'manage_products' %}active{% endif %}">
+                            <i class="fas fa-box"></i> {{ _('Products') }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('view_sales') }}" class="nav-link {% if request.endpoint == 'view_sales' %}active{% endif %}">
+                            <i class="fas fa-chart-line"></i> {{ _('Sales') }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('view_monthly_profits') }}" class="nav-link {% if request.endpoint == 'view_monthly_profits' %}active{% endif %}">
+                            <i class="fas fa-calendar-alt"></i> {{ _('Monthly Profits') }}
+                        </a>
+                    </li>
+                {%- elif current_user.role == 'cashier' -%}
+                    <li class="nav-item">
+                        <a href="{{ url_for('cashier_dashboard') }}" class="nav-link {% if request.endpoint == 'cashier_dashboard' %}active{% endif %}">
+                            <i class="fas fa-tachometer-alt"></i> {{ _('Dashboard') }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('view_cashier_sales') }}" class="nav-link {% if request.endpoint == 'view_cashier_sales' %}active{% endif %}">
+                            <i class="fas fa-chart-line"></i> {{ _('My Sales') }}
+                        </a>
+                    </li>
+                {%- endif %}
             </ul>
-        </div>
-    
-        <div class="language-selector">
-            <form action="{{ url_for('set_language', language='en') }}" method="GET" class="d-inline">
-                <button type="submit" class="btn btn-sm btn-outline-secondary">English</button>
-            </form>
-            <form action="{{ url_for('set_language', language='rw') }}" method="GET" class="d-inline">
-                <button type="submit" class="btn btn-sm btn-outline-secondary">Kinyarwanda</button>
-            </form>
         </div>
     </nav>
     {% endif %}
@@ -105,6 +92,14 @@
                 <h3>{{ _('Smart Inventory') }}</h3>
                 <p>{{ _('Efficient inventory and sales management for your mini market business.') }}</p>
             </div>
+            <ul class="footer-links">
+                <li><a href="#">{{ _('About') }}</a></li>
+                <li><a href="#">{{ _('Contact') }}</a></li>
+                <li><a href="#">{{ _('Privacy Policy') }}</a></li>
+                {%- if current_user.is_authenticated -%}
+                <li><a href="{{ url_for('logout') }}">{{ _('Logout') }}</a></li>
+                {%- endif -%}
+            </ul>
             <div class="footer-section">
                 <h3>{{ _('Quick Links') }}</h3>
                 <ul>
@@ -113,12 +108,9 @@
                         {% if current_user.role == 'admin' %}
                             <li><a href="{{ url_for('admin_dashboard') }}">{{ _('Dashboard') }}</a></li>
                             <li><a href="{{ url_for('manage_products') }}">{{ _('Products') }}</a></li>
-                            <li><a href="{{ url_for('view_sales') }}">{{ _('Sales') }}</a></li>
-                            <li><a href="{{ url_for('admin_cashout') }}">{{ _('Cashout') }}</a></li>
+                            <li><a href="{{ url_for('view_monthly_profits') }}">{{ _('Monthly Profits') }}</a></li>
                         {% elif current_user.role == 'cashier' %}
                             <li><a href="{{ url_for('cashier_dashboard') }}">{{ _('Dashboard') }}</a></li>
-                            <li><a href="{{ url_for('view_cashier_sales') }}">{{ _('My Sales') }}</a></li>
-                            <li><a href="{{ url_for('cashier_sales_status') }}">{{ _('Balance') }}</a></li>
                         {% endif %}
                     {% endif %}
                 </ul>
@@ -135,12 +127,6 @@
             &copy; {{ _('2025 Smart Inventory. All rights reserved.') }}
         </div>
     </footer>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <script src="{{ url_for('static', filename='js/category-progress.js') }}"></script>
-    
-    {% block scripts %}{% endblock %}
     
     <script>
         function changeLanguage(lang) {
@@ -169,6 +155,7 @@
             }
         });
     </script>
+    <script src="{{ url_for('static', filename='js/category-progress.js') }}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

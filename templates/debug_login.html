@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Debug {{ _("Login") }} - Smart Inventory</title>
+    <title>Debug Login - Smart Inventory</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -62,7 +62,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Debug {{ _("Login") }}</h1>
+        <h1>Debug Login</h1>
         
         <div class="info">
             <p>This is a special debug login page to help diagnose and fix login issues.</p>
@@ -70,17 +70,17 @@
         
         <form method="POST" action="/debug_login">
             <div class="form-group">
-                <label for="username">{{ _("Username") }}:</label>
+                <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required autocomplete="username">
             </div>
             
             <div class="form-group">
-                <label for="password">{{ _("Password") }}:</label>
+                <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required autocomplete="current-password">
             </div>
             
             <div class="form-group">
-                <button type="submit">{{ _("Login") }}</button>
+                <button type="submit">Login</button>
             </div>
         </form>
     </div>

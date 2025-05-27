@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "password_hash": "pbkdf2:sha256:600000$0sWEMSREIxqJdyEu$d376685c6a364c0d6e5348d6d0f2436ffa3b6177fd6cad2ac8028bf6a027b907",
+    "role": "admin"
+  },
+  {
+    "id": 2,
+    "username": "renoir01",
+    "password_hash": "pbkdf2:sha256:600000$vMbdLsAAOqJsXQ10$155118bcf79bc08038d8679b2351c9b08102f941955d007a92502530ce47ca65",
+    "role": "admin"
+  },
+  {
+    "id": 3,
+    "username": "cashier",
+    "password_hash": "pbkdf2:sha256:600000$itKF9zPy2Bp3Ak5e$7859d64b66e9dbaec6976d0e817b572ec735a96a98a109a41ddc6794e3e45392",
+    "role": "cashier"
+  },
+  {
+    "id": 4,
+    "username": "epi",
+    "password_hash": "pbkdf2:sha256:600000$vcCpA2p9rWEx2Ibr$360f4620343d85f3e9b562777a24d6e694f97956cc1bf71bef571744a9e2d315",
+    "role": "cashier"
+  }
+]
