@@ -132,14 +132,14 @@ class Sale(db.Model):
 class MonthlyProfit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     year = db.Column(db.Integer, nullable=False)
-    month = db.Column(db.Integer, nullable=False)  # 1-12 for Jan-Dec
+    month = db.Column(db.Integer, nullable=False)
+    start_day = db.Column(db.Integer, default=1)  # Default to 1st day of month
+    end_day = db.Column(db.Integer, default=31)  # Default to last day of month
     total_revenue = db.Column(db.Float, default=0.0)
     total_cost = db.Column(db.Float, default=0.0)
     total_profit = db.Column(db.Float, default=0.0)
     sale_count = db.Column(db.Integer, default=0)
-    
-    # Ensure year and month combination is unique
-    __table_args__ = (db.UniqueConstraint('year', 'month', name='unique_year_month'),)
+    __table_args__ = (db.UniqueConstraint('year', 'month', 'start_day', name='unique_year_month_start'),)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -824,7 +824,7 @@ def update_monthly_profit(sale):
         profit = sale.total_price - cost
         
         # Find or create the monthly profit record
-        monthly_profit = MonthlyProfit.query.filter_by(year=year, month=month).first()
+        monthly_profit = MonthlyProfit.query.filter_by(year=year, month=month, start_day=1).first()
         
         if monthly_profit:
             # Update existing record
@@ -851,7 +851,7 @@ def update_monthly_profit(sale):
         db.session.rollback()
 
 # Function to recalculate all monthly profits from sales data
-def recalculate_monthly_profits():
+def recalculate_monthly_profits(start_day=1):
     try:
         # Clear existing monthly profit data
         MonthlyProfit.query.delete()
@@ -860,11 +860,98 @@ def recalculate_monthly_profits():
         # Get all sales ordered by date
         sales = Sale.query.order_by(Sale.date_sold).all()
         
-        # Process each sale to update monthly profits
-        for sale in sales:
-            update_monthly_profit(sale)
+        # Group sales by custom month periods
+        if start_day == 1:
+            # Standard calendar month
+            for sale in sales:
+                update_monthly_profit(sale)
+        else:
+            # Custom period (e.g., 12th to 12th)
+            # First, clear any existing data
+            MonthlyProfit.query.delete()
+            db.session.commit()
             
-        logger.info("Successfully recalculated all monthly profits")
+            # Group sales by custom periods
+            from collections import defaultdict
+            from calendar import monthrange
+            
+            # Dictionary to store aggregated data by period
+            periods = defaultdict(lambda: {'revenue': 0, 'cost': 0, 'profit': 0, 'count': 0})
+            
+            for sale in sales:
+                sale_day = sale.date_sold.day
+                sale_month = sale.date_sold.month
+                sale_year = sale.date_sold.year
+                
+                # Determine which period this sale belongs to
+                if sale_day >= start_day:
+                    # This belongs to the current month's period
+                    period_key = (sale_year, sale_month, start_day)
+                else:
+                    # This belongs to the previous month's period
+                    # Calculate previous month and year
+                    if sale_month == 1:
+                        prev_month = 12
+                        prev_year = sale_year - 1
+                    else:
+                        prev_month = sale_month - 1
+                        prev_year = sale_year
+                    
+                    period_key = (prev_year, prev_month, start_day)
+                
+                # Calculate profit for this sale
+                purchase_price = sale.product.purchase_price or 0
+                cost = purchase_price * sale.quantity
+                profit = sale.total_price - cost
+                
+                # Add to the appropriate period
+                periods[period_key]['revenue'] += sale.total_price
+                periods[period_key]['cost'] += cost
+                periods[period_key]['profit'] += profit
+                periods[period_key]['count'] += 1
+            
+            # Create monthly profit records from the aggregated data
+            for period_key, data in periods.items():
+                year, month, day = period_key
+                
+                # Calculate end day (day before start_day of next month)
+                if start_day == 1:
+                    # If starting on the 1st, end on the last day of the month
+                    _, last_day = monthrange(year, month)
+                    end_day = last_day
+                else:
+                    # Otherwise, end on the day before start_day of next month
+                    next_month = month + 1 if month < 12 else 1
+                    next_year = year if month < 12 else year + 1
+                    end_day = start_day - 1
+                    
+                    # Handle case where end_day would be 0
+                    if end_day == 0:
+                        # Go to previous month's last day
+                        if month == 1:
+                            prev_month = 12
+                            prev_year = year - 1
+                        else:
+                            prev_month = month - 1
+                            prev_year = year
+                        _, end_day = monthrange(prev_year, prev_month)
+                
+                # Create the monthly profit record
+                monthly_profit = MonthlyProfit(
+                    year=year,
+                    month=month,
+                    start_day=start_day,
+                    end_day=end_day,
+                    total_revenue=data['revenue'],
+                    total_cost=data['cost'],
+                    total_profit=data['profit'],
+                    sale_count=data['count']
+                )
+                db.session.add(monthly_profit)
+            
+            db.session.commit()
+            
+        logger.info(f"Successfully recalculated all monthly profits with start day {start_day}")
         return True
     except Exception as e:
         logger.error(f"Error recalculating monthly profits: {str(e)}")
@@ -878,8 +965,21 @@ def view_monthly_profits():
         flash(_('Access denied. Admin privileges required.'), 'danger')
         return redirect(url_for('index'))
     
+    # Get the start day from the query parameters (default to 1)
+    try:
+        start_day = int(request.args.get('start_day', 1))
+        if start_day < 1 or start_day > 28:
+            start_day = 1  # Default to 1 if invalid
+    except (ValueError, TypeError):
+        start_day = 1  # Default to 1 if there's an error
+    
     # Get all monthly profit records ordered by year and month (most recent first)
-    monthly_profits = MonthlyProfit.query.order_by(MonthlyProfit.year.desc(), MonthlyProfit.month.desc()).all()
+    # Filter by start_day if specified
+    query = MonthlyProfit.query
+    if start_day != 1:
+        query = query.filter_by(start_day=start_day)
+    
+    monthly_profits = query.order_by(MonthlyProfit.year.desc(), MonthlyProfit.month.desc()).all()
     
     # Calculate totals
     total_revenue = sum(mp.total_revenue for mp in monthly_profits)
@@ -896,6 +996,9 @@ def view_monthly_profits():
         _('July'), _('August'), _('September'), _('October'), _('November'), _('December')
     ]
     
+    # Generate a list of possible start days for the dropdown
+    start_days = list(range(1, 29))  # 1 to 28 (all months have at least 28 days)
+    
     return render_template(
         'monthly_profits.html',
         monthly_profits=monthly_profits,
@@ -904,7 +1007,9 @@ def view_monthly_profits():
         total_cost=total_cost,
         total_profit=total_profit,
         total_sales=total_sales,
-        avg_monthly_profit=avg_monthly_profit
+        avg_monthly_profit=avg_monthly_profit,
+        current_start_day=start_day,
+        start_days=start_days
     )
 
 @app.route('/admin/recalculate_profits', methods=['POST'])
@@ -914,10 +1019,18 @@ def admin_recalculate_profits():
         flash(_('Access denied. Admin privileges required.'), 'danger')
         return redirect(url_for('index'))
     
-    if recalculate_monthly_profits():
-        flash(_('Monthly profits have been recalculated successfully.'), 'success')
+    # Get the start day from the form
+    try:
+        start_day = int(request.form.get('start_day', 1))
+        if start_day < 1 or start_day > 28:
+            start_day = 1  # Default to 1 if invalid
+    except (ValueError, TypeError):
+        start_day = 1  # Default to 1 if there's an error
+    
+    if recalculate_monthly_profits(start_day):
+        flash(_('Monthly profits recalculated successfully from day %(day)d!', day=start_day), 'success')
     else:
-        flash(_('An error occurred while recalculating monthly profits.'), 'danger')
+        flash(_('Error recalculating monthly profits. Please check the logs.'), 'danger')
     
     return redirect(url_for('view_monthly_profits'))
 
