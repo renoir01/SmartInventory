@@ -2122,3 +2122,83 @@ WHERE product.stock <= product.low_stock_threshold AND product.stock > ?]
 2025-05-28 00:45:09,875 - werkzeug - INFO -  * Debugger PIN: 185-800-852
 2025-05-28 00:46:30,846 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
 2025-05-28 00:46:30,908 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 00:46:30,944 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 00:46:31,011 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 00:46:31,609 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 00:46:31,610 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 00:46:31,627 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 00:46:31,627 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 00:46:31,630 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 00:46:31,630 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 00:47:01,866 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 00:47:01,895 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-05-28 00:47:01,896 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-05-28 00:47:01,896 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 00:47:02,410 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 00:47:02,427 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 00:47:02,431 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 00:47:10,652 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:10] "GET / HTTP/1.1" 200 -
+2025-05-28 00:47:10,832 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:10] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:10,836 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:10] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:10,838 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:10] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 00:47:10,840 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:10] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:14,776 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:14] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-28 00:47:14,785 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:14] "GET /login HTTP/1.1" 200 -
+2025-05-28 00:47:14,805 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:14] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:14,807 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:14] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:14,809 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:14] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:14,813 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:14] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 00:47:23,230 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:23] "[32mGET /set_language/en HTTP/1.1[0m" 302 -
+2025-05-28 00:47:23,236 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:23] "GET /login HTTP/1.1" 200 -
+2025-05-28 00:47:23,256 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:23] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:23,258 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:23] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:23,263 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:23] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:23,265 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:23] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 00:47:27,961 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:27] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 00:47:28,040 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:28] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-28 00:47:28,063 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:28] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:28,129 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:28] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:28,129 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:28] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:28,131 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:28] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:28,131 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:28] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 00:47:37,805 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:37] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-28 00:47:37,810 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:37] "GET /login HTTP/1.1" 200 -
+2025-05-28 00:47:37,827 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:37] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:37,830 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:37] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:37,831 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:37] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:37,832 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:37] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 00:47:42,663 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:42] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 00:47:42,718 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:42] "GET /cashier/dashboard HTTP/1.1" 200 -
+2025-05-28 00:47:42,739 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:42] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:42,743 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:42] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:42,743 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:42] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 00:47:42,744 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:42] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:47,572 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:47] "GET /cashier/dashboard?search= HTTP/1.1" 200 -
+2025-05-28 00:47:48,131 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:48] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:48,134 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:48] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:48,137 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:48] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 00:47:48,140 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:47:48] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 00:54:04,637 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 00:54:04,805 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 00:54:05,037 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 00:54:05,200 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 00:54:05,353 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 00:54:05,510 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 00:54:05,562 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 00:54:05,582 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 00:54:05,591 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 00:54:05,779 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 00:54:05,800 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 00:54:05,803 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 00:54:06,093 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 00:54:06,114 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 00:54:06,118 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 00:54:19,923 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 00:54:19,978 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 00:54:20,538 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 00:54:20,557 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 00:54:20,561 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 00:54:20,609 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 00:54:20,680 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 00:54:20,844 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading

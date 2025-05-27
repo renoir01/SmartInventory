@@ -82,6 +82,11 @@ except Exception as e:
     has_babel = False
     # Use the fallback translation function defined above
 
+# Helper function to get current time in CAT timezone
+def get_cat_time():
+    cat_timezone = pytz.timezone('Africa/Kigali')  # Kigali is in Rwanda and uses CAT
+    return datetime.now(cat_timezone)
+
 # Database models
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -138,7 +143,7 @@ class Sale(db.Model):
     total_price = db.Column(db.Float, nullable=False)
     cashier_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     cashier = db.relationship('User', backref=db.backref('sales', lazy=True))
-    date_sold = db.Column(db.DateTime, default=datetime.utcnow)
+    date_sold = db.Column(db.DateTime, default=get_cat_time)
 
 class MonthlyProfit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -745,12 +750,16 @@ def sell_product():
                     # Update product stock
                     product.stock -= quantity
                 
-                # Create sale record
+                # Create sale record with explicit CAT timezone
+                cat_now = get_cat_time()
+                logger.debug(f"Recording sale with CAT timezone: {cat_now}")
+                
                 sale = Sale(
                     product_id=product_id,
                     quantity=quantity,
                     total_price=total_price,
-                    cashier_id=current_user.id
+                    cashier_id=current_user.id,
+                    date_sold=cat_now
                 )
                 
                 # Add and commit the changes to the database
