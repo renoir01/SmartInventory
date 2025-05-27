@@ -41,7 +41,7 @@
         <div class="widget widget-info">
             <i class="fas fa-shopping-cart widget-icon"></i>
             <h3 class="widget-title">{{ _('Today\'s Sales') }}</h3>
-            <div class="widget-value">{{ today_sales_count if today_sales_count is defined else 0 }}</div>
+            <div class="widget-value">{{ today_sales_count }}</div>
             <p class="widget-description">{{ _('Total sales made today') }}</p>
             <a href="{{ url_for('view_sales') }}" class="widget-link">{{ _('View all sales') }} <i class="fas fa-arrow-right"></i></a>
         </div>
@@ -51,7 +51,7 @@
         <div class="widget widget-success">
             <i class="fas fa-money-bill-wave widget-icon"></i>
             <h3 class="widget-title">{{ _('Today\'s Revenue') }}</h3>
-            <div class="widget-value">RWF {{ "%.0f"|format(total_revenue if total_revenue is defined else 0) }}</div>
+            <div class="widget-value">RWF {{ "%.0f"|format(total_revenue) }}</div>
             <p class="widget-description">{{ _('Total revenue generated today') }}</p>
             <a href="{{ url_for('view_sales') }}" class="widget-link">{{ _('View sales report') }} <i class="fas fa-arrow-right"></i></a>
         </div>
@@ -63,7 +63,7 @@
         <div class="widget widget-warning">
             <i class="fas fa-chart-line widget-icon"></i>
             <h3 class="widget-title">{{ _('Today\'s Profit') }}</h3>
-            <div class="widget-value">RWF {{ "%.0f"|format(total_profit if total_profit is defined else 0) }}</div>
+            <div class="widget-value">RWF {{ "%.0f"|format(total_profit) }}</div>
             <p class="widget-description">{{ _('Total profit generated today') }}</p>
             <a href="{{ url_for('view_sales') }}" class="widget-link">{{ _('View profit report') }} <i class="fas fa-arrow-right"></i></a>
         </div>

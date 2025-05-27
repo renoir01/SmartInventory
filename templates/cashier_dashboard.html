@@ -8,13 +8,13 @@
 <div class="dashboard-widgets">
     <div class="widget widget-info">
         <h3 class="widget-title">{{ _('Today\'s Sales') }}</h3>
-        <div class="widget-value">{{ today_sales|length if today_sales is defined else 0 }}</div>
+        <div class="widget-value">{{ today_sales|length }}</div>
         <p class="widget-description">{{ _('Sales you\'ve made today') }}</p>
     </div>
     
     <div class="widget widget-success">
         <h3 class="widget-title">{{ _('Today\'s Revenue') }}</h3>
-        <div class="widget-value">RWF {{ "%.0f"|format(total_revenue if total_revenue is defined else 0) }}</div>
+        <div class="widget-value">RWF {{ "%.0f"|format(total_revenue) }}</div>
         <p class="widget-description">{{ _('Revenue you\'ve generated today') }}</p>
     </div>
 </div>

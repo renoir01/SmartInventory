@@ -2,7 +2,8 @@ from flask import Flask, render_template, redirect, url_for, flash, request, ses
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
+from datetime import datetime, timedelta
+import pytz
 import os
 from dotenv import load_dotenv
 import logging
@@ -248,8 +249,9 @@ def admin_dashboard():
             flash(_('Access denied. Admin privileges required.'), 'danger')
             return redirect(url_for('index'))
         
-        # Get today's date
-        today = datetime.now().date()
+        # Get today's date in Central Africa Time (CAT, GMT+2)
+        cat = pytz.timezone('Africa/Johannesburg')
+        today = datetime.now(cat).date()
         today_start = datetime.combine(today, datetime.min.time())
         today_end = datetime.combine(today, datetime.max.time())
         
@@ -276,25 +278,15 @@ def admin_dashboard():
             all_products = []
             low_stock_items = []
         
-        # Get today's sales with simplified query to ensure data is retrieved
+        # Get today's sales
         try:
-            # First check if there are any sales in the database
-            all_sales_count = Sale.query.count()
-            logger.debug(f"Total sales in database: {all_sales_count}")
-            
-            # Get today's sales with a more robust query
             today_sales = Sale.query.filter(
-                Sale.date_sold >= today_start,
-                Sale.date_sold <= today_end
+                db.func.date(Sale.date_sold) == today.strftime('%Y-%m-%d')
             ).all()
-            
             today_sales_count = len(today_sales)
-            logger.debug(f"Found {today_sales_count} sales for today")
             
-            # Calculate total revenue
-            total_revenue = 0
-            for sale in today_sales:
-                total_revenue += sale.total_price
+            # Handle case where purchase_price might be None
+            total_revenue = sum(sale.total_price for sale in today_sales)
             
             # Calculate profit with error handling for each sale
             total_profit = 0
@@ -305,8 +297,6 @@ def admin_dashboard():
                     total_profit += profit
                 except Exception as e:
                     logger.error(f"Error calculating profit for sale {sale.id}: {str(e)}")
-            
-            logger.debug(f"Today's revenue: {total_revenue}, profit: {total_profit}")
         except Exception as e:
             logger.error(f"Error getting today's sales: {str(e)}")
             today_sales = []
@@ -320,8 +310,6 @@ def admin_dashboard():
         except Exception as e:
             logger.error(f"Error getting recent sales: {str(e)}")
             recent_sales = []
-        
-        # This section is now handled above in the product counts section
         
         # Get latest monthly profit data
         try:
@@ -634,8 +622,9 @@ def cashier_dashboard():
             flash(_('Access denied. Cashier privileges required.'), 'danger')
             return redirect(url_for('index'))
         
-        # Get today's date
-        today = datetime.now().date()
+        # Get today's date in Central Africa Time (CAT, GMT+2)
+        cat = pytz.timezone('Africa/Johannesburg')
+        today = datetime.now(cat).date()
         today_start = datetime.combine(today, datetime.min.time())
         today_end = datetime.combine(today, datetime.max.time())
         
@@ -661,28 +650,15 @@ def cashier_dashboard():
             logger.error(f"Error in product search: {str(e)}")
             products = Product.query.filter(Product.stock > 0).all()
         
-        # Get today's sales for this cashier with improved query
+        # Get today's sales for this cashier
         try:
-            # First check if there are any sales by this cashier
-            all_cashier_sales = Sale.query.filter(Sale.cashier_id == current_user.id).count()
-            logger.debug(f"Total sales by cashier {current_user.username}: {all_cashier_sales}")
-            
-            # Get today's sales with a more robust query
             today_sales = Sale.query.filter(
-                Sale.date_sold >= today_start,
-                Sale.date_sold <= today_end,
+                db.func.date(Sale.date_sold) == today.strftime('%Y-%m-%d'),
                 Sale.cashier_id == current_user.id
             ).all()
             
-            # Log for debugging
-            logger.debug(f"Found {len(today_sales)} sales for today by cashier {current_user.username}")
-            
-            # Calculate total revenue for today more explicitly
-            total_revenue = 0
-            for sale in today_sales:
-                total_revenue += sale.total_price
-                
-            logger.debug(f"Today's revenue for cashier {current_user.username}: {total_revenue}")
+            # Calculate total revenue for today
+            total_revenue = sum(sale.total_price for sale in today_sales)
         except Exception as e:
             logger.error(f"Error getting sales: {str(e)}")
             today_sales = []

@@ -2095,3 +2095,30 @@ WHERE product.stock <= product.low_stock_threshold AND product.stock > ?]
 2025-05-28 00:37:44,974 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:37:44] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
 2025-05-28 00:37:44,975 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:37:44] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
 2025-05-28 00:39:25,092 - app - INFO - Flask-Babel initialized successfully
+2025-05-28 00:39:49,465 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:39:49] "[32mGET /set_language/rw HTTP/1.1[0m" 302 -
+2025-05-28 00:39:49,505 - __main__ - DEBUG - Total sales by cashier epi: 6
+2025-05-28 00:39:49,506 - __main__ - DEBUG - Found 0 sales for today by cashier epi
+2025-05-28 00:39:49,506 - __main__ - DEBUG - Today's revenue for cashier epi: 0
+2025-05-28 00:39:49,546 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:39:49] "GET /cashier/dashboard HTTP/1.1" 200 -
+2025-05-28 00:39:49,633 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:39:49] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 00:39:49,649 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:39:49] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 00:39:49,649 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:39:49] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 00:39:49,651 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:39:49] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 00:39:53,411 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:39:53] "GET /cashier/sales HTTP/1.1" 200 -
+2025-05-28 00:39:53,429 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:39:53] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 00:39:53,433 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:39:53] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 00:39:53,441 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:39:53] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 00:39:53,442 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 00:39:53] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 00:44:50,335 - app - INFO - Flask-Babel initialized successfully
+2025-05-28 00:45:09,151 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 00:45:09,149 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 00:45:09,320 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 00:45:09,334 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 00:45:09,848 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 00:45:09,848 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 00:45:09,867 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 00:45:09,868 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 00:45:09,875 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 00:45:09,875 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 00:46:30,846 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 00:46:30,908 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
