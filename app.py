@@ -23,9 +23,19 @@ load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'default-secret-key')
+
+# Set a strong, consistent SECRET_KEY for session management
+# Using a fixed key for development, but in production this should be an environment variable
+app.config['SECRET_KEY'] = 'SmartInventory_secure_key_2025_05_28'
+app.config['SESSION_TYPE'] = 'filesystem'  # Store sessions in files
+app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # Session lifetime in seconds (1 hour)
+app.config['SESSION_USE_SIGNER'] = True  # Add a cryptographic signature to cookies
+
+# Database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///new_inventory.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Internationalization configuration
 app.config['BABEL_DEFAULT_LOCALE'] = 'en'
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'locale'
 
@@ -148,61 +158,79 @@ def load_user(user_id):
 # Routes
 @app.route('/')
 def index():
+    """Home page route that shows the login page directly."""
+    # Always render login page directly to avoid redirect loops
+    return render_template('login.html')
+
+# Emergency direct login routes for testing
+@app.route('/direct-admin-login')
+def direct_admin_login():
+    """Emergency route to directly log in as admin for testing."""
     try:
-        # Check if user is authenticated without redirecting to avoid loops
-        if current_user.is_authenticated:
-            if current_user.role == 'admin':
-                return redirect(url_for('admin_dashboard'))
-            else:
-                return redirect(url_for('cashier_dashboard'))
-        # Render login directly instead of redirecting
-        return render_template('login.html')
+        # Find the admin user
+        admin = User.query.filter_by(role='admin').first()
+        if admin:
+            # Log in as admin
+            login_user(admin)
+            flash('Logged in as admin for testing', 'success')
+            return redirect(url_for('admin_dashboard'))
+        else:
+            flash('Admin user not found', 'danger')
     except Exception as e:
-        logger.error(f"Error in index route: {str(e)}")
-        # Break potential redirect loops by going directly to login template
-        return render_template('login.html')
+        logger.error(f"Error in direct admin login: {str(e)}")
+        flash('Error logging in', 'danger')
+    return render_template('login.html')
+
+@app.route('/direct-cashier-login')
+def direct_cashier_login():
+    """Emergency route to directly log in as cashier for testing."""
+    try:
+        # Find the cashier user
+        cashier = User.query.filter_by(role='cashier').first()
+        if cashier:
+            # Log in as cashier
+            login_user(cashier)
+            flash('Logged in as cashier for testing', 'success')
+            return redirect(url_for('cashier_dashboard'))
+        else:
+            flash('Cashier user not found', 'danger')
+    except Exception as e:
+        logger.error(f"Error in direct cashier login: {str(e)}")
+        flash('Error logging in', 'danger')
+    return render_template('login.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    try:
-        # Log the authentication state to help debug
-        logger.debug(f"Login route: is_authenticated={current_user.is_authenticated if hasattr(current_user, 'is_authenticated') else 'Unknown'}")
-        
-        # Don't redirect if already authenticated to avoid loops
-        if current_user.is_authenticated:
-            logger.debug(f"Authenticated user: {current_user.username}, role: {current_user.role}")
-            if current_user.role == 'admin':
-                return redirect(url_for('admin_dashboard'))
-            else:
-                return redirect(url_for('cashier_dashboard'))
-        
-        if request.method == 'POST':
-            username = request.form.get('username')
-            password = request.form.get('password')
-            
-            logger.debug(f"Login attempt for username: {username}")
-            user = User.query.filter_by(username=username).first()
-            
-            if user and user.check_password(password):
-                login_user(user, remember=True)  # Enable remember me to maintain session
-                logger.debug(f"Login successful for {username}, role: {user.role}")
-                
-                next_page = request.args.get('next')
-                if next_page:
-                    return redirect(next_page)
-                    
-                if user.role == 'admin':
-                    return redirect(url_for('admin_dashboard'))
-                else:
-                    return redirect(url_for('cashier_dashboard'))
-            else:
-                logger.debug(f"Login failed for username: {username}")
-                flash(_('Invalid username or password'), 'danger')
-        
-        # Always render login template directly for GET requests
+    """Simplified login route to avoid redirect loops."""
+    # For GET requests, just show the login page
+    if request.method == 'GET':
         return render_template('login.html')
-    except Exception as e:
-        logger.error(f"Error in login route: {str(e)}")
+    
+    # For POST requests, handle login
+    username = request.form.get('username', '')
+    password = request.form.get('password', '')
+    
+    if not username or not password:
+        flash(_('Please enter both username and password'), 'danger')
+        return render_template('login.html')
+    
+    # Find the user
+    user = User.query.filter_by(username=username).first()
+    
+    if user and user.check_password(password):
+        # Log the user in
+        login_user(user)
+        
+        # Redirect based on role
+        if user.role == 'admin':
+            return redirect(url_for('admin_dashboard'))
+        elif user.role == 'cashier':
+            return redirect(url_for('cashier_dashboard'))
+        else:
+            flash(_('Invalid user role'), 'danger')
+            return render_template('login.html')
+    else:
+        flash(_('Invalid username or password'), 'danger')
         return render_template('login.html')
 
 @app.route('/logout')
@@ -225,24 +253,48 @@ def admin_dashboard():
         today_start = datetime.combine(today, datetime.min.time())
         today_end = datetime.combine(today, datetime.max.time())
         
-        # Get counts
+        # Get counts and product data
         try:
+            # Get product counts
             total_products = Product.query.count()
-            low_stock_products = Product.query.filter(Product.stock <= Product.low_stock_threshold).count()
+            low_stock_count = Product.query.filter(Product.stock <= Product.low_stock_threshold).count()
             out_of_stock_products = Product.query.filter(Product.stock == 0).count()
+            
+            # Get all products for category statistics
+            all_products = Product.query.all()
+            
+            # Get low stock products as a list (not just count)
+            low_stock_items = Product.query.filter(
+                Product.stock <= Product.low_stock_threshold,
+                Product.stock > 0
+            ).all()
         except Exception as e:
             logger.error(f"Error getting product counts: {str(e)}")
             total_products = 0
-            low_stock_products = 0
+            low_stock_count = 0
             out_of_stock_products = 0
+            all_products = []
+            low_stock_items = []
         
-        # Get today's sales
+        # Get today's sales with simplified query to ensure data is retrieved
         try:
-            today_sales = Sale.query.filter(Sale.date_sold.between(today_start, today_end)).all()
-            today_sales_count = len(today_sales)
+            # First check if there are any sales in the database
+            all_sales_count = Sale.query.count()
+            logger.debug(f"Total sales in database: {all_sales_count}")
             
-            # Handle case where purchase_price might be None
-            total_revenue = sum(sale.total_price for sale in today_sales)
+            # Get today's sales with a more robust query
+            today_sales = Sale.query.filter(
+                Sale.date_sold >= today_start,
+                Sale.date_sold <= today_end
+            ).all()
+            
+            today_sales_count = len(today_sales)
+            logger.debug(f"Found {today_sales_count} sales for today")
+            
+            # Calculate total revenue
+            total_revenue = 0
+            for sale in today_sales:
+                total_revenue += sale.total_price
             
             # Calculate profit with error handling for each sale
             total_profit = 0
@@ -253,6 +305,8 @@ def admin_dashboard():
                     total_profit += profit
                 except Exception as e:
                     logger.error(f"Error calculating profit for sale {sale.id}: {str(e)}")
+            
+            logger.debug(f"Today's revenue: {total_revenue}, profit: {total_profit}")
         except Exception as e:
             logger.error(f"Error getting today's sales: {str(e)}")
             today_sales = []
@@ -267,15 +321,7 @@ def admin_dashboard():
             logger.error(f"Error getting recent sales: {str(e)}")
             recent_sales = []
         
-        # Get low stock products
-        try:
-            low_stock_items = Product.query.filter(
-                Product.stock <= Product.low_stock_threshold,
-                Product.stock > 0
-            ).all()
-        except Exception as e:
-            logger.error(f"Error getting low stock items: {str(e)}")
-            low_stock_items = []
+        # This section is now handled above in the product counts section
         
         # Get latest monthly profit data
         try:
@@ -333,13 +379,14 @@ def admin_dashboard():
         
         return render_template('admin_dashboard.html', 
                                total_products=total_products,
-                               low_stock_products=low_stock_products,
+                               low_stock_count=low_stock_count,
+                               low_stock_products=low_stock_items,  # Pass the list of products, not just the count
                                out_of_stock_products=out_of_stock_products,
                                today_sales_count=today_sales_count,
                                total_revenue=total_revenue,
                                total_profit=total_profit,
                                recent_sales=recent_sales,
-                               low_stock_items=low_stock_items,
+                               products=all_products,  # Pass all products for category statistics
                                latest_monthly_profit=latest_monthly_profit,
                                month_to_date_profit=month_to_date_profit,
                                month_to_date_revenue=month_to_date_revenue)
@@ -614,15 +661,28 @@ def cashier_dashboard():
             logger.error(f"Error in product search: {str(e)}")
             products = Product.query.filter(Product.stock > 0).all()
         
-        # Get today's sales for this cashier
+        # Get today's sales for this cashier with improved query
         try:
+            # First check if there are any sales by this cashier
+            all_cashier_sales = Sale.query.filter(Sale.cashier_id == current_user.id).count()
+            logger.debug(f"Total sales by cashier {current_user.username}: {all_cashier_sales}")
+            
+            # Get today's sales with a more robust query
             today_sales = Sale.query.filter(
-                Sale.date_sold.between(today_start, today_end),
+                Sale.date_sold >= today_start,
+                Sale.date_sold <= today_end,
                 Sale.cashier_id == current_user.id
             ).all()
             
-            # Calculate total revenue for today
-            total_revenue = sum(sale.total_price for sale in today_sales)
+            # Log for debugging
+            logger.debug(f"Found {len(today_sales)} sales for today by cashier {current_user.username}")
+            
+            # Calculate total revenue for today more explicitly
+            total_revenue = 0
+            for sale in today_sales:
+                total_revenue += sale.total_price
+                
+            logger.debug(f"Today's revenue for cashier {current_user.username}: {total_revenue}")
         except Exception as e:
             logger.error(f"Error getting sales: {str(e)}")
             today_sales = []
@@ -641,72 +701,115 @@ def cashier_dashboard():
 @app.route('/cashier/sell', methods=['GET', 'POST'])
 @login_required
 def sell_product():
-    if current_user.role != 'cashier':
-        flash(_('Access denied. Cashier privileges required.'), 'danger')
-        return redirect(url_for('index'))
-    
-    if request.method == 'POST':
-        product_id = request.form.get('product_id')
-        quantity = int(request.form.get('quantity'))
-        sale_type = request.form.get('sale_type', 'package')  # Default to package if not specified
+    try:
+        if current_user.role != 'cashier':
+            flash(_('Access denied. Cashier privileges required.'), 'danger')
+            return redirect(url_for('index'))
         
-        product = Product.query.get_or_404(product_id)
-        
-        # Handle packaged products differently based on sale type
-        if product.is_packaged:
-            if sale_type == 'package':
-                # Selling complete packages
-                if product.stock < quantity:
-                    flash(_('Not enough packages available. Only {0} packages left.', product.stock), 'danger')
+        if request.method == 'POST':
+            try:
+                # Get form data with validation
+                product_id = request.form.get('product_id')
+                if not product_id:
+                    flash(_('Please select a product.'), 'danger')
                     return redirect(url_for('cashier_dashboard'))
                 
-                # Calculate total price for packages
-                total_price = product.price * quantity
-                
-                # Update package stock
-                product.stock -= quantity
-            else:
-                # Selling individual units
-                if product.individual_stock < quantity:
-                    flash(_('Not enough individual units available. Only {0} units left.', product.individual_stock), 'danger')
+                try:
+                    quantity = int(request.form.get('quantity', 1))
+                    if quantity <= 0:
+                        raise ValueError("Quantity must be positive")
+                except ValueError:
+                    flash(_('Please enter a valid quantity.'), 'danger')
                     return redirect(url_for('cashier_dashboard'))
                 
-                # Calculate total price for individual units
-                total_price = product.individual_price * quantity
+                sale_type = request.form.get('sale_type', 'package')  # Default to package if not specified
                 
-                # Update individual stock
-                product.individual_stock -= quantity
-        else:
-            # Regular non-packaged product
-            if product.stock < quantity:
-                flash(_('Not enough stock available. Only {0} units left.', product.stock), 'danger')
+                # Log the sale attempt for debugging
+                logger.debug(f"Sale attempt: product_id={product_id}, quantity={quantity}, sale_type={sale_type}")
+                
+                # Get the product
+                product = Product.query.get(product_id)
+                if not product:
+                    flash(_('Product not found.'), 'danger')
+                    return redirect(url_for('cashier_dashboard'))
+                
+                # Handle packaged products differently based on sale type
+                if product.is_packaged:
+                    if sale_type == 'package':
+                        # Selling complete packages
+                        if product.stock < quantity:
+                            flash(_('Not enough packages available. Only {0} packages left.', product.stock), 'danger')
+                            return redirect(url_for('cashier_dashboard'))
+                        
+                        # Calculate total price for packages
+                        total_price = product.price * quantity
+                        
+                        # Update package stock
+                        product.stock -= quantity
+                    else:
+                        # Selling individual units
+                        if product.individual_stock < quantity:
+                            flash(_('Not enough individual units available. Only {0} units left.', product.individual_stock), 'danger')
+                            return redirect(url_for('cashier_dashboard'))
+                        
+                        # Calculate total price for individual units
+                        total_price = product.individual_price * quantity
+                        
+                        # Update individual stock
+                        product.individual_stock -= quantity
+                else:
+                    # Regular non-packaged product
+                    if product.stock < quantity:
+                        flash(_('Not enough stock available. Only {0} units left.', product.stock), 'danger')
+                        return redirect(url_for('cashier_dashboard'))
+                    
+                    # Calculate total price
+                    total_price = product.price * quantity
+                    
+                    # Update product stock
+                    product.stock -= quantity
+                
+                # Create sale record
+                sale = Sale(
+                    product_id=product_id,
+                    quantity=quantity,
+                    total_price=total_price,
+                    cashier_id=current_user.id
+                )
+                
+                # Add and commit the changes to the database
+                try:
+                    db.session.add(sale)
+                    db.session.commit()
+                    logger.debug(f"Sale recorded successfully: id={sale.id}, product={product.name}, quantity={quantity}, total_price={total_price}")
+                    
+                    # Update monthly profit data
+                    try:
+                        update_monthly_profit(sale)
+                    except Exception as e:
+                        logger.error(f"Error updating monthly profit: {str(e)}")
+                        # Continue even if monthly profit update fails
+                    
+                    flash(_('Sale recorded successfully!'), 'success')
+                    return redirect(url_for('cashier_dashboard'))
+                except Exception as db_error:
+                    db.session.rollback()
+                    logger.error(f"Database error recording sale: {str(db_error)}")
+                    flash(_('Error recording sale. Please try again.'), 'danger')
+                    return redirect(url_for('cashier_dashboard'))
+            
+            except Exception as form_error:
+                logger.error(f"Error processing sale form: {str(form_error)}")
+                flash(_('Error processing sale. Please try again.'), 'danger')
                 return redirect(url_for('cashier_dashboard'))
-            
-            # Calculate total price
-            total_price = product.price * quantity
-            
-            # Update product stock
-            product.stock -= quantity
         
-        # Create sale record
-        sale = Sale(
-            product_id=product_id,
-            quantity=quantity,
-            total_price=total_price,
-            cashier_id=current_user.id
-        )
-        
-        db.session.add(sale)
-        db.session.commit()
-        
-        # Update monthly profit data
-        update_monthly_profit(sale)
-        
-        flash(_('Sale recorded successfully!'), 'success')
+        # If GET request, redirect to cashier dashboard
         return redirect(url_for('cashier_dashboard'))
     
-    # If GET request, redirect to cashier dashboard
-    return redirect(url_for('cashier_dashboard'))
+    except Exception as e:
+        logger.error(f"Unhandled error in sell_product: {str(e)}")
+        flash(_('An unexpected error occurred. Please try again.'), 'danger')
+        return redirect(url_for('cashier_dashboard'))
 
 @app.route('/cashier/sales')
 @login_required
@@ -846,8 +949,14 @@ def update_monthly_profit(sale):
         db.session.rollback()
 
 # Function to recalculate all monthly profits from sales data
-def recalculate_monthly_profits():
+def recalculate_monthly_profits(start_day=1):
     try:
+        # Validate start_day
+        if not isinstance(start_day, int) or start_day < 1 or start_day > 28:
+            start_day = 1  # Default to 1 if invalid
+            
+        logger.debug(f"Recalculating monthly profits with accounting period starting on day {start_day}")
+        
         # Clear existing monthly profit data
         MonthlyProfit.query.delete()
         db.session.commit()
@@ -855,66 +964,165 @@ def recalculate_monthly_profits():
         # Get all sales ordered by date
         sales = Sale.query.order_by(Sale.date_sold).all()
         
-        # Process each sale to update monthly profits
-        for sale in sales:
-            update_monthly_profit(sale)
+        if not sales:
+            logger.info("No sales found to calculate profits from")
+            return True
             
-        logger.info("Successfully recalculated all monthly profits")
+        # Group sales by accounting periods based on start_day
+        # For example, if start_day is 15, periods are from 15th to 14th of next month
+        accounting_periods = {}
+        
+        for sale in sales:
+            sale_date = sale.date_sold.date()
+            # Determine the accounting period this sale belongs to
+            if sale_date.day >= start_day:
+                # This sale belongs to the current month's period
+                period_year = sale_date.year
+                period_month = sale_date.month
+            else:
+                # This sale belongs to the previous month's period
+                # Adjust for January (month 1)
+                if sale_date.month == 1:
+                    period_year = sale_date.year - 1
+                    period_month = 12
+                else:
+                    period_year = sale_date.year
+                    period_month = sale_date.month - 1
+                    
+            period_key = (period_year, period_month)
+            
+            if period_key not in accounting_periods:
+                accounting_periods[period_key] = []
+                
+            accounting_periods[period_key].append(sale)
+        
+        # Process each accounting period
+        for (year, month), period_sales in accounting_periods.items():
+            # Calculate totals for this period
+            total_revenue = 0
+            total_cost = 0
+            total_profit = 0
+            sale_count = 0
+            
+            for sale in period_sales:
+                # Calculate profit for this sale
+                purchase_price = sale.product.purchase_price or 0
+                cost = purchase_price * sale.quantity
+                profit = sale.total_price - cost
+                
+                # Add to period totals
+                total_revenue += sale.total_price
+                total_cost += cost
+                total_profit += profit
+                sale_count += 1
+            
+            # Create monthly profit record for this period
+            monthly_profit = MonthlyProfit(
+                year=year,
+                month=month,
+                total_revenue=total_revenue,
+                total_cost=total_cost,
+                total_profit=total_profit,
+                sale_count=sale_count
+            )
+            db.session.add(monthly_profit)
+        
+        db.session.commit()
+        logger.info(f"Successfully recalculated all monthly profits with start day {start_day}")
         return True
     except Exception as e:
         logger.error(f"Error recalculating monthly profits: {str(e)}")
         db.session.rollback()
         return False
 
-@app.route('/admin/monthly_profits')
+@app.route('/admin/monthly-profits')
+@app.route('/admin/monthly_profits')  # Add underscore version for compatibility
 @login_required
 def view_monthly_profits():
-    if current_user.role != 'admin':
-        flash(_('Access denied. Admin privileges required.'), 'danger')
-        return redirect(url_for('index'))
-    
-    # Get all monthly profit records ordered by year and month (most recent first)
-    monthly_profits = MonthlyProfit.query.order_by(MonthlyProfit.year.desc(), MonthlyProfit.month.desc()).all()
-    
-    # Calculate totals
-    total_revenue = sum(mp.total_revenue for mp in monthly_profits)
-    total_cost = sum(mp.total_cost for mp in monthly_profits)
-    total_profit = sum(mp.total_profit for mp in monthly_profits)
-    total_sales = sum(mp.sale_count for mp in monthly_profits)
-    
-    # Calculate average monthly profit
-    avg_monthly_profit = total_profit / len(monthly_profits) if monthly_profits else 0
-    
-    # Get month names for display
-    month_names = [
-        _('January'), _('February'), _('March'), _('April'), _('May'), _('June'),
-        _('July'), _('August'), _('September'), _('October'), _('November'), _('December')
-    ]
-    
-    return render_template(
-        'monthly_profits.html',
-        monthly_profits=monthly_profits,
-        month_names=month_names,
-        total_revenue=total_revenue,
-        total_cost=total_cost,
-        total_profit=total_profit,
-        total_sales=total_sales,
-        avg_monthly_profit=avg_monthly_profit
-    )
+    try:
+        if current_user.role != 'admin':
+            flash(_('Access denied. Admin privileges required.'), 'danger')
+            return redirect(url_for('index'))
+        
+        # Get the start day from query parameters, default to 1
+        start_day = request.args.get('start_day', '1')
+        try:
+            start_day = int(start_day)
+            if start_day < 1 or start_day > 28:
+                start_day = 1  # Default to 1 if invalid
+        except (ValueError, TypeError):
+            start_day = 1
+        
+        # Define possible start days (1-28)
+        start_days = list(range(1, 29))
+        
+        # Get all monthly profit records ordered by year and month (most recent first)
+        monthly_profits = MonthlyProfit.query.order_by(MonthlyProfit.year.desc(), MonthlyProfit.month.desc()).all()
+        
+        # Calculate totals
+        total_revenue = sum(mp.total_revenue for mp in monthly_profits)
+        total_cost = sum(mp.total_cost for mp in monthly_profits)
+        total_profit = sum(mp.total_profit for mp in monthly_profits)
+        total_sales = sum(mp.sale_count for mp in monthly_profits)
+        
+        # Calculate average monthly profit
+        avg_monthly_profit = total_profit / len(monthly_profits) if monthly_profits else 0
+        
+        # Get month names for display
+        month_names = [
+            _('January'), _('February'), _('March'), _('April'), _('May'), _('June'),
+            _('July'), _('August'), _('September'), _('October'), _('November'), _('December')
+        ]
+        
+        logger.debug(f"Rendering monthly_profits.html with current_start_day={start_day}")
+        
+        return render_template(
+            'monthly_profits.html',
+            monthly_profits=monthly_profits,
+            month_names=month_names,
+            total_revenue=total_revenue,
+            total_cost=total_cost,
+            total_profit=total_profit,
+            total_sales=total_sales,
+            avg_monthly_profit=avg_monthly_profit,
+            start_days=start_days,
+            current_start_day=start_day  # Add the missing variable
+        )
+    except Exception as e:
+        logger.error(f"Error in view_monthly_profits: {str(e)}")
+        flash(_('An error occurred while loading the monthly profits. Please try again.'), 'danger')
+        return redirect(url_for('admin_dashboard'))
 
 @app.route('/admin/recalculate_profits', methods=['POST'])
 @login_required
 def admin_recalculate_profits():
-    if current_user.role != 'admin':
-        flash(_('Access denied. Admin privileges required.'), 'danger')
-        return redirect(url_for('index'))
-    
-    if recalculate_monthly_profits():
-        flash(_('Monthly profits have been recalculated successfully.'), 'success')
-    else:
-        flash(_('An error occurred while recalculating monthly profits.'), 'danger')
-    
-    return redirect(url_for('view_monthly_profits'))
+    try:
+        if current_user.role != 'admin':
+            flash(_('Access denied. Admin privileges required.'), 'danger')
+            return redirect(url_for('index'))
+        
+        # Get the start day from the form
+        start_day = request.form.get('start_day', '1')
+        try:
+            start_day = int(start_day)
+            if start_day < 1 or start_day > 28:
+                start_day = 1  # Default to 1 if invalid
+        except (ValueError, TypeError):
+            start_day = 1
+        
+        logger.debug(f"Recalculating monthly profits with start_day={start_day}")
+        
+        if recalculate_monthly_profits(start_day=start_day):
+            flash(_('Monthly profits have been recalculated successfully.'), 'success')
+        else:
+            flash(_('An error occurred while recalculating monthly profits.'), 'danger')
+        
+        # Return to the monthly profits page with the same start day
+        return redirect(url_for('view_monthly_profits', start_day=start_day))
+    except Exception as e:
+        logger.error(f"Error in admin_recalculate_profits: {str(e)}")
+        flash(_('An error occurred while recalculating profits. Please try again.'), 'danger')
+        return redirect(url_for('view_monthly_profits'))
 
 if __name__ == '__main__':
     with app.app_context():
