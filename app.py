@@ -132,14 +132,14 @@ class Sale(db.Model):
 class MonthlyProfit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     year = db.Column(db.Integer, nullable=False)
-    month = db.Column(db.Integer, nullable=False)
-    start_day = db.Column(db.Integer, default=1)  # Default to 1st day of month
-    end_day = db.Column(db.Integer, default=31)  # Default to last day of month
+    month = db.Column(db.Integer, nullable=False)  # 1-12 for Jan-Dec
     total_revenue = db.Column(db.Float, default=0.0)
     total_cost = db.Column(db.Float, default=0.0)
     total_profit = db.Column(db.Float, default=0.0)
     sale_count = db.Column(db.Integer, default=0)
-    __table_args__ = (db.UniqueConstraint('year', 'month', 'start_day', name='unique_year_month_start'),)
+    
+    # Ensure year and month combination is unique
+    __table_args__ = (db.UniqueConstraint('year', 'month', name='unique_year_month'),)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -149,12 +149,14 @@ def load_user(user_id):
 @app.route('/')
 def index():
     try:
+        # Check if user is authenticated without redirecting to avoid loops
         if current_user.is_authenticated:
             if current_user.role == 'admin':
                 return redirect(url_for('admin_dashboard'))
             else:
                 return redirect(url_for('cashier_dashboard'))
-        return redirect(url_for('login'))
+        # Render login directly instead of redirecting
+        return render_template('login.html')
     except Exception as e:
         logger.error(f"Error in index route: {str(e)}")
         # Break potential redirect loops by going directly to login template
@@ -163,9 +165,12 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     try:
+        # Log the authentication state to help debug
+        logger.debug(f"Login route: is_authenticated={current_user.is_authenticated if hasattr(current_user, 'is_authenticated') else 'Unknown'}")
+        
         # Don't redirect if already authenticated to avoid loops
-        # Instead, check role and render appropriate dashboard
         if current_user.is_authenticated:
+            logger.debug(f"Authenticated user: {current_user.username}, role: {current_user.role}")
             if current_user.role == 'admin':
                 return redirect(url_for('admin_dashboard'))
             else:
@@ -175,17 +180,26 @@ def login():
             username = request.form.get('username')
             password = request.form.get('password')
             
+            logger.debug(f"Login attempt for username: {username}")
             user = User.query.filter_by(username=username).first()
             
             if user and user.check_password(password):
-                login_user(user)
+                login_user(user, remember=True)  # Enable remember me to maintain session
+                logger.debug(f"Login successful for {username}, role: {user.role}")
+                
+                next_page = request.args.get('next')
+                if next_page:
+                    return redirect(next_page)
+                    
                 if user.role == 'admin':
                     return redirect(url_for('admin_dashboard'))
                 else:
                     return redirect(url_for('cashier_dashboard'))
             else:
+                logger.debug(f"Login failed for username: {username}")
                 flash(_('Invalid username or password'), 'danger')
         
+        # Always render login template directly for GET requests
         return render_template('login.html')
     except Exception as e:
         logger.error(f"Error in login route: {str(e)}")
@@ -263,78 +277,59 @@ def admin_dashboard():
             logger.error(f"Error getting low stock items: {str(e)}")
             low_stock_items = []
         
-        # Create a dummy profit object as a fallback
-        class DummyProfit:
-            def __init__(self):
-                self.year = today.year
-                self.month = today.month
-                self.total_revenue = 0
-                self.total_cost = 0
-                self.total_profit = 0
-                self.sale_count = 0
-        
-        # Default values
-        latest_monthly_profit = DummyProfit()
-        month_to_date_profit = 0
-        month_to_date_revenue = 0
-        
-        # Try to get monthly profit data with extensive error handling
+        # Get latest monthly profit data
         try:
-            # First check if the table exists
-            table_exists = False
+            # First check if the table exists to prevent the 'int' object is not iterable error
             try:
-                result = db.session.execute(db.text("SELECT name FROM sqlite_master WHERE type='table' AND name='monthly_profit'"))
-                table_exists = bool(result.scalar())
+                db.session.execute(db.text("SELECT 1 FROM monthly_profit LIMIT 1"))
+                table_exists = True
             except Exception as e:
-                logger.error(f"Error checking if monthly_profit table exists: {str(e)}")
-                table_exists = False
+                if 'no such table' in str(e).lower():
+                    logger.warning("monthly_profit table does not exist")
+                    table_exists = False
+                else:
+                    raise
             
             if table_exists:
-                try:
-                    # Get the latest monthly profit record
-                    latest_mp_query = db.text(
-                        "SELECT id, year, month, total_revenue, total_cost, total_profit, sale_count "
-                        "FROM monthly_profit ORDER BY year DESC, month DESC LIMIT 1"
-                    )
-                    latest_mp_result = db.session.execute(latest_mp_query).fetchone()
-                    
-                    if latest_mp_result:
-                        try:
-                            # Safely extract values with type checking
-                            latest_monthly_profit.year = int(latest_mp_result.year) if latest_mp_result.year is not None else today.year
-                            latest_monthly_profit.month = int(latest_mp_result.month) if latest_mp_result.month is not None else today.month
-                            latest_monthly_profit.total_revenue = float(latest_mp_result.total_revenue) if latest_mp_result.total_revenue is not None else 0.0
-                            latest_monthly_profit.total_cost = float(latest_mp_result.total_cost) if latest_mp_result.total_cost is not None else 0.0
-                            latest_monthly_profit.total_profit = float(latest_mp_result.total_profit) if latest_mp_result.total_profit is not None else 0.0
-                            latest_monthly_profit.sale_count = int(latest_mp_result.sale_count) if latest_mp_result.sale_count is not None else 0
-                        except (TypeError, ValueError) as e:
-                            logger.error(f"Error converting monthly profit data types: {str(e)}")
-                            # Keep using the default values
-                except Exception as e:
-                    logger.error(f"Error getting latest monthly profit: {str(e)}")
+                latest_monthly_profit = MonthlyProfit.query.order_by(
+                    MonthlyProfit.year.desc(), 
+                    MonthlyProfit.month.desc()
+                ).first()
                 
-                try:
-                    # Get current month data with explicit type conversion
-                    current_month = today.month
-                    current_year = today.year
-                    current_mp_query = db.text(
-                        "SELECT total_revenue, total_profit FROM monthly_profit "
-                        "WHERE year = :year AND month = :month"
-                    )
-                    current_mp_result = db.session.execute(current_mp_query, {"year": current_year, "month": current_month}).fetchone()
-                    
-                    if current_mp_result:
-                        try:
-                            month_to_date_revenue = float(current_mp_result.total_revenue) if current_mp_result.total_revenue is not None else 0.0
-                            month_to_date_profit = float(current_mp_result.total_profit) if current_mp_result.total_profit is not None else 0.0
-                        except (TypeError, ValueError) as e:
-                            logger.error(f"Error converting current month data types: {str(e)}")
-                            # Keep using the default values
-                except Exception as e:
-                    logger.error(f"Error getting current month profit: {str(e)}")
+                # Get current month's profit data
+                current_month = today.month
+                current_year = today.year
+                current_month_profit = MonthlyProfit.query.filter_by(
+                    year=current_year, 
+                    month=current_month
+                ).first()
+                
+                # Calculate month-to-date profit if current month data exists
+                if current_month_profit:
+                    month_to_date_profit = current_month_profit.total_profit
+                    month_to_date_revenue = current_month_profit.total_revenue
+                else:
+                    month_to_date_profit = 0
+                    month_to_date_revenue = 0
+            else:
+                # Create a dummy object if the table doesn't exist
+                class DummyProfit:
+                    def __init__(self):
+                        self.year = today.year
+                        self.month = today.month
+                        self.total_revenue = 0
+                        self.total_cost = 0
+                        self.total_profit = 0
+                        self.sale_count = 0
+                
+                latest_monthly_profit = DummyProfit()
+                month_to_date_profit = 0
+                month_to_date_revenue = 0
         except Exception as e:
-            logger.error(f"Unhandled error in monthly profit processing: {str(e)}")
-            # Keep using the default values
+            logger.error(f"Error getting monthly profit data: {str(e)}")
+            latest_monthly_profit = None
+            month_to_date_profit = 0
+            month_to_date_revenue = 0
         
         return render_template('admin_dashboard.html', 
                                total_products=total_products,
@@ -824,7 +819,7 @@ def update_monthly_profit(sale):
         profit = sale.total_price - cost
         
         # Find or create the monthly profit record
-        monthly_profit = MonthlyProfit.query.filter_by(year=year, month=month, start_day=1).first()
+        monthly_profit = MonthlyProfit.query.filter_by(year=year, month=month).first()
         
         if monthly_profit:
             # Update existing record
@@ -851,7 +846,7 @@ def update_monthly_profit(sale):
         db.session.rollback()
 
 # Function to recalculate all monthly profits from sales data
-def recalculate_monthly_profits(start_day=1):
+def recalculate_monthly_profits():
     try:
         # Clear existing monthly profit data
         MonthlyProfit.query.delete()
@@ -860,98 +855,11 @@ def recalculate_monthly_profits(start_day=1):
         # Get all sales ordered by date
         sales = Sale.query.order_by(Sale.date_sold).all()
         
-        # Group sales by custom month periods
-        if start_day == 1:
-            # Standard calendar month
-            for sale in sales:
-                update_monthly_profit(sale)
-        else:
-            # Custom period (e.g., 12th to 12th)
-            # First, clear any existing data
-            MonthlyProfit.query.delete()
-            db.session.commit()
+        # Process each sale to update monthly profits
+        for sale in sales:
+            update_monthly_profit(sale)
             
-            # Group sales by custom periods
-            from collections import defaultdict
-            from calendar import monthrange
-            
-            # Dictionary to store aggregated data by period
-            periods = defaultdict(lambda: {'revenue': 0, 'cost': 0, 'profit': 0, 'count': 0})
-            
-            for sale in sales:
-                sale_day = sale.date_sold.day
-                sale_month = sale.date_sold.month
-                sale_year = sale.date_sold.year
-                
-                # Determine which period this sale belongs to
-                if sale_day >= start_day:
-                    # This belongs to the current month's period
-                    period_key = (sale_year, sale_month, start_day)
-                else:
-                    # This belongs to the previous month's period
-                    # Calculate previous month and year
-                    if sale_month == 1:
-                        prev_month = 12
-                        prev_year = sale_year - 1
-                    else:
-                        prev_month = sale_month - 1
-                        prev_year = sale_year
-                    
-                    period_key = (prev_year, prev_month, start_day)
-                
-                # Calculate profit for this sale
-                purchase_price = sale.product.purchase_price or 0
-                cost = purchase_price * sale.quantity
-                profit = sale.total_price - cost
-                
-                # Add to the appropriate period
-                periods[period_key]['revenue'] += sale.total_price
-                periods[period_key]['cost'] += cost
-                periods[period_key]['profit'] += profit
-                periods[period_key]['count'] += 1
-            
-            # Create monthly profit records from the aggregated data
-            for period_key, data in periods.items():
-                year, month, day = period_key
-                
-                # Calculate end day (day before start_day of next month)
-                if start_day == 1:
-                    # If starting on the 1st, end on the last day of the month
-                    _, last_day = monthrange(year, month)
-                    end_day = last_day
-                else:
-                    # Otherwise, end on the day before start_day of next month
-                    next_month = month + 1 if month < 12 else 1
-                    next_year = year if month < 12 else year + 1
-                    end_day = start_day - 1
-                    
-                    # Handle case where end_day would be 0
-                    if end_day == 0:
-                        # Go to previous month's last day
-                        if month == 1:
-                            prev_month = 12
-                            prev_year = year - 1
-                        else:
-                            prev_month = month - 1
-                            prev_year = year
-                        _, end_day = monthrange(prev_year, prev_month)
-                
-                # Create the monthly profit record
-                monthly_profit = MonthlyProfit(
-                    year=year,
-                    month=month,
-                    start_day=start_day,
-                    end_day=end_day,
-                    total_revenue=data['revenue'],
-                    total_cost=data['cost'],
-                    total_profit=data['profit'],
-                    sale_count=data['count']
-                )
-                db.session.add(monthly_profit)
-            
-            db.session.commit()
-            
-        logger.info(f"Successfully recalculated all monthly profits with start day {start_day}")
+        logger.info("Successfully recalculated all monthly profits")
         return True
     except Exception as e:
         logger.error(f"Error recalculating monthly profits: {str(e)}")
@@ -965,21 +873,8 @@ def view_monthly_profits():
         flash(_('Access denied. Admin privileges required.'), 'danger')
         return redirect(url_for('index'))
     
-    # Get the start day from the query parameters (default to 1)
-    try:
-        start_day = int(request.args.get('start_day', 1))
-        if start_day < 1 or start_day > 28:
-            start_day = 1  # Default to 1 if invalid
-    except (ValueError, TypeError):
-        start_day = 1  # Default to 1 if there's an error
-    
     # Get all monthly profit records ordered by year and month (most recent first)
-    # Filter by start_day if specified
-    query = MonthlyProfit.query
-    if start_day != 1:
-        query = query.filter_by(start_day=start_day)
-    
-    monthly_profits = query.order_by(MonthlyProfit.year.desc(), MonthlyProfit.month.desc()).all()
+    monthly_profits = MonthlyProfit.query.order_by(MonthlyProfit.year.desc(), MonthlyProfit.month.desc()).all()
     
     # Calculate totals
     total_revenue = sum(mp.total_revenue for mp in monthly_profits)
@@ -996,9 +891,6 @@ def view_monthly_profits():
         _('July'), _('August'), _('September'), _('October'), _('November'), _('December')
     ]
     
-    # Generate a list of possible start days for the dropdown
-    start_days = list(range(1, 29))  # 1 to 28 (all months have at least 28 days)
-    
     return render_template(
         'monthly_profits.html',
         monthly_profits=monthly_profits,
@@ -1007,9 +899,7 @@ def view_monthly_profits():
         total_cost=total_cost,
         total_profit=total_profit,
         total_sales=total_sales,
-        avg_monthly_profit=avg_monthly_profit,
-        current_start_day=start_day,
-        start_days=start_days
+        avg_monthly_profit=avg_monthly_profit
     )
 
 @app.route('/admin/recalculate_profits', methods=['POST'])
@@ -1019,18 +909,10 @@ def admin_recalculate_profits():
         flash(_('Access denied. Admin privileges required.'), 'danger')
         return redirect(url_for('index'))
     
-    # Get the start day from the form
-    try:
-        start_day = int(request.form.get('start_day', 1))
-        if start_day < 1 or start_day > 28:
-            start_day = 1  # Default to 1 if invalid
-    except (ValueError, TypeError):
-        start_day = 1  # Default to 1 if there's an error
-    
-    if recalculate_monthly_profits(start_day):
-        flash(_('Monthly profits recalculated successfully from day %(day)d!', day=start_day), 'success')
+    if recalculate_monthly_profits():
+        flash(_('Monthly profits have been recalculated successfully.'), 'success')
     else:
-        flash(_('Error recalculating monthly profits. Please check the logs.'), 'danger')
+        flash(_('An error occurred while recalculating monthly profits.'), 'danger')
     
     return redirect(url_for('view_monthly_profits'))
 
