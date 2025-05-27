@@ -263,8 +263,7 @@ def admin_dashboard():
             logger.error(f"Error getting low stock items: {str(e)}")
             low_stock_items = []
         
-        # SIMPLIFIED: Set default values for monthly profit data without any database queries
-        # This completely avoids the 'int' object is not iterable error
+        # Create a dummy profit object as a fallback
         class DummyProfit:
             def __init__(self):
                 self.year = today.year
@@ -274,9 +273,68 @@ def admin_dashboard():
                 self.total_profit = 0
                 self.sale_count = 0
         
+        # Default values
         latest_monthly_profit = DummyProfit()
         month_to_date_profit = 0
         month_to_date_revenue = 0
+        
+        # Try to get monthly profit data with extensive error handling
+        try:
+            # First check if the table exists
+            table_exists = False
+            try:
+                result = db.session.execute(db.text("SELECT name FROM sqlite_master WHERE type='table' AND name='monthly_profit'"))
+                table_exists = bool(result.scalar())
+            except Exception as e:
+                logger.error(f"Error checking if monthly_profit table exists: {str(e)}")
+                table_exists = False
+            
+            if table_exists:
+                try:
+                    # Get the latest monthly profit record
+                    latest_mp_query = db.text(
+                        "SELECT id, year, month, total_revenue, total_cost, total_profit, sale_count "
+                        "FROM monthly_profit ORDER BY year DESC, month DESC LIMIT 1"
+                    )
+                    latest_mp_result = db.session.execute(latest_mp_query).fetchone()
+                    
+                    if latest_mp_result:
+                        try:
+                            # Safely extract values with type checking
+                            latest_monthly_profit.year = int(latest_mp_result.year) if latest_mp_result.year is not None else today.year
+                            latest_monthly_profit.month = int(latest_mp_result.month) if latest_mp_result.month is not None else today.month
+                            latest_monthly_profit.total_revenue = float(latest_mp_result.total_revenue) if latest_mp_result.total_revenue is not None else 0.0
+                            latest_monthly_profit.total_cost = float(latest_mp_result.total_cost) if latest_mp_result.total_cost is not None else 0.0
+                            latest_monthly_profit.total_profit = float(latest_mp_result.total_profit) if latest_mp_result.total_profit is not None else 0.0
+                            latest_monthly_profit.sale_count = int(latest_mp_result.sale_count) if latest_mp_result.sale_count is not None else 0
+                        except (TypeError, ValueError) as e:
+                            logger.error(f"Error converting monthly profit data types: {str(e)}")
+                            # Keep using the default values
+                except Exception as e:
+                    logger.error(f"Error getting latest monthly profit: {str(e)}")
+                
+                try:
+                    # Get current month data with explicit type conversion
+                    current_month = today.month
+                    current_year = today.year
+                    current_mp_query = db.text(
+                        "SELECT total_revenue, total_profit FROM monthly_profit "
+                        "WHERE year = :year AND month = :month"
+                    )
+                    current_mp_result = db.session.execute(current_mp_query, {"year": current_year, "month": current_month}).fetchone()
+                    
+                    if current_mp_result:
+                        try:
+                            month_to_date_revenue = float(current_mp_result.total_revenue) if current_mp_result.total_revenue is not None else 0.0
+                            month_to_date_profit = float(current_mp_result.total_profit) if current_mp_result.total_profit is not None else 0.0
+                        except (TypeError, ValueError) as e:
+                            logger.error(f"Error converting current month data types: {str(e)}")
+                            # Keep using the default values
+                except Exception as e:
+                    logger.error(f"Error getting current month profit: {str(e)}")
+        except Exception as e:
+            logger.error(f"Unhandled error in monthly profit processing: {str(e)}")
+            # Keep using the default values
         
         return render_template('admin_dashboard.html', 
                                total_products=total_products,
