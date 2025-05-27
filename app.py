@@ -265,24 +265,50 @@ def admin_dashboard():
         
         # Get latest monthly profit data
         try:
-            latest_monthly_profit = MonthlyProfit.query.order_by(
-                MonthlyProfit.year.desc(), 
-                MonthlyProfit.month.desc()
-            ).first()
+            # First check if the table exists to prevent the 'int' object is not iterable error
+            try:
+                db.session.execute(db.text("SELECT 1 FROM monthly_profit LIMIT 1"))
+                table_exists = True
+            except Exception as e:
+                if 'no such table' in str(e).lower():
+                    logger.warning("monthly_profit table does not exist")
+                    table_exists = False
+                else:
+                    raise
             
-            # Get current month's profit data
-            current_month = today.month
-            current_year = today.year
-            current_month_profit = MonthlyProfit.query.filter_by(
-                year=current_year, 
-                month=current_month
-            ).first()
-            
-            # Calculate month-to-date profit if current month data exists
-            if current_month_profit:
-                month_to_date_profit = current_month_profit.total_profit
-                month_to_date_revenue = current_month_profit.total_revenue
+            if table_exists:
+                latest_monthly_profit = MonthlyProfit.query.order_by(
+                    MonthlyProfit.year.desc(), 
+                    MonthlyProfit.month.desc()
+                ).first()
+                
+                # Get current month's profit data
+                current_month = today.month
+                current_year = today.year
+                current_month_profit = MonthlyProfit.query.filter_by(
+                    year=current_year, 
+                    month=current_month
+                ).first()
+                
+                # Calculate month-to-date profit if current month data exists
+                if current_month_profit:
+                    month_to_date_profit = current_month_profit.total_profit
+                    month_to_date_revenue = current_month_profit.total_revenue
+                else:
+                    month_to_date_profit = 0
+                    month_to_date_revenue = 0
             else:
+                # Create a dummy object if the table doesn't exist
+                class DummyProfit:
+                    def __init__(self):
+                        self.year = today.year
+                        self.month = today.month
+                        self.total_revenue = 0
+                        self.total_cost = 0
+                        self.total_profit = 0
+                        self.sale_count = 0
+                
+                latest_monthly_profit = DummyProfit()
                 month_to_date_profit = 0
                 month_to_date_revenue = 0
         except Exception as e:

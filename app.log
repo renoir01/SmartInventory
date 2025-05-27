@@ -932,3 +932,66 @@ WHERE product.stock <= product.low_stock_threshold AND product.stock > ?]
 2025-05-27 22:45:25,990 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 22:45:25] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
 2025-05-27 22:45:25,994 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 22:45:25] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
 2025-05-27 22:45:25,996 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 22:45:25] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-27 23:02:02,577 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:02] "[32mGET / HTTP/1.1[0m" 302 -
+2025-05-27 23:02:02,600 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:02] "GET /login HTTP/1.1" 200 -
+2025-05-27 23:02:02,648 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:02] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-05-27 23:02:02,660 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:02] "GET /static/css/enhanced-ui.css HTTP/1.1" 200 -
+2025-05-27 23:02:02,662 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:02] "GET /static/css/responsive-fixes.css HTTP/1.1" 200 -
+2025-05-27 23:02:02,662 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:02] "GET /static/js/category-progress.js HTTP/1.1" 200 -
+2025-05-27 23:02:03,908 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:03] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-05-27 23:02:09,207 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:09] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-27 23:02:09,256 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:09] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-27 23:02:09,302 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:09] "GET /static/css/dashboard.css HTTP/1.1" 200 -
+2025-05-27 23:02:09,304 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:09,308 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:09] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:09,314 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:09] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:09,316 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:09] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-27 23:02:11,307 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:11] "GET /admin/sales HTTP/1.1" 200 -
+2025-05-27 23:02:11,353 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:11] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:11,360 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:11] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:11,363 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:11] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:11,367 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:11] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-27 23:02:12,145 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:12] "GET /admin/monthly_profits HTTP/1.1" 200 -
+2025-05-27 23:02:12,228 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:12] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:12,236 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:12] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:12,240 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:12] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:12,242 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:12] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-27 23:02:15,564 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:15] "GET /admin/sales HTTP/1.1" 200 -
+2025-05-27 23:02:15,617 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:15] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:15,629 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:15] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:15,637 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:15] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:15,638 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:15] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-27 23:02:16,371 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:16] "GET /admin/products HTTP/1.1" 200 -
+2025-05-27 23:02:16,420 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:16] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:16,435 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:16] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:16,437 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:16] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:16,440 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:16] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-27 23:02:17,108 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:17] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-27 23:02:17,164 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:17] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:17,165 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:17] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:17,166 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:17] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:17,170 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:17] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:17,173 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:17] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-27 23:02:22,456 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:22] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-27 23:02:22,470 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:22] "GET /login HTTP/1.1" 200 -
+2025-05-27 23:02:22,530 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:22] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:22,534 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:22] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:22,540 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:22] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-27 23:02:22,544 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:02:22] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-27 23:15:20,764 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\CascadeProjects\\SmartInventory\\app.py', reloading
+2025-05-27 23:15:21,250 - werkzeug - INFO -  * Restarting with stat
+2025-05-27 23:15:22,427 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-27 23:15:22,458 - werkzeug - WARNING -  * Debugger is active!
+2025-05-27 23:15:22,472 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-27 23:18:53,394 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:18:53] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-27 23:18:53,582 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:18:53] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-27 23:18:54,082 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:18:54] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-27 23:18:54,088 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:18:54] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-27 23:18:54,108 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:18:54] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-05-27 23:18:54,112 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:18:54] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-27 23:18:54,117 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:18:54] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-27 23:18:57,254 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:18:57] "GET /admin/products HTTP/1.1" 200 -
+2025-05-27 23:18:57,296 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:18:57] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-27 23:18:57,302 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:18:57] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-27 23:18:57,310 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:18:57] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-27 23:18:57,310 - werkzeug - INFO - 127.0.0.1 - - [27/May/2025 23:18:57] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
