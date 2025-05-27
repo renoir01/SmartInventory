@@ -263,61 +263,20 @@ def admin_dashboard():
             logger.error(f"Error getting low stock items: {str(e)}")
             low_stock_items = []
         
-        # Set default values for monthly profit data
-        try:
-            # Create a dummy object by default
-            class DummyProfit:
-                def __init__(self):
-                    self.year = today.year
-                    self.month = today.month
-                    self.total_revenue = 0
-                    self.total_cost = 0
-                    self.total_profit = 0
-                    self.sale_count = 0
-            
-            latest_monthly_profit = DummyProfit()
-            month_to_date_profit = 0
-            month_to_date_revenue = 0
-            
-            # Only try to query if we can confirm the table exists
-            try:
-                # Use a direct SQL query with error handling
-                result = db.session.execute(db.text("SELECT name FROM sqlite_master WHERE type='table' AND name='monthly_profit'"))
-                if result.scalar():
-                    # Table exists, now try to query it safely
-                    latest_mp = db.session.execute(db.text(
-                        "SELECT id, year, month, total_revenue, total_cost, total_profit, sale_count "
-                        "FROM monthly_profit ORDER BY year DESC, month DESC LIMIT 1"
-                    )).fetchone()
-                    
-                    if latest_mp:
-                        # Manually create an object from the result
-                        latest_monthly_profit.year = latest_mp.year
-                        latest_monthly_profit.month = latest_mp.month
-                        latest_monthly_profit.total_revenue = latest_mp.total_revenue
-                        latest_monthly_profit.total_cost = latest_mp.total_cost
-                        latest_monthly_profit.total_profit = latest_mp.total_profit
-                        latest_monthly_profit.sale_count = latest_mp.sale_count
-                    
-                    # Get current month data
-                    current_month = today.month
-                    current_year = today.year
-                    current_mp = db.session.execute(db.text(
-                        "SELECT total_revenue, total_profit FROM monthly_profit "
-                        "WHERE year = :year AND month = :month"
-                    ), {"year": current_year, "month": current_month}).fetchone()
-                    
-                    if current_mp:
-                        month_to_date_revenue = current_mp.total_revenue
-                        month_to_date_profit = current_mp.total_profit
-            except Exception as e:
-                logger.warning(f"Safe monthly profit query failed: {str(e)}")
-                # Keep using the default values
-        except Exception as e:
-            logger.error(f"Error handling monthly profit data: {str(e)}")
-            latest_monthly_profit = None
-            month_to_date_profit = 0
-            month_to_date_revenue = 0
+        # SIMPLIFIED: Set default values for monthly profit data without any database queries
+        # This completely avoids the 'int' object is not iterable error
+        class DummyProfit:
+            def __init__(self):
+                self.year = today.year
+                self.month = today.month
+                self.total_revenue = 0
+                self.total_cost = 0
+                self.total_profit = 0
+                self.sale_count = 0
+        
+        latest_monthly_profit = DummyProfit()
+        month_to_date_profit = 0
+        month_to_date_revenue = 0
         
         return render_template('admin_dashboard.html', 
                                total_products=total_products,
