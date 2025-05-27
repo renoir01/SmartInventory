@@ -2445,3 +2445,236 @@ WHERE product.stock <= product.low_stock_threshold AND product.stock > ?]
 2025-05-28 01:07:51,235 - werkzeug - INFO -  * Restarting with stat
 2025-05-28 01:07:51,236 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
 2025-05-28 01:07:51,293 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 01:07:51,306 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 01:07:51,361 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 01:07:51,824 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 01:07:51,824 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 01:07:51,842 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 01:07:51,842 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 01:07:51,844 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 01:07:51,849 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 01:07:51,849 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 01:07:51,861 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 01:07:51,865 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 01:08:16,184 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:16] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-28 01:08:16,203 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:16] "GET /login HTTP/1.1" 200 -
+2025-05-28 01:08:16,276 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:16] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:08:16,287 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:16] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:08:16,288 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:16] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:08:16,290 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:16] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:08:21,387 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:21] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:08:21,449 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:21] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-28 01:08:21,468 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:21] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:08:21,469 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:21] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:08:21,475 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:21] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:08:21,478 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:21] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-05-28 01:08:21,482 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:21] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:08:24,244 - __main__ - DEBUG - Filtering admin sales view for single date: 2025-05-28
+2025-05-28 01:08:24,292 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:24] "GET /admin/sales HTTP/1.1" 200 -
+2025-05-28 01:08:24,312 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:24] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:08:24,320 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:24] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:08:24,326 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:24] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:08:24,327 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:24] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:08:30,329 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:30] "[32mPOST /delete_sale/7 HTTP/1.1[0m" 302 -
+2025-05-28 01:08:30,339 - __main__ - DEBUG - Filtering admin sales view for single date: 2025-05-28
+2025-05-28 01:08:30,346 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:30] "GET /admin/sales HTTP/1.1" 200 -
+2025-05-28 01:08:30,365 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:30] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:08:30,368 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:30] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:08:30,371 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:30] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:08:30,373 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:08:30] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:21:05,785 - __main__ - ERROR - Unhandled error in admin_dashboard: 'today' is undefined
+2025-05-28 01:21:05,789 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:05] "[32mGET /admin/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:21:05,803 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:05] "GET / HTTP/1.1" 200 -
+2025-05-28 01:21:05,940 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:05] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:05,941 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:05] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:05,943 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:05] "GET /static/css/login.css HTTP/1.1" 200 -
+2025-05-28 01:21:06,111 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:06] "GET /static/manifest.webmanifest HTTP/1.1" 200 -
+2025-05-28 01:21:06,124 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:06] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:21:13,825 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:13] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:21:13,848 - __main__ - ERROR - Unhandled error in admin_dashboard: 'today' is undefined
+2025-05-28 01:21:13,850 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:13] "[32mGET /admin/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:21:13,887 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:13] "GET / HTTP/1.1" 200 -
+2025-05-28 01:21:13,917 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:13] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:13,922 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:13] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:13,922 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:13] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:13,936 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:13] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:21:13,944 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:13] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:21:21,368 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:21] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:21:21,379 - __main__ - DEBUG - Filtering cashier sales for date: 2025-05-28
+2025-05-28 01:21:21,383 - __main__ - DEBUG - Found 0 sales for today for cashier epi
+2025-05-28 01:21:21,383 - __main__ - DEBUG - Today's revenue for cashier epi: 0
+2025-05-28 01:21:21,389 - __main__ - DEBUG - Total all-time sales for this cashier: 6 (should be more than today's sales if there are historical records)
+2025-05-28 01:21:21,428 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:21] "GET /cashier/dashboard HTTP/1.1" 200 -
+2025-05-28 01:21:21,475 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:21] "GET /static/css/mobile-responsive.css HTTP/1.1" 200 -
+2025-05-28 01:21:21,476 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:21] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:21,479 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:21] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:21,481 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:21] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:21,485 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:21] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:21:21,525 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:21] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:21:21,533 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:21] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:21:25,135 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:25] "[32mGET /cashier/sales HTTP/1.1[0m" 302 -
+2025-05-28 01:21:25,148 - __main__ - DEBUG - Filtering cashier sales for date: 2025-05-28
+2025-05-28 01:21:25,150 - __main__ - DEBUG - Found 0 sales for today for cashier epi
+2025-05-28 01:21:25,151 - __main__ - DEBUG - Today's revenue for cashier epi: 0
+2025-05-28 01:21:25,152 - __main__ - DEBUG - Total all-time sales for this cashier: 6 (should be more than today's sales if there are historical records)
+2025-05-28 01:21:25,158 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:25] "GET /cashier/dashboard HTTP/1.1" 200 -
+2025-05-28 01:21:25,181 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:25] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:25,185 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:25] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:25,188 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:25] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:25,194 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:25] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:25,196 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:25] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:21:25,214 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:25] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:21:25,223 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:25] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:21:29,981 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:29] "[32mGET /cashier/sales HTTP/1.1[0m" 302 -
+2025-05-28 01:21:29,992 - __main__ - DEBUG - Filtering cashier sales for date: 2025-05-28
+2025-05-28 01:21:29,994 - __main__ - DEBUG - Found 0 sales for today for cashier epi
+2025-05-28 01:21:29,995 - __main__ - DEBUG - Today's revenue for cashier epi: 0
+2025-05-28 01:21:29,997 - __main__ - DEBUG - Total all-time sales for this cashier: 6 (should be more than today's sales if there are historical records)
+2025-05-28 01:21:30,000 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:30] "GET /cashier/dashboard HTTP/1.1" 200 -
+2025-05-28 01:21:30,057 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:30] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:30,070 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:30] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:30,071 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:30] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:30,074 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:30] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:30,074 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:30] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:21:30,092 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:30] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:21:30,105 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:30] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:21:30,936 - __main__ - DEBUG - Filtering cashier sales for date: 2025-05-28
+2025-05-28 01:21:30,939 - __main__ - DEBUG - Found 0 sales for today for cashier epi
+2025-05-28 01:21:30,939 - __main__ - DEBUG - Today's revenue for cashier epi: 0
+2025-05-28 01:21:30,941 - __main__ - DEBUG - Total all-time sales for this cashier: 6 (should be more than today's sales if there are historical records)
+2025-05-28 01:21:30,947 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:30] "GET /cashier/dashboard HTTP/1.1" 200 -
+2025-05-28 01:21:30,964 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:30] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:30,966 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:30] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:30,971 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:30] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:30,983 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:30] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:30,985 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:30] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:21:31,007 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:31] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:21:31,019 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:31] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:21:34,437 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:34] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-28 01:21:34,449 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:34] "GET /login HTTP/1.1" 200 -
+2025-05-28 01:21:34,477 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:34] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:34,487 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:34] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:34,487 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:34] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:34,498 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:34] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:21:34,507 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:34] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:21:40,953 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:40] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:21:40,974 - __main__ - ERROR - Unhandled error in admin_dashboard: 'today' is undefined
+2025-05-28 01:21:40,976 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:40] "[32mGET /admin/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:21:40,988 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:40] "GET / HTTP/1.1" 200 -
+2025-05-28 01:21:41,081 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:41] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:41,089 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:41] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:41,090 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:41] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:41,103 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:41] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:21:41,112 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:41] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:21:49,055 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:49] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:21:49,080 - __main__ - ERROR - Unhandled error in admin_dashboard: 'today' is undefined
+2025-05-28 01:21:49,081 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:49] "[32mGET /admin/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:21:49,095 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:49] "GET / HTTP/1.1" 200 -
+2025-05-28 01:21:49,118 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:49] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:49,123 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:49] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:49,125 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:49] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:21:49,140 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:49] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:21:49,148 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:21:49] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:22:28,467 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:22:28] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:22:28,489 - __main__ - ERROR - Unhandled error in admin_dashboard: 'today' is undefined
+2025-05-28 01:22:28,491 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:22:28] "[32mGET /admin/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:22:28,505 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:22:28] "GET / HTTP/1.1" 200 -
+2025-05-28 01:22:28,529 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:22:28] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:22:28,529 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:22:28] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:22:28,532 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:22:28] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:22:28,563 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:22:28] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:22:28,572 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:22:28] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:22:38,624 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:22:38] "GET / HTTP/1.1" 200 -
+2025-05-28 01:22:38,652 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:22:38] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:22:38,653 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:22:38] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:22:38,658 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:22:38] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:22:38,688 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:22:38] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:22:38,706 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:22:38] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:23:16,125 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:23:16] "GET / HTTP/1.1" 200 -
+2025-05-28 01:23:16,145 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:23:16] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:23:16,145 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:23:16] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:23:16,146 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:23:16] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:23:16,183 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:23:16] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:23:16,188 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:23:16] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:23:47,554 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:23:47] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:23:47,564 - __main__ - DEBUG - Filtering cashier sales for date: 2025-05-28
+2025-05-28 01:23:47,566 - __main__ - DEBUG - Found 0 sales for today for cashier epi
+2025-05-28 01:23:47,567 - __main__ - DEBUG - Today's revenue for cashier epi: 0
+2025-05-28 01:23:47,569 - __main__ - DEBUG - Total all-time sales for this cashier: 6 (should be more than today's sales if there are historical records)
+2025-05-28 01:23:47,622 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:23:47] "GET /cashier/dashboard HTTP/1.1" 200 -
+2025-05-28 01:23:47,661 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:23:47] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:23:47,661 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:23:47] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:23:47,665 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:23:47] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:23:47,666 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:23:47] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:23:47,667 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:23:47] "GET /static/css/footer.css HTTP/1.1" 200 -
+2025-05-28 01:23:47,668 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:23:47] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:24:04,890 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:04] "[32mGET /cashier/sales HTTP/1.1[0m" 302 -
+2025-05-28 01:24:04,899 - __main__ - DEBUG - Filtering cashier sales for date: 2025-05-28
+2025-05-28 01:24:04,901 - __main__ - DEBUG - Found 0 sales for today for cashier epi
+2025-05-28 01:24:04,901 - __main__ - DEBUG - Today's revenue for cashier epi: 0
+2025-05-28 01:24:04,902 - __main__ - DEBUG - Total all-time sales for this cashier: 6 (should be more than today's sales if there are historical records)
+2025-05-28 01:24:04,905 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:04] "GET /cashier/dashboard HTTP/1.1" 200 -
+2025-05-28 01:24:04,933 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:04] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:04,934 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:04] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:04,936 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:04] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:04,937 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:04] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:04,941 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:04] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:04,941 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:04] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:24:09,244 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:09] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:24:09,252 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:09] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:24:09,666 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:09] "[32mGET /set_language/rw HTTP/1.1[0m" 302 -
+2025-05-28 01:24:09,674 - __main__ - DEBUG - Filtering cashier sales for date: 2025-05-28
+2025-05-28 01:24:09,675 - __main__ - DEBUG - Found 0 sales for today for cashier epi
+2025-05-28 01:24:09,677 - __main__ - DEBUG - Today's revenue for cashier epi: 0
+2025-05-28 01:24:09,678 - __main__ - DEBUG - Total all-time sales for this cashier: 6 (should be more than today's sales if there are historical records)
+2025-05-28 01:24:09,683 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:09] "GET /cashier/dashboard HTTP/1.1" 200 -
+2025-05-28 01:24:09,702 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:09,708 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:09] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:09,710 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:09] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:09,714 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:09] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:09,714 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:09] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:09,716 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:09] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:24:09,744 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:09] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:24:09,751 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:09] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:24:24,536 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:24] "[32mGET /set_language/rw HTTP/1.1[0m" 302 -
+2025-05-28 01:24:24,546 - __main__ - DEBUG - Filtering cashier sales for date: 2025-05-28
+2025-05-28 01:24:24,547 - __main__ - DEBUG - Found 0 sales for today for cashier epi
+2025-05-28 01:24:24,549 - __main__ - DEBUG - Today's revenue for cashier epi: 0
+2025-05-28 01:24:24,549 - __main__ - DEBUG - Total all-time sales for this cashier: 6 (should be more than today's sales if there are historical records)
+2025-05-28 01:24:24,555 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:24] "GET /cashier/dashboard HTTP/1.1" 200 -
+2025-05-28 01:24:24,580 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:24] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:24,581 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:24] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:24,583 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:24] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:24,594 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:24] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:24,603 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:24] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:24,603 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:24] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:24:24,623 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:24] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:24:24,632 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:24] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:24:35,588 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:35] "[32mGET /cashier/sales HTTP/1.1[0m" 302 -
+2025-05-28 01:24:35,601 - __main__ - DEBUG - Filtering cashier sales for date: 2025-05-28
+2025-05-28 01:24:35,611 - __main__ - DEBUG - Found 0 sales for today for cashier epi
+2025-05-28 01:24:35,612 - __main__ - DEBUG - Today's revenue for cashier epi: 0
+2025-05-28 01:24:35,615 - __main__ - DEBUG - Total all-time sales for this cashier: 6 (should be more than today's sales if there are historical records)
+2025-05-28 01:24:35,622 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:35] "GET /cashier/dashboard HTTP/1.1" 200 -
+2025-05-28 01:24:35,651 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:35] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:35,654 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:35] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:35,654 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:35] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:35,657 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:35] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:35,667 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:35] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:35,670 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:35] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:24:35,686 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:35] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:24:35,696 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:35] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:24:38,555 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:38] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-28 01:24:38,571 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:38] "GET /login HTTP/1.1" 200 -
+2025-05-28 01:24:38,622 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:38] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:38,631 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:38] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:38,638 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:38] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:38,676 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:38] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:24:38,694 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:38] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:24:49,033 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:49] "GET /login?lang=rw HTTP/1.1" 200 -
+2025-05-28 01:24:49,064 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:49] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:49,070 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:49] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:49,072 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:49] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:24:49,083 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:49] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:24:49,090 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:49] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:25:07,561 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading

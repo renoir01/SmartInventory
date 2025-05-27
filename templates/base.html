@@ -3,10 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="Smart Inventory - Inventory management system for small businesses">
+    <!-- Using color-scheme instead of theme-color for better cross-browser support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>{% block title %}{{ _('Smart Inventory') }}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive-fixes.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-ui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-responsive.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+    <!-- Add touch icon for better mobile experience -->
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/logo-192.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}" type="application/manifest+json">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     {% block extra_css %}{% endblock %}
@@ -15,7 +25,7 @@
     {% if current_user.is_authenticated %}
     <header class="header">
         <div class="container header-content">
-            <div class="logo">{{ _('Smart Inventory') }}</div>
+            <div class="logo"><i class="fas fa-box-open"></i> {{ _('Smart Inventory') }}</div>
             <div class="user-info">
                 <div class="language-selector">
                     <select id="language-select" onchange="changeLanguage(this.value)" aria-label="{{ _('Select language') }}">
@@ -32,7 +42,7 @@
     <nav class="nav">
         <div class="container">
             <ul class="nav-list">
-                {% if current_user.role == 'admin' -%}
+                {% if current_user.role == 'admin' %}
                     <li class="nav-item">
                         <a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
                             <i class="fas fa-tachometer-alt"></i> {{ _('Dashboard') }}
@@ -87,44 +97,81 @@
     </main>
     
     <footer class="footer">
-        <div class="container footer-content">
-            <div class="footer-section">
-                <h3>{{ _('Smart Inventory') }}</h3>
-                <p>{{ _('Efficient inventory and sales management for your mini market business.') }}</p>
+        <div class="footer-wave"></div>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <div class="footer-logo-icon">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <div class="footer-logo-text">{{ _('Smart Inventory') }}</div>
+                </div>
+                <p class="footer-description">{{ _('Inventory management system for small businesses in Rwanda and Burundi.') }}</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
             </div>
-            <ul class="footer-links">
-                <li><a href="#">{{ _('About') }}</a></li>
-                <li><a href="#">{{ _('Contact') }}</a></li>
-                <li><a href="#">{{ _('Privacy Policy') }}</a></li>
-                {%- if current_user.is_authenticated -%}
-                <li><a href="{{ url_for('logout') }}">{{ _('Logout') }}</a></li>
-                {%- endif -%}
-            </ul>
+            
             <div class="footer-section">
                 <h3>{{ _('Quick Links') }}</h3>
-                <ul>
-                    <li><a href="{{ url_for('index') }}">{{ _('Home') }}</a></li>
-                    {% if current_user.is_authenticated %}
-                        {% if current_user.role == 'admin' %}
-                            <li><a href="{{ url_for('admin_dashboard') }}">{{ _('Dashboard') }}</a></li>
-                            <li><a href="{{ url_for('manage_products') }}">{{ _('Products') }}</a></li>
-                            <li><a href="{{ url_for('view_monthly_profits') }}">{{ _('Monthly Profits') }}</a></li>
-                        {% elif current_user.role == 'cashier' %}
-                            <li><a href="{{ url_for('cashier_dashboard') }}">{{ _('Dashboard') }}</a></li>
-                        {% endif %}
-                    {% endif %}
+                <ul class="navbar-nav">
+                    {%- if true -%}<li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}"><i class="fas fa-home"></i> {{ _('Home') }}</a></li>{%- endif -%}
+                    {%- if current_user.is_authenticated -%}
+                        {%- if current_user.role == 'admin' -%}
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_dashboard') }}"><i class="fas fa-tachometer-alt"></i> {{ _('Dashboard') }}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('manage_products') }}"><i class="fas fa-box"></i> {{ _('Products') }}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('view_sales') }}"><i class="fas fa-shopping-cart"></i> {{ _('Sales') }}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('view_monthly_profits') }}"><i class="fas fa-chart-line"></i> {{ _('Profits') }}</a></li>
+                        {%- elif current_user.role == 'cashier' -%}
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('cashier_dashboard') }}"><i class="fas fa-cash-register"></i> {{ _('Dashboard') }}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('record_sale') }}"><i class="fas fa-cart-plus"></i> {{ _('Record Sale') }}</a></li>
+                        {%- endif -%}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> {{ _('Logout') }}</a></li>
+                    {%- else -%}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i> {{ _('Login') }}</a></li>
+                    {%- endif -%}
                 </ul>
             </div>
+            
             <div class="footer-section">
-                <h3>{{ _('Language') }}</h3>
+                <h3>{{ _('Support') }}</h3>
                 <ul>
-                    <li><a href="{{ url_for('set_language', language='en') }}">{{ _('English') }}</a></li>
-                    <li><a href="{{ url_for('set_language', language='rw') }}">{{ _('Kinyarwanda') }}</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i> {{ _('Help Center') }}</a></li>
+                    <li><a href="#"><i class="fas fa-book"></i> {{ _('Documentation') }}</a></li>
+                    <li><a href="#"><i class="fas fa-shield-alt"></i> {{ _('Privacy Policy') }}</a></li>
+                    <li><a href="#"><i class="fas fa-file-contract"></i> {{ _('Terms of Service') }}</a></li>
                 </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>{{ _('Contact') }}</h3>
+                <div class="footer-contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>{{ _('Kigali, Rwanda') }}</span>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+250786365324</span>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>info@smartinventory.rw</span>
+                </div>
+                
+                <div class="footer-language">
+                    <span class="footer-language-label">{{ _('Language:') }}</span>
+                    <select id="footer-language-select" class="footer-language-select" onchange="changeLanguage(this.value)" aria-label="{{ _('Select language') }}">
+                        <option value="en" {% if g.lang_code == 'en' %}selected{% endif %}>{{ _('English') }}</option>
+                        <option value="rw" {% if g.lang_code == 'rw' %}selected{% endif %}>{{ _('Kinyarwanda') }}</option>
+                    </select>
+                </div>
             </div>
         </div>
+        
         <div class="copyright">
-            &copy; {{ _('2025 Smart Inventory. All rights reserved.') }}
+            &copy; 2025 {{ _('Smart Inventory') }} | {{ _('CAT Timezone (GMT+2)') }} | <a href="#">{{ _('Terms') }}</a> | <a href="#">{{ _('Privacy') }}</a>
         </div>
     </footer>
     

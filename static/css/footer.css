@@ -1,0 +1,245 @@
+/* 
+ * Smart Inventory Footer Styles
+ * Designed for Rwanda/Burundi businesses with CAT timezone (GMT+2)
+ * Mobile-first approach for smartphone users
+ */
+
+.footer {
+  background: linear-gradient(to right, var(--primary-dark), var(--primary));
+  color: #fff;
+  padding: 0;
+  margin-top: 3rem;
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+}
+
+.footer-wave {
+  position: absolute;
+  top: -70px;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z' opacity='.25' fill='%232980b9'%3E%3C/path%3E%3Cpath d='M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z' opacity='.5' fill='%232980b9'%3E%3C/path%3E%3Cpath d='M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z' fill='%232980b9'%3E%3C/path%3E%3C/svg%3E");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-brand {
+  flex: 0 0 100%;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .footer-brand {
+    flex: 0 0 30%;
+  }
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.footer-logo-icon {
+  font-size: 1.8rem;
+  margin-right: 0.5rem;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.footer-logo-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.footer-description {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.footer-section {
+  flex: 0 0 100%;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 576px) {
+  .footer-section {
+    flex: 0 0 48%;
+  }
+}
+
+@media (min-width: 768px) {
+  .footer-section {
+    flex: 0 0 22%;
+  }
+}
+
+.footer-section h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-bottom: 10px;
+  font-weight: 600;
+}
+
+.footer-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 3px;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-section ul li a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+}
+
+.footer-section ul li a:hover {
+  color: #fff;
+  transform: translateX(3px);
+}
+
+.footer-section ul li a i {
+  margin-right: 8px;
+  font-size: 0.8rem;
+}
+
+.footer-contact-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+}
+
+.footer-contact-item i {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+}
+
+.footer-social {
+  display: flex;
+  margin-top: 1rem;
+}
+
+.footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  margin-right: 10px;
+  transition: var(--transition-fast);
+}
+
+.footer-social a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px);
+}
+
+.copyright {
+  background-color: rgba(0, 0, 0, 0.2);
+  text-align: center;
+  padding: 1.2rem 1rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.copyright a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.footer-language {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.footer-language-label {
+  margin-right: 10px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.footer-language-select {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: var(--border-radius);
+  font-size: 0.85rem;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  padding-right: 30px;
+}
+
+/* Mobile optimizations */
+@media (max-width: 576px) {
+  .footer-wave {
+    top: -40px;
+    height: 40px;
+  }
+  
+  .footer-content {
+    padding: 1.5rem 1rem;
+  }
+  
+  .footer-section h3 {
+    font-size: 1rem;
+  }
+  
+  .footer-logo-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 1.5rem;
+  }
+  
+  .footer-logo-text {
+    font-size: 1.1rem;
+  }
+}

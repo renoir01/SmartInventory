@@ -1,0 +1,248 @@
+/* Mobile-Responsive Design for SmartInventory
+   Optimized for smartphone usage by admins and cashiers
+   CAT timezone (Rwanda/Burundi) - 2025
+*/
+
+/* Base Mobile Styles */
+@media (max-width: 767px) {
+  /* General Layout */
+  .container {
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  /* Header Adjustments */
+  .header-content {
+    flex-direction: column;
+    padding: 10px 0;
+  }
+  
+  .logo {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+  }
+  
+  .user-info {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  /* Navigation Adjustments */
+  .nav {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .nav-list {
+    display: flex;
+    flex-wrap: nowrap;
+    padding-bottom: 5px;
+  }
+  
+  .nav-item {
+    flex: 0 0 auto;
+  }
+  
+  /* Dashboard Widgets */
+  .row {
+    margin-left: -5px;
+    margin-right: -5px;
+  }
+  
+  .col, .col-md-3, .col-md-4, .col-md-6, .col-md-9 {
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  
+  .widget {
+    padding: 15px;
+    margin-bottom: 10px;
+    height: auto;
+  }
+  
+  .widget-title {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+  }
+  
+  .widget-value {
+    font-size: 1.5rem;
+  }
+  
+  .widget-description {
+    font-size: 0.8rem;
+  }
+  
+  .widget-icon {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+  }
+  
+  /* Cards */
+  .card {
+    margin-bottom: 15px;
+  }
+  
+  .card-header {
+    padding: 12px 15px;
+  }
+  
+  .card-header h2 {
+    font-size: 1.1rem;
+  }
+  
+  .card-body {
+    padding: 15px;
+  }
+  
+  /* Forms */
+  .form-group {
+    margin-bottom: 12px;
+  }
+  
+  .form-label {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+  }
+  
+  .form-control {
+    font-size: 0.9rem;
+    height: 38px;
+  }
+  
+  select.form-control {
+    padding-right: 25px;
+  }
+  
+  /* Buttons */
+  .btn {
+    font-size: 0.85rem;
+    padding: 8px 12px;
+  }
+  
+  /* Tables */
+  .table {
+    font-size: 0.85rem;
+  }
+  
+  .table th, .table td {
+    padding: 8px 5px;
+  }
+  
+  /* Cashier-specific */
+  #sale-form .form-group {
+    margin-bottom: 15px;
+  }
+  
+  /* Input groups */
+  .input-group {
+    flex-wrap: wrap;
+  }
+  
+  .input-group-append {
+    width: 100%;
+    margin-top: 5px;
+    margin-left: 0 !important;
+  }
+  
+  .input-group-append .btn {
+    border-radius: var(--border-radius) !important;
+    width: 100%;
+    margin-left: 0 !important;
+    margin-top: 5px;
+  }
+  
+  /* Today's Sales Table */
+  .table-responsive {
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 15px;
+  }
+  
+  /* Touch-friendly elements */
+  .btn, 
+  .nav-link, 
+  select, 
+  input[type="checkbox"], 
+  input[type="radio"] {
+    min-height: 38px; /* Minimum touch target size */
+  }
+  
+  /* Improved tap targets */
+  .nav-link, .widget-link, .btn {
+    padding: 10px 12px;
+  }
+  
+  /* Date inputs */
+  input[type="date"] {
+    min-height: 38px;
+  }
+  
+  /* Better spacing for filter forms */
+  .filter-form .row {
+    margin-bottom: 0;
+  }
+  
+  .filter-form .col {
+    margin-bottom: 10px;
+  }
+  
+  /* Improved dashboard header */
+  .dashboard-header {
+    padding: 10px 0;
+  }
+  
+  .dashboard-header h1 {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+  }
+  
+  .dashboard-subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+  }
+}
+
+/* Extra Small Devices (phones under 576px) */
+@media (max-width: 575px) {
+  .widget-title {
+    font-size: 0.85rem;
+  }
+  
+  .widget-value {
+    font-size: 1.3rem;
+  }
+  
+  .card-header h2 {
+    font-size: 1rem;
+  }
+  
+  /* Simplified tables for very small screens */
+  .table th, .table td {
+    padding: 6px 4px;
+    font-size: 0.8rem;
+  }
+  
+  /* Stack buttons on very small screens */
+  .btn + .btn {
+    margin-top: 5px;
+    margin-left: 0;
+  }
+  
+  /* Optimize forms for very small screens */
+  label {
+    font-size: 0.85rem;
+  }
+  
+  /* Optimize select dropdowns */
+  select.form-control option {
+    font-size: 0.85rem;
+  }
+}

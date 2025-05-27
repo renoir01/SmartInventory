@@ -382,7 +382,8 @@ def admin_dashboard():
                                products=all_products,  # Pass all products for category statistics
                                latest_monthly_profit=latest_monthly_profit,
                                month_to_date_profit=month_to_date_profit,
-                               month_to_date_revenue=month_to_date_revenue)
+                               month_to_date_revenue=month_to_date_revenue,
+                               today=today)  # Pass today's date to the template
     except Exception as e:
         logger.error(f"Unhandled error in admin_dashboard: {str(e)}")
         flash(_('An error occurred while loading the dashboard. Please try again.'), 'danger')

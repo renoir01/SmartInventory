@@ -3,19 +3,28 @@
 {% block title %}{{ _('Cashier Dashboard') }} - {{ _('Smart Inventory') }}{% endblock %}
 
 {% block content %}
-<h1>{{ _('Cashier Dashboard') }} - {{ today_date }}</h1>
+<div class="dashboard-header">
+    <h1><i class="fas fa-cash-register"></i> {{ _('Cashier Dashboard') }}</h1>
+    <p class="dashboard-subtitle">{{ today_date }}</p>
+</div>
 
-<div class="dashboard-widgets">
-    <div class="widget widget-info">
-        <h3 class="widget-title">{{ _('Today\'s Sales') }} ({{ today_date }})</h3>
-        <div class="widget-value">{{ today_sales|length if today_sales is defined else 0 }}</div>
-        <p class="widget-description">{{ _('Sales you\'ve made today only') }}</p>
+<div class="row dashboard-widgets">
+    <div class="col col-md-6">
+        <div class="widget widget-info">
+            <i class="fas fa-shopping-cart widget-icon"></i>
+            <h3 class="widget-title">{{ _('Today\'s Sales') }}</h3>
+            <div class="widget-value">{{ today_sales|length if today_sales is defined else 0 }}</div>
+            <p class="widget-description">{{ _('Sales you\'ve made today only') }}</p>
+        </div>
     </div>
     
-    <div class="widget widget-success">
-        <h3 class="widget-title">{{ _('Today\'s Revenue') }} ({{ today_date }})</h3>
-        <div class="widget-value">RWF {{ "%.0f"|format(total_revenue if total_revenue is defined else 0) }}</div>
-        <p class="widget-description">{{ _('Revenue you\'ve generated today only') }}</p>
+    <div class="col col-md-6">
+        <div class="widget widget-success">
+            <i class="fas fa-money-bill-wave widget-icon"></i>
+            <h3 class="widget-title">{{ _('Today\'s Revenue') }}</h3>
+            <div class="widget-value">RWF {{ "%.0f"|format(total_revenue if total_revenue is defined else 0) }}</div>
+            <p class="widget-description">{{ _('Revenue you\'ve generated today only') }}</p>
+        </div>
     </div>
 </div>
 
@@ -25,13 +34,13 @@
     </div>
     <div class="card-body">
         <!-- Product Search Form -->
-        <form method="GET" action="{{ url_for('cashier_dashboard') }}" class="mb-4">
-            <div class="input-group">
+        <form method="GET" action="{{ url_for('cashier_dashboard') }}" class="mb-4 search-form">
+            <div class="input-group mobile-input-group">
                 <input type="text" name="search" class="form-control" placeholder="{{ _('Search for products...') }}" value="{{ search_query }}">
                 <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit">{{ _('Search') }}</button>
+                    <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> {{ _('Search') }}</button>
                     {% if search_query %}
-                    <a href="{{ url_for('cashier_dashboard') }}" class="btn btn-secondary">{{ _('Clear') }}</a>
+                    <a href="{{ url_for('cashier_dashboard') }}" class="btn btn-secondary"><i class="fas fa-times"></i> {{ _('Clear') }}</a>
                     {% endif %}
                 </div>
             </div>
@@ -88,7 +97,8 @@
 
 <div class="card mt-3">
     <div class="card-header">
-        <h2>{{ _('Today\'s Sales') }} ({{ today_date }}) - {{ _('Current Day Only') }}</h2>
+        <h2><i class="fas fa-receipt"></i> {{ _('Today\'s Sales') }}</h2>
+        <div class="card-subtitle">{{ today_date }} - {{ _('Current Day Only') }}</div>
     </div>
     <div class="card-body">
         {% if today_sales|length > 0 %}
