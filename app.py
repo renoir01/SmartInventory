@@ -655,25 +655,42 @@ def cashier_dashboard():
             logger.error(f"Error in product search: {str(e)}")
             products = Product.query.filter(Product.stock > 0).all()
         
-        # Get today's sales for this cashier
+        # Get today's sales for this cashier with explicit date filtering
         try:
+            # Get the date string for today in CAT timezone
+            today_str = today.strftime('%Y-%m-%d')
+            logger.debug(f"Filtering cashier sales for date: {today_str}")
+            
+            # Query sales for today only
             today_sales = Sale.query.filter(
-                db.func.date(Sale.date_sold) == today.strftime('%Y-%m-%d'),
+                db.func.date(Sale.date_sold) == today_str,
                 Sale.cashier_id == current_user.id
             ).all()
             
-            # Calculate total revenue for today
-            total_revenue = sum(sale.total_price for sale in today_sales)
+            logger.debug(f"Found {len(today_sales)} sales for today for cashier {current_user.username}")
+            
+            # Calculate total revenue for today only
+            total_revenue = 0
+            for sale in today_sales:
+                total_revenue += sale.total_price
+                
+            logger.debug(f"Today's revenue for cashier {current_user.username}: {total_revenue}")
+            
+            # Double-check we're not accidentally showing all sales
+            all_sales_count = Sale.query.filter(Sale.cashier_id == current_user.id).count()
+            logger.debug(f"Total all-time sales for this cashier: {all_sales_count} (should be more than today's sales if there are historical records)")
         except Exception as e:
             logger.error(f"Error getting sales: {str(e)}")
             today_sales = []
             total_revenue = 0
         
+        # Make it very explicit that we're only showing today's data
         return render_template('cashier_dashboard.html', 
                             products=products,
-                            today_sales=today_sales,
-                            total_revenue=total_revenue,
-                            search_query=search_query)
+                            today_sales=today_sales,  # This contains only today's sales
+                            total_revenue=total_revenue,  # This is calculated only from today's sales
+                            search_query=search_query,
+                            today_date=today.strftime('%Y-%m-%d'))  # Pass today's date to the template
     except Exception as e:
         logger.error(f"Unhandled error in cashier_dashboard: {str(e)}")
         flash(_('An error occurred. Please try again.'), 'danger')
@@ -807,6 +824,14 @@ def view_cashier_sales():
     start_date_str = request.args.get('start_date')
     end_date_str = request.args.get('end_date')
     category = request.args.get('category')
+    
+    # If no date filters provided, default to today's sales
+    if not start_date_str and not end_date_str:
+        # Get today's date in CAT timezone
+        cat_timezone = pytz.timezone('Africa/Kigali')
+        today = datetime.now(cat_timezone).date()
+        start_date_str = today.strftime('%Y-%m-%d')
+        end_date_str = today.strftime('%Y-%m-%d')
     
     # Base query - only show sales by the current cashier
     query = Sale.query.filter(Sale.cashier_id == current_user.id)
