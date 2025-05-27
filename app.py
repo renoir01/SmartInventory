@@ -522,26 +522,36 @@ def view_sales():
             start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
             start_datetime = datetime.combine(start_date, datetime.min.time())
         else:
-            # Default to beginning of current month
-            today = datetime.now().date()
-            start_date = datetime(today.year, today.month, 1).date()
-            start_datetime = datetime.combine(start_date, datetime.min.time())
+            # Default to today (using CAT timezone)
+            cat_timezone = pytz.timezone('Africa/Kigali')
+            today = datetime.now(cat_timezone).date()
+            start_date = today
+            start_datetime = cat_timezone.localize(datetime.combine(start_date, datetime.min.time()))
             start_date_str = start_date.strftime('%Y-%m-%d')
             
         if end_date_str:
             end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
             end_datetime = datetime.combine(end_date, datetime.max.time())
         else:
-            # Default to today
-            end_date = datetime.now().date()
-            end_datetime = datetime.combine(end_date, datetime.max.time())
+            # Default to today (using CAT timezone)
+            cat_timezone = pytz.timezone('Africa/Kigali')
+            today = datetime.now(cat_timezone).date()
+            end_date = today
+            end_datetime = cat_timezone.localize(datetime.combine(end_date, datetime.max.time()))
             end_date_str = end_date.strftime('%Y-%m-%d')
     except ValueError:
         flash(_('Invalid date format. Please use YYYY-MM-DD.'), 'danger')
         return redirect(url_for('view_sales'))
     
-    # Build query
-    query = Sale.query.filter(Sale.date_sold.between(start_datetime, end_datetime))
+    # Build query - use string-based date comparison for better timezone handling
+    if start_date == end_date:
+        # If viewing a single day, use the more reliable date function
+        logger.debug(f"Filtering admin sales view for single date: {start_date_str}")
+        query = Sale.query.filter(db.func.date(Sale.date_sold) == start_date_str)
+    else:
+        # For date ranges, use between
+        logger.debug(f"Filtering admin sales view from {start_date_str} to {end_date_str}")
+        query = Sale.query.filter(Sale.date_sold.between(start_datetime, end_datetime))
     
     if category and category != 'all':
         query = query.join(Product).filter(Product.category == category)
@@ -816,8 +826,14 @@ def sell_product():
 @app.route('/cashier/sales')
 @login_required
 def view_cashier_sales():
-    if current_user.role != 'cashier':
-        flash(_('Access denied. Cashier privileges required.'), 'danger')
+    # Restrict cashiers from accessing sales history - they should only see current day's sales on dashboard
+    if current_user.role == 'cashier':
+        flash(_('Access restricted. Cashiers can only view current day\'s sales on the dashboard.'), 'warning')
+        return redirect(url_for('cashier_dashboard'))
+    
+    # Only admins should be able to access this page
+    if current_user.role != 'admin':
+        flash(_('Access denied. Admin privileges required.'), 'danger')
         return redirect(url_for('index'))
     
     # Get filter parameters

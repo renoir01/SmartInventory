@@ -116,9 +116,7 @@
         <p>{{ _('You haven\'t recorded any sales today.') }}</p>
         {% endif %}
     </div>
-    <div class="card-footer">
-        <a href="{{ url_for('view_cashier_sales') }}" class="btn btn-primary">{{ _('View My Sales History') }}</a>
-    </div>
+    <!-- Sales history access removed as per requirement - cashiers should only see current day sales -->
 </div>
 
 {% block extra_js %}
