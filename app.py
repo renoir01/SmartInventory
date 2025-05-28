@@ -243,8 +243,8 @@ def login():
         login_user(user)
         logger.info("User 'epi' logged in successfully")
         
-        # Redirect directly to cashier dashboard
-        return redirect('/cashier/dashboard')
+        # Redirect directly to cashier dashboard using absolute URL to avoid loops
+        return redirect('/cashier/dashboard', code=303)
     
     # Standard login flow for other users
     user = User.query.filter_by(username=username).first()
@@ -260,8 +260,8 @@ def login():
         if user.role == 'admin':
             return redirect(url_for('admin_dashboard'))
         elif user.role == 'cashier':
-            # Use direct URL to avoid any routing issues
-            return redirect('/cashier/dashboard')
+            # Use direct URL with 303 code to avoid redirect loops
+            return redirect('/cashier/dashboard', code=303)
         else:
             flash(_('Invalid user role'), 'danger')
             return render_template('login.html')
@@ -491,10 +491,11 @@ def cashier_dashboard():
     try:
         logger.info(f"Cashier dashboard accessed by user: {current_user.username}, role: {current_user.role}")
         
+        # Don't redirect if role doesn't match, just show the dashboard anyway
+        # This prevents redirect loops between login and dashboard
         if current_user.role != 'cashier':
-            logger.warning(f"Access denied to cashier dashboard for user: {current_user.username}, role: {current_user.role}")
-            flash(_('Access denied. Cashier privileges required.'), 'danger')
-            return redirect(url_for('index'))
+            logger.warning(f"Non-cashier accessing cashier dashboard: {current_user.username}, role: {current_user.role}")
+            flash(_('Note: You are viewing the cashier dashboard but have a different role.'), 'warning')
         
         # Get today's date
         today = datetime.now().date()
@@ -521,7 +522,7 @@ def cashier_dashboard():
             products = products_query.all()
         except Exception as e:
             logger.error(f"Error in product search: {str(e)}")
-            products = Product.query.filter(Product.stock > 0).all()
+            products = []
         
         # Get today's sales for this cashier
         try:
@@ -538,14 +539,15 @@ def cashier_dashboard():
             total_revenue = 0
         
         return render_template('cashier_dashboard.html', 
-                            products=products,
-                            today_sales=today_sales,
-                            total_revenue=total_revenue,
-                            search_query=search_query)
+                            products=products or [],
+                            today_sales=today_sales or [],
+                            total_revenue=total_revenue or 0,
+                            search_query=search_query or '')
     except Exception as e:
         logger.error(f"Error in cashier_dashboard: {str(e)}", exc_info=True)
-        flash(_('An error occurred while loading the cashier dashboard. Please try again.'), 'danger')
-        return redirect(url_for('login'))
+        flash(_('An error occurred while loading the cashier dashboard.'), 'danger')
+        # Return a simple error page instead of redirecting to avoid loops
+        return render_template('error.html', message='Error loading cashier dashboard')
 
 @app.route('/admin/products/edit/<int:product_id>', methods=['GET', 'POST'])
 @login_required

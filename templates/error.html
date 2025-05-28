@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Error') }} - {{ _('Smart Inventory') }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white">
+            <h2 class="card-title mb-0"><i class="fas fa-exclamation-triangle"></i> {{ _('Error') }}</h2>
+        </div>
+        <div class="card-body">
+            <p class="lead">{{ message }}</p>
+            <p>{{ _('Please try the following:') }}</p>
+            <ul>
+                <li>{{ _('Clear your browser cookies and cache') }}</li>
+                <li>{{ _('Try logging out and logging back in') }}</li>
+                <li>{{ _('Contact the administrator if the problem persists') }}</li>
+            </ul>
+            <div class="mt-4">
+                <a href="{{ url_for('index') }}" class="btn btn-primary">
+                    <i class="fas fa-home"></i> {{ _('Go to Home Page') }}
+                </a>
+                <a href="{{ url_for('logout') }}" class="btn btn-secondary ml-2">
+                    <i class="fas fa-sign-out-alt"></i> {{ _('Logout') }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
