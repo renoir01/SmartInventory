@@ -932,9 +932,9 @@ def view_cashier_sales():
                            end_date=end_date_str)
 
 # Initialize the database and create an admin user
+@app.cli.command('init-db')
 def init_db_command():
     """Initialize the database and create admin and cashier users if they don't exist."""
-    print("Creating database tables...")
     db.create_all()
     
     # Check if admin user exists
@@ -943,9 +943,10 @@ def init_db_command():
         admin = User(username='admin', role='admin')
         admin.set_password('admin123')
         db.session.add(admin)
-        print("Created admin user with username 'admin' and password 'admin123'")
+        db.session.commit()
+        print('Created admin user with username: admin and password: admin123')
     else:
-        print("Admin user already exists.")
+        print('Admin user already exists')
     
     # Check if cashier user exists
     cashier = User.query.filter_by(username='cashier').first()
@@ -953,18 +954,27 @@ def init_db_command():
         cashier = User(username='cashier', role='cashier')
         cashier.set_password('cashier123')
         db.session.add(cashier)
-        print("Created cashier user with username 'cashier' and password 'cashier123'")
+        db.session.commit()
+        print('Created cashier user with username: cashier and password: cashier123')
     else:
-        print("Cashier user already exists.")
-    
-    db.session.commit()
-    print("Database initialization complete.")
-    
-    return True
+        print('Cashier user already exists')
 
 # Function to update monthly profit data when a sale is made
 def update_monthly_profit(sale):
+    """Update monthly profit data when a sale is made"""
     try:
+        # Ensure the monthly_profit table exists
+        try:
+            db.session.execute(db.text("SELECT 1 FROM monthly_profit LIMIT 1"))
+        except Exception as e:
+            if 'no such table' in str(e).lower():
+                logger.warning("monthly_profit table does not exist, creating it now")
+                with app.app_context():
+                    db.create_all()
+            else:
+                logger.error(f"Database error checking for monthly_profit table: {str(e)}")
+                raise
+        
         # Get the year and month from the sale date
         year = sale.date_sold.year
         month = sale.date_sold.month
@@ -1109,6 +1119,23 @@ def view_monthly_profits():
         # Define possible start days (1-28)
         start_days = list(range(1, 29))
         
+        # First check if the table exists
+        try:
+            db.session.execute(db.text("SELECT 1 FROM monthly_profit LIMIT 1"))
+            table_exists = True
+        except Exception as e:
+            if 'no such table' in str(e).lower():
+                logger.warning("monthly_profit table does not exist, creating it now")
+                table_exists = False
+                # Create the table if it doesn't exist
+                with app.app_context():
+                    db.create_all()
+                # Try to recalculate profits
+                recalculate_monthly_profits(start_day=start_day)
+            else:
+                logger.error(f"Database error checking for monthly_profit table: {str(e)}")
+                raise
+        
         # Get all monthly profit records ordered by year and month (most recent first)
         monthly_profits = MonthlyProfit.query.order_by(MonthlyProfit.year.desc(), MonthlyProfit.month.desc()).all()
         
@@ -1139,10 +1166,10 @@ def view_monthly_profits():
             total_sales=total_sales,
             avg_monthly_profit=avg_monthly_profit,
             start_days=start_days,
-            current_start_day=start_day  # Add the missing variable
+            current_start_day=start_day
         )
     except Exception as e:
-        logger.error(f"Error in view_monthly_profits: {str(e)}")
+        logger.error(f"Error in view_monthly_profits: {str(e)}", exc_info=True)
         flash(_('An error occurred while loading the monthly profits. Please try again.'), 'danger')
         return redirect(url_for('admin_dashboard'))
 
