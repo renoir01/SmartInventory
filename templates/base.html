@@ -129,7 +129,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('view_monthly_profits') }}"><i class="fas fa-chart-line"></i> {{ _('Profits') }}</a></li>
                         {%- elif current_user.role == 'cashier' -%}
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('cashier_dashboard') }}"><i class="fas fa-cash-register"></i> {{ _('Dashboard') }}</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('record_sale') }}"><i class="fas fa-cart-plus"></i> {{ _('Record Sale') }}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('cashier_dashboard') }}"><i class="fas fa-cart-plus"></i> {{ _('Record Sale') }}</a></li>
                         {%- endif -%}
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> {{ _('Logout') }}</a></li>
                     {%- else -%}
