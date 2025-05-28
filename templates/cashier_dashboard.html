@@ -46,7 +46,7 @@
             </div>
         </form>
         
-        <form method="POST" action="{{ url_for('cashier_dashboard') }}" id="sale-form">
+        <form method="POST" action="/cashier/sell" id="sale-form">
             <div class="form-group">
                 <label for="product_id" class="form-label">{{ _('Select Product') }}</label>
                 <select id="product_id" name="product_id" class="form-control" required>
