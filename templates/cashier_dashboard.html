@@ -114,7 +114,7 @@
             <tbody>
                 {% for sale in today_sales %}
                 <tr>
-                    <td>{{ sale.date_sold.strftime('%H:%M:%S') }}</td>
+                    <td>{% if sale.date_sold %}{{ sale.date_sold.strftime('%H:%M:%S') }}{% else %}--:--:--{% endif %}</td>
                     <td>{{ sale.product.name }}</td>
                     <td>{{ sale.quantity }}</td>
                     <td>RWF {{ "%.0f"|format(sale.total_price) }}</td>

@@ -21,7 +21,8 @@ body {
   padding: 0;
   color: var(--text-color);
   background-color: #f5f5f5;
-  line-height: 1.6;
+  line-height: 1.5;
+  font-size: 0.95rem;
 }
 
 .container {

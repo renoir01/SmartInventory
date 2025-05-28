@@ -2678,3 +2678,755 @@ WHERE product.stock <= product.low_stock_threshold AND product.stock > ?]
 2025-05-28 01:24:49,083 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:49] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
 2025-05-28 01:24:49,090 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:24:49] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
 2025-05-28 01:25:07,561 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 01:25:07,744 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 01:25:08,596 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 01:25:08,618 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 01:25:08,629 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 01:26:33,544 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:33] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-28 01:26:33,590 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:33] "GET /login?next=/logout HTTP/1.1" 200 -
+2025-05-28 01:26:34,063 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:34] "GET /static/css/login.css HTTP/1.1" 200 -
+2025-05-28 01:26:34,081 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:34] "GET /static/css/enhanced-ui.css HTTP/1.1" 200 -
+2025-05-28 01:26:34,089 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:34] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-05-28 01:26:34,352 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:34] "GET /static/manifest.webmanifest HTTP/1.1" 200 -
+2025-05-28 01:26:34,369 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:34] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:26:43,067 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:43] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:26:43,193 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:43] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-28 01:26:43,227 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:43] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:43,236 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:43] "GET /static/css/footer.css HTTP/1.1" 200 -
+2025-05-28 01:26:43,242 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:43] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:43,242 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:43] "GET /static/css/mobile-responsive.css HTTP/1.1" 200 -
+2025-05-28 01:26:43,247 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:43] "GET /static/css/responsive-fixes.css HTTP/1.1" 200 -
+2025-05-28 01:26:43,253 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:43] "GET /static/css/dashboard.css HTTP/1.1" 200 -
+2025-05-28 01:26:43,259 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:43] "GET /static/js/category-progress.js HTTP/1.1" 200 -
+2025-05-28 01:26:43,827 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:43] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:26:43,839 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:43] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:26:49,746 - __main__ - DEBUG - Filtering admin sales view for single date: 2025-05-28
+2025-05-28 01:26:49,789 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:49] "GET /admin/sales HTTP/1.1" 200 -
+2025-05-28 01:26:49,820 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:49] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:49,828 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:49] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:49,830 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:49] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:49,833 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:49] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:49,841 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:49] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:49,842 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:49] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:26:49,882 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:49] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:26:49,890 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:49] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:26:50,750 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:50] "GET /admin/products HTTP/1.1" 200 -
+2025-05-28 01:26:50,774 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:50] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:50,777 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:50] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:50,778 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:50] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:50,782 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:50] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:50,784 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:50] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:50,788 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:50] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:26:50,824 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:50] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:26:50,832 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:50] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:26:53,464 - __main__ - DEBUG - Rendering monthly_profits.html with current_start_day=1
+2025-05-28 01:26:53,505 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:53] "GET /admin/monthly_profits HTTP/1.1" 200 -
+2025-05-28 01:26:53,546 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:53] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:53,599 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:53] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:53,600 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:53] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:26:53,603 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:53] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:53,603 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:53] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:53,604 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:53] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:26:53,642 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:53] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:26:53,657 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:26:53] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:28:43,407 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:28:43] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-28 01:28:43,437 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:28:43] "GET /login HTTP/1.1" 200 -
+2025-05-28 01:28:43,500 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:28:43] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:28:43,507 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:28:43] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:28:43,512 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:28:43] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:28:43,599 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:28:43] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:28:43,617 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:28:43] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:29:18,717 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:18] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:29:18,821 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:18] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-28 01:29:18,872 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:18] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:18,883 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:18] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:18,886 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:18] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:18,888 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:18] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:18,889 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:18] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:18,892 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:18] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:18,896 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:18] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:29:19,176 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:19] "GET /static/manifest.webmanifest HTTP/1.1" 200 -
+2025-05-28 01:29:19,185 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:19] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:29:51,107 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:51] "[32mGET /set_language/rw HTTP/1.1[0m" 302 -
+2025-05-28 01:29:51,181 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:51] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-28 01:29:51,209 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:51] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:51,219 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:51] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:51,219 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:51] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:51,222 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:51] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:51,225 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:51] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:51,230 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:51] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:51,231 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:51] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:29:51,248 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:51] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:29:51,256 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:51] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:29:54,716 - __main__ - DEBUG - Rendering monthly_profits.html with current_start_day=1
+2025-05-28 01:29:54,723 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:54] "GET /admin/monthly_profits HTTP/1.1" 200 -
+2025-05-28 01:29:54,750 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:54] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:54,760 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:54] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:54,767 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:54] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:54,767 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:54] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:54,771 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:54] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:29:54,781 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:54] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:29:54,812 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:54] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:29:54,821 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:29:54] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:30:04,288 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:04] "[32mGET /set_language/rw HTTP/1.1[0m" 302 -
+2025-05-28 01:30:04,297 - __main__ - DEBUG - Rendering monthly_profits.html with current_start_day=1
+2025-05-28 01:30:04,303 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:04] "GET /admin/monthly_profits HTTP/1.1" 200 -
+2025-05-28 01:30:04,334 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:04] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:04,339 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:04] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:04,340 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:04] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:04,349 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:04] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:04,350 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:04] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:04,353 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:04] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:30:04,417 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:04] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:30:04,426 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:04] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:30:11,208 - __main__ - DEBUG - Filtering admin sales view for single date: 2025-05-28
+2025-05-28 01:30:11,218 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:11] "GET /admin/sales HTTP/1.1" 200 -
+2025-05-28 01:30:11,238 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:11] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:11,250 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:11] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:11,253 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:11] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:11,255 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:11] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:11,257 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:11] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:11,259 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:11] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:30:11,284 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:11] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:30:11,292 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:11] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:30:15,219 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:15] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-28 01:30:15,229 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:15] "GET /login HTTP/1.1" 200 -
+2025-05-28 01:30:15,255 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:15] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:15,259 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:15] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:15,259 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:15] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:15,278 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:15] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:30:15,286 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:15] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:30:29,869 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:29] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:30:29,883 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:29] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-28 01:30:29,931 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:29] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:29,933 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:29] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:29,935 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:29] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:29,937 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:29] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:29,939 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:29] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:29,942 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:29] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-05-28 01:30:29,944 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:29] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:30:29,967 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:29] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:30:29,975 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:30:29] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:36:15,150 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:15] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-28 01:36:15,165 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:15] "GET /login HTTP/1.1" 200 -
+2025-05-28 01:36:15,197 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:15] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:15,205 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:15] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:15,205 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:15] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:15,244 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:15] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:36:15,253 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:15] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:36:21,180 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:21] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:36:21,226 - __main__ - DEBUG - Filtering cashier sales for date: 2025-05-28
+2025-05-28 01:36:21,235 - __main__ - DEBUG - Found 0 sales for today for cashier epi
+2025-05-28 01:36:21,235 - __main__ - DEBUG - Today's revenue for cashier epi: 0
+2025-05-28 01:36:21,255 - __main__ - DEBUG - Total all-time sales for this cashier: 6 (should be more than today's sales if there are historical records)
+2025-05-28 01:36:21,329 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 01:36:21,329 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:21] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:36:21,342 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:21] "GET / HTTP/1.1" 200 -
+2025-05-28 01:36:21,365 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:21] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:21,371 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:21] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:21,371 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:21] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:21,385 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:21] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:36:21,393 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:21] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:36:39,137 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:39] "GET / HTTP/1.1" 200 -
+2025-05-28 01:36:39,157 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:39] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:39,158 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:39] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:39,158 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:39] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:39,228 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:39] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:36:39,233 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:39] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:36:44,782 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:44] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:36:44,819 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:44] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-28 01:36:44,845 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:44] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:44,853 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:44] "GET /static/css/mobile-responsive.css HTTP/1.1" 200 -
+2025-05-28 01:36:44,855 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:44] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:44,856 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:44] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:44,856 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:44] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:44,861 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:44] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:36:44,862 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:44] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:44,935 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:44] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:36:44,941 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:44] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:36:52,239 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:52] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-28 01:36:52,270 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:52] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:52,275 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:52] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:52,275 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:52] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:52,278 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:52] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:52,280 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:52] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:52,281 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:52] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:52,284 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:52] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:36:52,299 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:52] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:36:52,306 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:52] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:36:55,345 - __main__ - DEBUG - Rendering monthly_profits.html with current_start_day=1
+2025-05-28 01:36:55,348 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:55] "GET /admin/monthly_profits HTTP/1.1" 200 -
+2025-05-28 01:36:55,370 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:55] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:55,378 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:55] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:55,379 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:55] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:55,380 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:55] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:55,381 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:55] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:36:55,383 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:55] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:36:55,425 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:55] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:36:55,432 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:36:55] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:36:57,468 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 01:36:57,699 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 01:36:58,842 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 01:36:58,867 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 01:36:58,882 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 01:37:20,553 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:37:20] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-28 01:37:20,569 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:37:20] "GET /login HTTP/1.1" 200 -
+2025-05-28 01:37:20,696 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:37:20] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:37:20,699 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:37:20] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:37:20,700 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:37:20] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:37:20,730 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:37:20] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:37:20,736 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:37:20] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:37:27,565 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:37:27] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:37:27,614 - __main__ - DEBUG - Filtering cashier sales for date: 2025-05-28
+2025-05-28 01:37:27,619 - __main__ - DEBUG - Found 0 sales for today for cashier epi
+2025-05-28 01:37:27,619 - __main__ - DEBUG - Today's revenue for cashier epi: 0
+2025-05-28 01:37:27,625 - __main__ - DEBUG - Total all-time sales for this cashier: 6 (should be more than today's sales if there are historical records)
+2025-05-28 01:37:27,660 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 01:37:27,662 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:37:27] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:37:27,667 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:37:27] "GET / HTTP/1.1" 200 -
+2025-05-28 01:37:27,695 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:37:27] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:37:27,697 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:37:27] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:37:27,698 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:37:27] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:37:27,706 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:37:27] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:37:27,712 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:37:27] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:38:21,258 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:21] "GET /?lang=rw HTTP/1.1" 200 -
+2025-05-28 01:38:21,280 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:21] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:38:21,286 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:21] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:38:21,289 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:21] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:38:21,323 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:21] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:38:21,331 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:21] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:38:27,370 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:27] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:38:27,405 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:27] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-28 01:38:27,431 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:27] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:38:27,432 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:27] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:38:27,433 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:27] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:38:27,433 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:27] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:38:27,436 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:27] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:38:27,438 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:27] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-05-28 01:38:27,441 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:27] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:38:27,503 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:27] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:38:27,512 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:27] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:38:48,331 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:48] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-28 01:38:48,338 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:48] "GET /login HTTP/1.1" 200 -
+2025-05-28 01:38:48,405 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:48] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:38:48,414 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:48] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:38:48,414 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:48] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:38:48,426 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:48] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:38:48,433 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:38:48] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:39:20,571 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:20] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:39:20,577 - __main__ - DEBUG - Filtering cashier sales for date: 2025-05-28
+2025-05-28 01:39:20,578 - __main__ - DEBUG - Found 0 sales for today for cashier epi
+2025-05-28 01:39:20,578 - __main__ - DEBUG - Today's revenue for cashier epi: 0
+2025-05-28 01:39:20,581 - __main__ - DEBUG - Total all-time sales for this cashier: 6 (should be more than today's sales if there are historical records)
+2025-05-28 01:39:20,601 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 01:39:20,602 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:20] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:39:20,609 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:20] "GET / HTTP/1.1" 200 -
+2025-05-28 01:39:20,639 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:20] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:39:20,646 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:20] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:39:20,646 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:20] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:39:20,678 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:20] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:39:20,684 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:20] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:39:30,917 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:30] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:39:30,919 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:30] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:39:30,923 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:30] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:39:30,925 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:30] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:39:30,927 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:30] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-05-28 01:39:31,675 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 01:39:31,744 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 01:39:32,583 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 01:39:32,608 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 01:39:32,611 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 01:39:52,292 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:52] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:39:52,346 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 01:39:52,346 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:52] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:39:52,358 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:52] "GET / HTTP/1.1" 200 -
+2025-05-28 01:39:52,464 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:52] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:39:52,467 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:52] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:39:52,469 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:52] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:39:52,580 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:52] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:39:52,586 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:39:52] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:40:56,462 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:40:56] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:40:56,555 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:40:56] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-28 01:40:56,577 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:40:56] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:40:56,587 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:40:56] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:40:56,589 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:40:56] "GET /static/css/mobile-responsive.css HTTP/1.1" 200 -
+2025-05-28 01:40:56,592 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:40:56] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:40:56,592 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:40:56] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:40:56,592 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:40:56] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:40:56,592 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:40:56] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-05-28 01:40:56,667 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:40:56] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:40:56,673 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:40:56] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:40:58,013 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 01:40:58,151 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 01:40:59,169 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 01:40:59,196 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 01:40:59,199 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 01:41:26,633 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:41:26] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-28 01:41:26,652 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:41:26] "GET /login HTTP/1.1" 200 -
+2025-05-28 01:41:26,772 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:41:26] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:41:26,775 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:41:26] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:41:26,776 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:41:26] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:41:26,794 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:41:26] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:41:26,799 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:41:26] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:41:33,000 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:41:33] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:41:33,121 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 01:41:33,124 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:41:33] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:41:33,137 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:41:33] "GET / HTTP/1.1" 200 -
+2025-05-28 01:41:33,179 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:41:33] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:41:33,185 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:41:33] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:41:33,188 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:41:33] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:41:33,201 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:41:33] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:41:33,211 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:41:33] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:42:03,947 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:42:03] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:42:03,981 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:42:03] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-28 01:42:04,040 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:42:04] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:42:04,052 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:42:04] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:42:04,052 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:42:04] "GET /static/css/mobile-responsive.css HTTP/1.1" 200 -
+2025-05-28 01:42:04,053 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:42:04] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:42:04,054 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:42:04] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:42:04,054 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:42:04] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-05-28 01:42:04,055 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:42:04] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:42:04,121 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:42:04] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:42:04,127 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:42:04] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:43:37,372 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:43:37] "GET / HTTP/1.1" 200 -
+2025-05-28 01:43:37,409 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:43:37] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:43:37,411 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:43:37] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:43:37,412 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:43:37] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:43:37,449 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:43:37] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:43:37,457 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:43:37] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:43:46,573 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 01:43:46,649 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 01:43:47,430 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 01:43:47,451 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 01:43:47,454 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 01:44:01,455 - __main__ - INFO - User epi with role cashier logged in successfully
+2025-05-28 01:44:01,457 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:44:01] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:44:01,511 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 01:44:01,512 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:44:01] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:44:01,526 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:44:01] "GET / HTTP/1.1" 200 -
+2025-05-28 01:44:01,633 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:44:01] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:44:01,642 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:44:01] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:44:01,644 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:44:01] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:44:01,676 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:44:01] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:44:01,681 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:44:01] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:45:39,434 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 01:45:39,496 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 01:45:40,305 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 01:45:40,332 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 01:45:40,337 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 01:46:08,968 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:46:08] "GET / HTTP/1.1" 200 -
+2025-05-28 01:46:09,069 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:46:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:46:09,075 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:46:09] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:46:09,075 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:46:09] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:46:09,126 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:46:09] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:46:09,131 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:46:09] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:46:15,774 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 01:46:15,776 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:46:15] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:46:15,832 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 01:46:15,834 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:46:15] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:46:15,841 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:46:15] "GET / HTTP/1.1" 200 -
+2025-05-28 01:46:15,863 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:46:15] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:46:15,863 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:46:15] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:46:15,863 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:46:15] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:46:15,879 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:46:15] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:46:15,886 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:46:15] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:51:00,689 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 01:51:00,694 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:00] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:51:00,711 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 01:51:00,712 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:00] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:51:00,719 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:00] "GET / HTTP/1.1" 200 -
+2025-05-28 01:51:00,748 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:00] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:51:00,753 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:00] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:51:00,754 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:00] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:51:00,788 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:00] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:51:00,794 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:00] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:51:44,953 - __main__ - INFO - User renoir01 with role admin logged in successfully
+2025-05-28 01:51:44,953 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:44] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:51:45,049 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:45] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-28 01:51:45,076 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:45] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:51:45,087 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:45] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:51:45,087 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:45] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:51:45,089 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:45] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:51:45,090 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:45] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-05-28 01:51:45,092 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:45] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:51:45,096 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:45] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:51:45,158 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:45] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:51:45,164 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:51:45] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:53:35,114 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:35] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-28 01:53:35,133 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:35] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:53:35,139 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:35] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:53:35,140 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:35] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:53:35,142 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:35] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:53:35,143 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:35] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-05-28 01:53:35,143 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:35] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:53:35,148 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:35] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:53:35,228 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:35] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:53:35,234 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:35] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:53:36,083 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:36] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-28 01:53:36,092 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:36] "GET /login HTTP/1.1" 200 -
+2025-05-28 01:53:36,117 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:36] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:53:36,124 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:36] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:53:36,126 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:36] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:53:36,142 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:36] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:53:36,148 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:36] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:53:44,308 - __main__ - INFO - User cashier with role cashier logged in successfully
+2025-05-28 01:53:44,309 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:44] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:53:44,319 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 01:53:44,321 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:44] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:53:44,327 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:44] "GET / HTTP/1.1" 200 -
+2025-05-28 01:53:44,358 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:44] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:53:44,361 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:44] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:53:44,362 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:44] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:53:44,372 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:44] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:53:44,377 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:44] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:53:50,876 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 01:53:50,878 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:50] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:53:50,889 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 01:53:50,891 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:50] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:53:50,898 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:50] "GET / HTTP/1.1" 200 -
+2025-05-28 01:53:50,917 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:50] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:53:50,918 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:50] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:53:50,918 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:50] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:53:50,932 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:50] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:53:50,938 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:53:50] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:54:02,895 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:54:02] "GET / HTTP/1.1" 200 -
+2025-05-28 01:54:02,916 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:54:02] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:54:02,917 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:54:02] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:54:02,919 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:54:02] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:54:02,947 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:54:02] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:54:02,953 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:54:02] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:54:08,167 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 01:54:08,168 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:54:08] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:54:08,181 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 01:54:08,182 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:54:08] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:54:08,191 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:54:08] "GET / HTTP/1.1" 200 -
+2025-05-28 01:54:08,212 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:54:08] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:54:08,218 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:54:08] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:54:08,219 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:54:08] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:54:08,230 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:54:08] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:54:08,234 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:54:08] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:55:11,044 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 01:55:11,081 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-05-28 01:55:11,082 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-05-28 01:55:11,084 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 01:55:11,800 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 01:55:11,831 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 01:55:11,837 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 01:55:26,128 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:26] "GET / HTTP/1.1" 200 -
+2025-05-28 01:55:26,200 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:26] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:55:26,206 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:26] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:55:26,207 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:26] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:55:26,281 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:26] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:55:26,287 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:26] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:55:31,943 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 01:55:31,945 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:31] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:55:31,955 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 01:55:31,957 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:31] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:55:31,963 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:31] "GET / HTTP/1.1" 200 -
+2025-05-28 01:55:31,981 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:31] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:55:31,982 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:31] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:55:31,983 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:31] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:55:31,996 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:31] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:55:32,002 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:32] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:55:49,951 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:49] "GET /?lang=rw HTTP/1.1" 200 -
+2025-05-28 01:55:49,972 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:49] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:55:49,976 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:49] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:55:49,976 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:49] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:55:49,987 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:49] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:55:49,993 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:49] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:55:56,326 - __main__ - INFO - User renoir01 with role admin logged in successfully
+2025-05-28 01:55:56,327 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:56] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:55:56,341 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:56] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-28 01:55:56,366 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:56] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 01:55:56,370 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:56] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:55:56,370 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:56] "[36mGET /static/css/mobile-responsive.css HTTP/1.1[0m" 304 -
+2025-05-28 01:55:56,372 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:56] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:55:56,373 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:56] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 01:55:56,375 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:56] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-05-28 01:55:56,378 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:56] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 01:55:56,505 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:56] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:55:56,513 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:55:56] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:56:53,644 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 01:56:53,651 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:56:53] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:56:53,678 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 01:56:53,679 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:56:53] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:56:53,690 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:56:53] "GET / HTTP/1.1" 200 -
+2025-05-28 01:56:53,763 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:56:53] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:56:53,769 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:56:53] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:56:53,770 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:56:53] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:56:53,860 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:56:53] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:56:53,878 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:56:53] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:59:05,129 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:59:05] "GET / HTTP/1.1" 200 -
+2025-05-28 01:59:05,152 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:59:05] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:59:05,158 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:59:05] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:59:05,158 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:59:05] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:59:05,210 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:59:05] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:59:05,222 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:59:05] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 01:59:09,105 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 01:59:09,106 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:59:09] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 01:59:09,117 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 01:59:09,118 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:59:09] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 01:59:09,124 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:59:09] "GET / HTTP/1.1" 200 -
+2025-05-28 01:59:09,149 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:59:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 01:59:09,153 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:59:09] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 01:59:09,153 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:59:09] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 01:59:09,178 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:59:09] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 01:59:09,188 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 01:59:09] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:00:51,262 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:00:51] "GET / HTTP/1.1" 200 -
+2025-05-28 02:00:51,282 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:00:51] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:00:51,283 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:00:51] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:00:51,286 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:00:51] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:00:51,335 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:00:51] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:00:51,341 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:00:51] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:00:56,967 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 02:00:56,968 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:00:56] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 02:00:56,980 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 02:00:56,981 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:00:56] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 02:00:56,989 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:00:56] "GET / HTTP/1.1" 200 -
+2025-05-28 02:00:57,008 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:00:57] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:00:57,012 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:00:57] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:00:57,014 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:00:57] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:00:57,055 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:00:57] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:00:57,063 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:00:57] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:01:05,581 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:01:05] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:01:05,583 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:01:05] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:01:05,585 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:01:05] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:01:05,587 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:01:05] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:01:05,604 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:01:05] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-05-28 02:02:02,287 - __main__ - INFO - User renoir01 with role admin logged in successfully
+2025-05-28 02:02:02,333 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:02] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 02:02:02,356 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:02] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-28 02:02:02,391 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:02] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:02:02,400 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:02] "[36mGET /static/css/responsive-fixes.css HTTP/1.1[0m" 304 -
+2025-05-28 02:02:02,401 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:02] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:02:02,402 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:02] "[36mGET /static/css/footer.css HTTP/1.1[0m" 304 -
+2025-05-28 02:02:02,408 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:02] "GET /static/css/mobile-responsive.css HTTP/1.1" 200 -
+2025-05-28 02:02:02,412 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:02] "[36mGET /static/css/dashboard.css HTTP/1.1[0m" 304 -
+2025-05-28 02:02:02,412 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:02] "[36mGET /static/js/category-progress.js HTTP/1.1[0m" 304 -
+2025-05-28 02:02:02,696 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:02] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:02:02,705 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:02] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:02:05,002 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:05] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-28 02:02:05,011 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:05] "GET /login HTTP/1.1" 200 -
+2025-05-28 02:02:05,036 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:05] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:02:05,040 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:05] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:02:05,043 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:05] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:02:05,075 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:05] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:02:05,083 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:02:05] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:08:29,811 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 02:08:29,820 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:08:29] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 02:08:29,875 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 02:08:29,878 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:08:29] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 02:08:29,897 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:08:29] "GET / HTTP/1.1" 200 -
+2025-05-28 02:08:30,048 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:08:30] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:08:30,060 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:08:30] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:08:30,061 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:08:30] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:08:30,238 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:08:30] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:08:30,260 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:08:30] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:10:02,013 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:02] "GET / HTTP/1.1" 200 -
+2025-05-28 02:10:02,033 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:02] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:10:02,036 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:02] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:10:02,036 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:02] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:10:02,190 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:02] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:10:02,195 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:02] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:10:03,308 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:03] "GET / HTTP/1.1" 200 -
+2025-05-28 02:10:03,326 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:03] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:10:03,328 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:03] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:10:03,330 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:03] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:10:03,355 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:03] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:10:03,364 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:03] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:10:09,019 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 02:10:09,020 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:09] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 02:10:09,027 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 02:10:09,027 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:09] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 02:10:09,034 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:09] "GET / HTTP/1.1" 200 -
+2025-05-28 02:10:09,052 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:10:09,058 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:09] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:10:09,059 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:09] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:10:09,076 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:09] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:10:09,083 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:10:09] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:17:30,219 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:17:30] "GET / HTTP/1.1" 200 -
+2025-05-28 02:17:30,249 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:17:30] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:17:30,258 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:17:30] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:17:30,259 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:17:30] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:17:30,329 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:17:30] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:17:30,337 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:17:30] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:17:36,799 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 02:17:36,800 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:17:36] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 02:17:36,817 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 02:17:36,817 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:17:36] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 02:17:36,826 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:17:36] "GET / HTTP/1.1" 200 -
+2025-05-28 02:17:36,848 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:17:36] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:17:36,855 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:17:36] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:17:36,856 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:17:36] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:17:36,879 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:17:36] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:17:36,885 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:17:36] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:20:44,592 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:20:44] "GET / HTTP/1.1" 200 -
+2025-05-28 02:20:44,622 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:20:44] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:20:44,627 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:20:44] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:20:44,628 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:20:44] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:20:44,723 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:20:44] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:20:44,732 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:20:44] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:20:50,142 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 02:20:50,144 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:20:50] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 02:20:50,162 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 02:20:50,164 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:20:50] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 02:20:50,174 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:20:50] "GET / HTTP/1.1" 200 -
+2025-05-28 02:20:50,193 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:20:50] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:20:50,200 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:20:50] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:20:50,203 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:20:50] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:20:50,228 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:20:50] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:20:50,240 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:20:50] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:21:02,616 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 02:21:02,618 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:02] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 02:21:02,635 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 02:21:02,636 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:02] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 02:21:02,646 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:02] "GET / HTTP/1.1" 200 -
+2025-05-28 02:21:02,669 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:02] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:21:02,675 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:02] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:21:02,676 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:02] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:21:02,712 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:02] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:21:02,721 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:02] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:21:08,820 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:08] "POST /login HTTP/1.1" 200 -
+2025-05-28 02:21:08,844 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:08] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:21:08,851 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:08] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:21:08,853 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:08] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:21:08,875 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:08] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:21:08,882 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:08] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:21:14,697 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 02:21:14,700 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:14] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 02:21:14,714 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 02:21:14,714 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:14] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 02:21:14,727 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:14] "GET / HTTP/1.1" 200 -
+2025-05-28 02:21:14,745 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:14] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:21:14,751 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:14] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:21:14,753 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:14] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:21:14,770 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:14] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:21:14,778 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:21:14] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:30:10,798 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 02:30:10,806 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:30:10] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 02:30:10,842 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 02:30:10,845 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:30:10] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 02:30:10,860 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:30:10] "GET / HTTP/1.1" 200 -
+2025-05-28 02:30:10,922 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:30:10] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:30:10,935 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:30:10] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:30:10,936 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:30:10] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:30:11,029 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:30:11] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:30:11,047 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:30:11] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:34:04,278 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:04] "GET / HTTP/1.1" 200 -
+2025-05-28 02:34:04,342 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:04] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:34:04,354 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:04] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:34:04,354 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:04] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:34:04,429 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:04] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:34:04,441 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:04] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:34:13,303 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 02:34:13,305 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:13] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 02:34:13,320 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 02:34:13,320 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:13] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 02:34:13,328 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:13] "GET / HTTP/1.1" 200 -
+2025-05-28 02:34:13,356 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:13] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:34:13,361 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:13] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:34:13,364 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:13] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:34:13,390 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:13] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:34:13,397 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:13] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:34:31,406 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:31] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:34:31,411 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:31] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:34:31,411 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:31] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:34:31,412 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:31] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:34:31,446 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:34:31] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-05-28 02:36:58,516 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 02:36:58,517 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:36:58] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 02:36:58,527 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 02:36:58,529 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:36:58] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 02:36:58,537 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:36:58] "GET / HTTP/1.1" 200 -
+2025-05-28 02:36:58,568 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:36:58] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:36:58,570 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:36:58] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:36:58,572 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:36:58] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:36:58,614 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:36:58] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:36:58,622 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:36:58] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:41:42,547 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:42] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-28 02:41:42,565 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:42] "GET /login HTTP/1.1" 200 -
+2025-05-28 02:41:42,623 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:42] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:41:42,628 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:42] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:41:42,629 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:42] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:41:42,692 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:42] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:41:42,706 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:42] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:41:48,868 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 02:41:48,869 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:48] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 02:41:48,891 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 02:41:48,893 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:48] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 02:41:48,908 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:48] "GET / HTTP/1.1" 200 -
+2025-05-28 02:41:48,941 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:48] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:41:48,946 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:48] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:41:48,948 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:48] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:41:48,962 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:48] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:41:48,972 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:48] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:41:55,172 - __main__ - INFO - User cashier with role cashier logged in successfully
+2025-05-28 02:41:55,174 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:55] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 02:41:55,195 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 02:41:55,197 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:55] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 02:41:55,211 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:55] "GET / HTTP/1.1" 200 -
+2025-05-28 02:41:55,239 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:55] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:41:55,245 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:55] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:41:55,246 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:55] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:41:55,263 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:55] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:41:55,271 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:55] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:41:59,837 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 02:41:59,839 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:59] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 02:41:59,867 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 02:41:59,868 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:59] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 02:41:59,879 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:59] "GET / HTTP/1.1" 200 -
+2025-05-28 02:41:59,898 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:59] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:41:59,904 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:59] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:41:59,908 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:59] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:41:59,937 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:59] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:41:59,945 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:41:59] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:44:15,232 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:44:15] "GET / HTTP/1.1" 200 -
+2025-05-28 02:44:15,280 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:44:15] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:44:15,293 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:44:15] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:44:15,294 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:44:15] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:44:15,378 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:44:15] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:44:15,386 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:44:15] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:44:22,348 - __main__ - INFO - User 'epi' logged in successfully
+2025-05-28 02:44:22,353 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:44:22] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 02:44:22,385 - __main__ - ERROR - Unhandled error in cashier_dashboard: Could not build url for endpoint 'record_sale'. Did you mean 'view_sales' instead?
+2025-05-28 02:44:22,388 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:44:22] "[32mGET /cashier/dashboard HTTP/1.1[0m" 302 -
+2025-05-28 02:44:22,405 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:44:22] "GET / HTTP/1.1" 200 -
+2025-05-28 02:44:22,437 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:44:22] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:44:22,445 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:44:22] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:44:22,447 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:44:22] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:44:22,474 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:44:22] "[36mGET /static/manifest.webmanifest HTTP/1.1[0m" 304 -
+2025-05-28 02:44:22,488 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:44:22] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:45:21,662 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:45:21] "GET / HTTP/1.1" 200 -
+2025-05-28 02:45:21,802 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:45:21] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-05-28 02:45:21,803 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:45:21] "GET /static/css/enhanced-ui.css HTTP/1.1" 200 -
+2025-05-28 02:45:21,807 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:45:21] "GET /static/css/login.css HTTP/1.1" 200 -
+2025-05-28 02:45:42,694 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:45:42] "GET / HTTP/1.1" 200 -
+2025-05-28 02:45:42,725 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:45:42] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:45:42,728 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:45:42] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:45:42,730 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:45:42] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:46:04,164 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:04] "[33mGET /static/img/logo-192.png HTTP/1.1[0m" 404 -
+2025-05-28 02:46:04,170 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:04] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-05-28 02:46:19,808 - __main__ - INFO - User renoir01 with role admin logged in successfully
+2025-05-28 02:46:19,813 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:19] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-28 02:46:19,878 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:19] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-05-28 02:46:19,946 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:19] "GET /static/css/responsive-fixes.css HTTP/1.1" 200 -
+2025-05-28 02:46:19,948 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:19] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:46:19,950 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:19] "GET /static/css/mobile-responsive.css HTTP/1.1" 200 -
+2025-05-28 02:46:19,950 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:19] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:46:19,962 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:19] "GET /static/css/footer.css HTTP/1.1" 200 -
+2025-05-28 02:46:19,978 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:19] "GET /static/js/category-progress.js HTTP/1.1" 200 -
+2025-05-28 02:46:19,980 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:19] "GET /static/css/dashboard.css HTTP/1.1" 200 -
+2025-05-28 02:46:27,924 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:27] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-05-28 02:46:27,946 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:27] "GET /login HTTP/1.1" 200 -
+2025-05-28 02:46:28,007 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:28] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:46:28,010 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:28] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:46:28,016 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:28] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:46:44,497 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:44] "POST /login HTTP/1.1" 200 -
+2025-05-28 02:46:44,588 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:44] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-28 02:46:44,596 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:44] "[36mGET /static/css/enhanced-ui.css HTTP/1.1[0m" 304 -
+2025-05-28 02:46:44,597 - werkzeug - INFO - 127.0.0.1 - - [28/May/2025 02:46:44] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2025-05-28 02:46:59,716 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 02:47:00,340 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 02:47:01,629 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 02:47:01,711 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading

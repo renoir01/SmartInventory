@@ -1,0 +1,97 @@
+/* 
+ * Text Flow Optimization CSS
+ * Decreases font sizes and improves text flow throughout the application
+ */
+
+/* Base text size adjustments */
+body {
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+}
+
+/* Heading size adjustments */
+h1 {
+    font-size: 1.8rem !important;
+    margin-bottom: 0.8rem !important;
+}
+
+h2 {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.7rem !important;
+}
+
+h3 {
+    font-size: 1.3rem !important;
+    margin-bottom: 0.6rem !important;
+}
+
+h4 {
+    font-size: 1.1rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+h5, h6 {
+    font-size: 1rem !important;
+    margin-bottom: 0.4rem !important;
+}
+
+/* Table text adjustments */
+table {
+    font-size: 0.85rem !important;
+}
+
+/* Card text adjustments */
+.card-title {
+    font-size: 1.2rem !important;
+}
+
+.card-text {
+    font-size: 0.85rem !important;
+}
+
+/* Form elements */
+label {
+    font-size: 0.85rem !important;
+    margin-bottom: 0.2rem !important;
+}
+
+.form-control {
+    font-size: 0.85rem !important;
+    padding: 0.3rem 0.5rem !important;
+}
+
+/* Buttons */
+.btn {
+    font-size: 0.85rem !important;
+    padding: 0.3rem 0.7rem !important;
+}
+
+/* Navigation */
+.nav-link {
+    font-size: 0.85rem !important;
+}
+
+/* Footer */
+footer {
+    font-size: 0.8rem !important;
+}
+
+/* Dashboard stats */
+.stat-value {
+    font-size: 1.5rem !important;
+}
+
+.stat-label {
+    font-size: 0.8rem !important;
+}
+
+/* Alerts and notifications */
+.alert {
+    font-size: 0.85rem !important;
+    padding: 0.5rem 1rem !important;
+}
+
+/* Badges */
+.badge {
+    font-size: 0.75rem !important;
+}

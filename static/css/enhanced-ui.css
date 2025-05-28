@@ -47,7 +47,8 @@
 body {
     background-color: #f5f7fa;
     color: #333;
-    line-height: 1.6;
+    line-height: 1.5;
+    font-size: 0.92rem;
 }
 
 /* Enhanced header */

@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-ui.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-responsive.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/text-flow.css') }}">
     <!-- Add touch icon for better mobile experience -->
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/logo-192.png') }}">
     <link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}" type="application/manifest+json">
@@ -43,11 +44,11 @@
         <div class="container">
             <ul class="nav-list">
                 {% if current_user.role == 'admin' %}
-                    <li class="nav-item">
-                        <a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
-                            <i class="fas fa-tachometer-alt"></i> {{ _('Dashboard') }}
-                        </a>
-                    </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                        <i class="fas fa-tachometer-alt"></i> {{ _('Dashboard') }}
+                    </a>
+                </li>
                     <li class="nav-item">
                         <a href="{{ url_for('manage_products') }}" class="nav-link {% if request.endpoint == 'manage_products' %}active{% endif %}">
                             <i class="fas fa-box"></i> {{ _('Products') }}
@@ -117,15 +118,17 @@
             <div class="footer-section">
                 <h3>{{ _('Quick Links') }}</h3>
                 <ul class="navbar-nav">
-                    {%- if true -%}<li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}"><i class="fas fa-home"></i> {{ _('Home') }}</a></li>{%- endif -%}
+                    {%- if true -%}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}"><i class="fas fa-home"></i> {{ _('Home') }}</a></li>
+                    {%- endif -%}
                     {%- if current_user.is_authenticated -%}
                         {%- if current_user.role == 'admin' -%}
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_dashboard') }}"><i class="fas fa-tachometer-alt"></i> {{ _('Dashboard') }}</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('manage_products') }}"><i class="fas fa-box"></i> {{ _('Products') }}</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('view_sales') }}"><i class="fas fa-shopping-cart"></i> {{ _('Sales') }}</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('view_monthly_profits') }}"><i class="fas fa-chart-line"></i> {{ _('Profits') }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_dashboard') }}"><i class="fas fa-tachometer-alt"></i> {{ _('Dashboard') }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('manage_products') }}"><i class="fas fa-box"></i> {{ _('Products') }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('view_sales') }}"><i class="fas fa-shopping-cart"></i> {{ _('Sales') }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('view_monthly_profits') }}"><i class="fas fa-chart-line"></i> {{ _('Profits') }}</a></li>
                         {%- elif current_user.role == 'cashier' -%}
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('cashier_dashboard') }}"><i class="fas fa-cash-register"></i> {{ _('Dashboard') }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('cashier_dashboard') }}"><i class="fas fa-cash-register"></i> {{ _('Dashboard') }}</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ url_for('record_sale') }}"><i class="fas fa-cart-plus"></i> {{ _('Record Sale') }}</a></li>
                         {%- endif -%}
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> {{ _('Logout') }}</a></li>
