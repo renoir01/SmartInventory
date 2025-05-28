@@ -722,63 +722,7 @@ def delete_sale(sale_id):
     
     return redirect(url_for('view_sales'))
 
-@app.route('/cashier/dashboard')
-@login_required
-def cashier_dashboard():
-    try:
-        if current_user.role != 'cashier':
-            flash(_('Access denied. Cashier privileges required.'), 'danger')
-            return redirect(url_for('index'))
-        
-        # Get today's date in Central Africa Time (CAT, GMT+2)
-        cat = pytz.timezone('Africa/Johannesburg')
-        today = datetime.now(cat).date()
-        today_str = today.strftime('%Y-%m-%d')
-        
-        # Get search query with error handling
-        search_query = request.args.get('search', '')
-        
-        # Get products in stock with optional search filter
-        try:
-            products_query = Product.query.filter(Product.stock > 0)
-            
-            # Apply search filter if provided
-            if search_query and search_query.strip():
-                search_term = "%" + search_query + "%"
-                products_query = products_query.filter(Product.name.like(search_term))
-            
-            # Execute query
-            products = products_query.all()
-        except Exception as e:
-            logger.error(f"Error in product search: {str(e)}")
-            products = []
-        
-        # Get today's sales for this cashier with explicit date filtering
-        try:
-            # Query sales for today only using string comparison for better SQLite compatibility
-            today_sales = Sale.query.filter(
-                db.func.date(Sale.date_sold) == today_str,
-                Sale.cashier_id == current_user.id
-            ).all()
-            
-            # Calculate total revenue for today only
-            total_revenue = sum(sale.total_price for sale in today_sales if hasattr(sale, 'total_price'))
-        except Exception as e:
-            logger.error(f"Error getting sales: {str(e)}")
-            today_sales = []
-            total_revenue = 0
-        
-        # Make it very explicit that we're only showing today's data
-        return render_template('cashier_dashboard.html', 
-                            products=products or [],  # Ensure we always pass a list even if None
-                            today_sales=today_sales or [],  # Ensure we always pass a list even if None
-                            total_revenue=total_revenue or 0,  # Ensure we always pass a number even if None
-                            search_query=search_query or '',  # Ensure we always pass a string even if None
-                            today_date=today_str,  # Pass today's date as a string
-                            today=today)  # Pass the full today datetime object
-    except Exception as e:
-        logger.error(f"Unhandled error in cashier_dashboard: {str(e)}")
-        flash(_('An error occurred. Please try again.'), 'danger')
+# Second cashier_dashboard route removed to avoid duplicate endpoint error
         return redirect(url_for('index'))
 
 @app.route('/cashier/sell', methods=['GET', 'POST'])
