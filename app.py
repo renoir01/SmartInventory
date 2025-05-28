@@ -723,7 +723,6 @@ def delete_sale(sale_id):
     return redirect(url_for('view_sales'))
 
 # Second cashier_dashboard route removed to avoid duplicate endpoint error
-        return redirect(url_for('index'))
 
 @app.route('/cashier/sell', methods=['GET', 'POST'])
 @login_required
