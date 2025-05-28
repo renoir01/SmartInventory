@@ -80,6 +80,16 @@
         </div>
     </div>
     
+    <div class="col col-md-3">
+        <div class="widget widget-danger">
+            <i class="fas fa-cash-register widget-icon"></i>
+            <h3 class="widget-title">{{ _('Uncashed Sales') }}</h3>
+            <div class="widget-value">RWF {{ "%.0f"|format(uncashed_revenue) }}</div>
+            <p class="widget-description">{{ _('Transactions:') }} {{ uncashed_transactions }}</p>
+            <a href="{{ url_for('admin_cashout') }}" class="widget-link">{{ _('Go to Cashout') }} <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+    
     <div class="col col-md-9">
         <div class="card" id="low-stock-section">
             <div class="card-header">
@@ -183,6 +193,10 @@
                     <a href="{{ url_for('view_monthly_profits') }}" class="quick-action-btn">
                         <i class="fas fa-calendar-alt"></i>
                         <span>{{ _('Monthly Profits') }}</span>
+                    </a>
+                    <a href="{{ url_for('admin_cashout') }}" class="quick-action-btn">
+                        <i class="fas fa-cash-register"></i>
+                        <span>{{ _('Cash Out') }}</span>
                     </a>
                 </div>
             </div>

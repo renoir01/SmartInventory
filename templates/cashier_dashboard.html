@@ -9,7 +9,7 @@
 </div>
 
 <div class="row dashboard-widgets">
-    <div class="col col-md-6">
+    <div class="col col-md-4">
         <div class="widget widget-info">
             <i class="fas fa-shopping-cart widget-icon"></i>
             <h3 class="widget-title">{{ _('Today\'s Sales') }}</h3>
@@ -18,12 +18,21 @@
         </div>
     </div>
     
-    <div class="col col-md-6">
+    <div class="col col-md-4">
         <div class="widget widget-success">
             <i class="fas fa-money-bill-wave widget-icon"></i>
             <h3 class="widget-title">{{ _('Today\'s Revenue') }}</h3>
             <div class="widget-value">RWF {{ "%.0f"|format(total_revenue if total_revenue is defined else 0) }}</div>
             <p class="widget-description">{{ _('Revenue you\'ve generated today only') }}</p>
+        </div>
+    </div>
+    
+    <div class="col col-md-4">
+        <div class="widget widget-danger">
+            <i class="fas fa-cash-register widget-icon"></i>
+            <h3 class="widget-title">{{ _('Uncashed Sales') }}</h3>
+            <div class="widget-value">RWF {{ "%.0f"|format(uncashed_revenue) }}</div>
+            <p class="widget-description">{{ _('Transactions:') }} {{ uncashed_transactions }}</p>
         </div>
     </div>
 </div>

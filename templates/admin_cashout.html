@@ -1,171 +1,271 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ _('Cashout Management') }} - {{ _('Smart Inventory') }}{% endblock %}
+{% block title %}{{ _('Cash Out') }} - {{ _('Smart Inventory') }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<style>
+    .cashier-section {
+        margin-bottom: 2rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 1rem;
+    }
+    
+    .cashier-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .cashier-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+    
+    .cashier-total {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #28a745;
+    }
+    
+    @media print {
+        .no-print {
+            display: none !important;
+        }
+        
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+        }
+        
+        .cashier-section {
+            page-break-inside: avoid;
+        }
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="card">
-    <div class="card-header">
-        <h2>{{ _('Cashout Management') }}</h2>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>{{ _('Cashiers with Pending Sales') }}</h3>
-                    </div>
-                    <div class="card-body">
-                        {% if cashiers_with_sales|length > 0 %}
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>{{ _('Cashier') }}</th>
-                                        <th>{{ _('Sales Count') }}</th>
-                                        <th>{{ _('Total Amount') }}</th>
-                                        <th>{{ _('Action') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for item in cashiers_with_sales %}
-                                    <tr>
-                                        <td>{{ item.cashier.username }}</td>
-                                        <td>{{ item.sales_count }}</td>
-                                        <td>RWF {{ "%.0f"|format(item.total_amount) }}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary btn-sm" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#cashoutModal"
-                                                data-bs-cashier-id="{{ item.cashier.id }}"
-                                                data-bs-cashier-name="{{ item.cashier.username }}"
-                                                data-bs-amount="{{ item.total_amount }}">
-                                                {{ _('Cashout') }}
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+<div class="dashboard-header">
+    <h1><i class="fas fa-cash-register"></i> {{ _('Cash Out') }}</h1>
+    <p class="dashboard-subtitle">{{ _('End of day cash register summary') }}</p>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2>{{ _('Today\'s Sales Summary') }} - {{ today.strftime('%Y-%m-%d') }}</h2>
+                <button class="btn btn-outline-primary no-print" onclick="window.print()">
+                    <i class="fas fa-print"></i> {{ _('Print Report') }}
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="summary-section mb-4">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="widget widget-success">
+                                <i class="fas fa-money-bill-wave widget-icon"></i>
+                                <h3 class="widget-title">{{ _('Total Revenue') }}</h3>
+                                <div class="widget-value">RWF {{ "%.0f"|format(total_revenue) }}</div>
+                                <p class="widget-description">{{ _('Total sales for today') }}</p>
+                            </div>
                         </div>
-                        {% else %}
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle"></i> {{ _('No cashiers with pending sales found.') }}
+                        <div class="col-md-4">
+                            <div class="widget widget-info">
+                                <i class="fas fa-shopping-cart widget-icon"></i>
+                                <h3 class="widget-title">{{ _('Total Transactions') }}</h3>
+                                <div class="widget-value">{{ today_sales|length }}</div>
+                                <p class="widget-description">{{ _('Number of sales today') }}</p>
+                            </div>
                         </div>
-                        {% endif %}
+                        <div class="col-md-4">
+                            <div class="widget widget-primary">
+                                <i class="fas fa-users widget-icon"></i>
+                                <h3 class="widget-title">{{ _('Active Cashiers') }}</h3>
+                                <div class="widget-value">{{ cashier_sales|length }}</div>
+                                <p class="widget-description">{{ _('Cashiers with sales today') }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>{{ _('Recent Cashouts') }}</h3>
+                
+                {% if cashier_sales|length > 0 %}
+                <h3 class="mb-3">{{ _('Sales by Cashier') }}</h3>
+                
+                {% for cashier_id, data in cashier_sales.items() %}
+                <div class="cashier-section">
+                    <div class="cashier-header">
+                        <div class="cashier-name">
+                            <i class="fas fa-user"></i> {{ data.cashier.username }}
+                        </div>
+                        <div class="cashier-total">
+                            {{ _('Total') }}: RWF {{ "%.0f"|format(data.total) }}
+                        </div>
                     </div>
-                    <div class="card-body">
-                        {% if recent_cashouts|length > 0 %}
+                    
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>{{ _('Time') }}</th>
+                                    <th>{{ _('Product') }}</th>
+                                    <th>{{ _('Quantity') }}</th>
+                                    <th>{{ _('Price') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for sale in data.sales %}
+                                <tr>
+                                    <td>{{ sale.date_sold.strftime('%H:%M:%S') }}</td>
+                                    <td>{{ sale.product.name }}</td>
+                                    <td>{{ sale.quantity }}</td>
+                                    <td>RWF {{ "%.0f"|format(sale.total_price) }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3" class="text-right">{{ _('Total') }}</th>
+                                    <th>RWF {{ "%.0f"|format(data.total) }}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                {% else %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> {{ _('No sales have been recorded today.') }}
+                </div>
+                {% endif %}
+            </div>
+            <div class="card-footer no-print">
+                <div class="d-flex justify-content-between">
+                    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> {{ _('Back to Dashboard') }}
+                    </a>
+                    
+                    <form action="{{ url_for('perform_cashout') }}" method="POST" class="mb-0">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="notes" placeholder="{{ _('Optional notes about this cashout') }}">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-cash-register"></i> {{ _('Cash Out Now') }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    {% if today_cashouts %}
+                    <div class="mt-3">
+                        <h5>{{ _('Today\'s Cashouts') }}</h5>
                         <div class="table-responsive">
-                            <table class="table">
-                                <thead>
+                            <table class="table table-sm table-bordered">
+                                <thead class="thead-light">
                                     <tr>
-                                        <th>{{ _('Date') }}</th>
-                                        <th>{{ _('Cashier') }}</th>
+                                        <th>{{ _('Time') }}</th>
                                         <th>{{ _('Amount') }}</th>
-                                        <th>{{ _('Action') }}</th>
+                                        <th>{{ _('Transactions') }}</th>
+                                        <th>{{ _('Admin') }}</th>
+                                        <th>{{ _('Notes') }}</th>
+                                        <th>{{ _('Actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for cashout in recent_cashouts %}
+                                    {% for cashout in today_cashouts %}
                                     <tr>
-                                        <td>{{ cashout.date.strftime('%Y-%m-%d %H:%M') }}</td>
-                                        <td>{{ cashout.cashier.username }}</td>
-                                        <td>RWF {{ "%.0f"|format(cashout.amount) }}</td>
+                                        <td>{{ cashout.cashed_out_at.strftime('%H:%M') }}</td>
+                                        <td>RWF {{ "%.0f"|format(cashout.total_amount) }}</td>
+                                        <td>{{ cashout.transaction_count }}</td>
+                                        <td>{{ cashout.admin.username }}</td>
+                                        <td>{{ cashout.notes }}</td>
                                         <td>
-                                            <a href="{{ url_for('cashout_details', cashout_id=cashout.id) }}" class="btn btn-info btn-sm">
-                                                {{ _('Details') }}
-                                            </a>
+                                            <form action="{{ url_for('undo_cashout', cashout_id=cashout.id) }}" method="POST" class="d-inline">
+                                                <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Are you sure you want to undo this cash out?')">
+                                                    <i class="fas fa-undo"></i> {{ _('Undo') }}
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
                         </div>
-                        {% else %}
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle"></i> {{ _('No recent cashouts found.') }}
-                        </div>
-                        {% endif %}
-                        
-                        <div class="mt-3">
-                            <a href="{{ url_for('cashout_history') }}" class="btn btn-primary">
-                                {{ _('View Full Cashout History') }}
-                            </a>
-                        </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Cashout Modal -->
-<div class="modal fade" id="cashoutModal" tabindex="-1" aria-labelledby="cashoutModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="cashoutModalLabel">{{ _('Confirm Cashout') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="{{ url_for('admin_cashout') }}" method="POST">
-                <div class="modal-body">
-                    <p>{{ _('You are about to cash out') }} <strong id="cashierName"></strong>.</p>
-                    <p>{{ _('Total amount') }}: <strong id="cashoutAmount"></strong></p>
-                    
-                    <input type="hidden" id="cashierId" name="cashier_id">
-                    
-                    <div class="mb-3">
-                        <label for="note" class="form-label">{{ _('Note (Optional)') }}</label>
-                        <textarea id="note" name="note" class="form-control" rows="3" placeholder="{{ _('Add any notes about this cashout...') }}"></textarea>
+<!-- Cashout History Section -->
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="fas fa-history"></i> {{ _('Cashout History') }}</h5>
+                </div>
+                <div class="card-body">
+                    {% if all_cashouts %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>{{ _('Date') }}</th>
+                                    <th>{{ _('Time') }}</th>
+                                    <th>{{ _('Amount') }}</th>
+                                    <th>{{ _('Transactions') }}</th>
+                                    <th>{{ _('Admin') }}</th>
+                                    <th>{{ _('Notes') }}</th>
+                                    <th>{{ _('Actions') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cashout in all_cashouts %}
+                                <tr>
+                                    <td>{{ cashout.date.strftime('%Y-%m-%d') }}</td>
+                                    <td>{{ cashout.cashed_out_at.strftime('%H:%M') }}</td>
+                                    <td>RWF {{ "%.0f"|format(cashout.total_amount) }}</td>
+                                    <td>{{ cashout.transaction_count }}</td>
+                                    <td>{{ cashout.admin.username }}</td>
+                                    <td>{{ cashout.notes }}</td>
+                                    <td>
+                                        <form action="{{ url_for('undo_cashout', cashout_id=cashout.id) }}" method="POST" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Are you sure you want to undo this cash out?')">
+                                                <i class="fas fa-undo"></i> {{ _('Undo') }}
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> {{ _('No cashout records found.') }}
+                    </div>
+                    {% endif %}
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Cancel') }}</button>
-                    <button type="submit" class="btn btn-primary">{{ _('Confirm Cashout') }}</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
+
 {% endblock %}
 
 {% block extra_js %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Get the modal element
-        var cashoutModal = document.getElementById('cashoutModal');
-        
-        // Add event listener for when the modal is shown
-        cashoutModal.addEventListener('show.bs.modal', function(event) {
-            // Button that triggered the modal
-            var button = event.relatedTarget;
-            
-            // Extract info from data-bs-* attributes
-            var cashierId = button.getAttribute('data-bs-cashier-id');
-            var cashierName = button.getAttribute('data-bs-cashier-name');
-            var amount = parseFloat(button.getAttribute('data-bs-amount'));
-            
-            console.log('Cashier ID:', cashierId);
-            console.log('Cashier Name:', cashierName);
-            console.log('Amount:', amount);
-            
-            // Update the modal's content
-            var modalCashierId = cashoutModal.querySelector('#cashierId');
-            var modalCashierName = cashoutModal.querySelector('#cashierName');
-            var modalAmount = cashoutModal.querySelector('#cashoutAmount');
-            
-            modalCashierId.value = cashierId;
-            modalCashierName.textContent = cashierName;
-            modalAmount.textContent = 'RWF ' + amount.toFixed(0);
-        });
+        // Add any JavaScript functionality here if needed
     });
 </script>
 {% endblock %}

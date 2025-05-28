@@ -1,0 +1,9 @@
+2025-05-28 11:51:38,477 - app - INFO - Flask-Babel initialized successfully
+2025-05-28 11:51:38,499 - app - DEBUG - Recalculating monthly profits with accounting period starting on day 1
+2025-05-28 11:51:38,551 - app - INFO - Successfully recalculated all monthly profits with start day 1
+Starting monthly profit population...
+Initial monthly_profit records: 0
+Recalculating monthly profits from sales data...
+After recalculation: 1 monthly profit records
+Year: 2025, Month: 5, Revenue: 10.0, Profit: 6.0
+Monthly profit population completed successfully

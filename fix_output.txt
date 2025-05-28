@@ -1,0 +1,5 @@
+Starting direct fix for monthly_profit table...
+monthly_profit table already exists in the database
+Table structure: [(0, 'id', 'INTEGER', 0, None, 1), (1, 'year', 'INTEGER', 1, None, 0), (2, 'month', 'INTEGER', 1, None, 0), (3, 'total_revenue', 'REAL', 0, '0.0', 0), (4, 'total_cost', 'REAL', 0, '0.0', 0), (5, 'total_profit', 'REAL', 0, '0.0', 0), (6, 'sale_count', 'INTEGER', 0, '0', 0)]
+Number of records in monthly_profit table: 0
+Script completed.
