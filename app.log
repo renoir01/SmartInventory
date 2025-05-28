@@ -3430,3 +3430,21 @@ WHERE product.stock <= product.low_stock_threshold AND product.stock > ?]
 2025-05-28 02:47:00,340 - werkzeug - INFO -  * Restarting with stat
 2025-05-28 02:47:01,629 - __main__ - INFO - Flask-Babel initialized successfully
 2025-05-28 02:47:01,711 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 03:17:18,074 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 03:17:18,115 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-05-28 03:17:18,116 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-05-28 03:17:18,118 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 03:17:18,833 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 03:17:18,862 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 03:17:18,872 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 03:19:41,209 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 03:19:41,647 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 03:19:43,148 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 03:19:43,177 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 03:19:43,186 - werkzeug - INFO -  * Debugger PIN: 185-800-852
+2025-05-28 03:20:01,755 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Videos\\SmartInventory\\app.py', reloading
+2025-05-28 03:20:01,861 - werkzeug - INFO -  * Restarting with stat
+2025-05-28 03:20:02,804 - __main__ - INFO - Flask-Babel initialized successfully
+2025-05-28 03:20:02,833 - werkzeug - WARNING -  * Debugger is active!
+2025-05-28 03:20:02,838 - werkzeug - INFO -  * Debugger PIN: 185-800-852

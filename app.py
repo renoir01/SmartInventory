@@ -228,23 +228,28 @@ def login():
     
     # Special case for the 'epi' user with password 'Epi@654'
     if username == 'epi' and password == 'Epi@654':
-        # Find the user
-        user = User.query.filter_by(username='epi').first()
-        
-        # If user doesn't exist, create it
-        if not user:
-            user = User(username='epi', role='cashier')
-            user.set_password('Epi@654')
-            db.session.add(user)
-            db.session.commit()
-            logger.info("Created cashier user 'epi'")
-        
-        # Log the user in
-        login_user(user)
-        logger.info("User 'epi' logged in successfully")
-        
-        # Redirect directly to cashier dashboard using absolute URL to avoid loops
-        return redirect('/cashier/dashboard', code=303)
+        try:
+            # Find the user
+            user = User.query.filter_by(username='epi').first()
+            
+            # If user doesn't exist, create it
+            if not user:
+                user = User(username='epi', role='cashier')
+                user.set_password('Epi@654')
+                db.session.add(user)
+                db.session.commit()
+                logger.info("Created cashier user 'epi'")
+            
+            # Log the user in
+            login_user(user)
+            logger.info("User 'epi' logged in successfully")
+            
+            # Redirect directly to cashier dashboard using absolute URL to avoid loops
+            return redirect('/cashier/dashboard', code=303)
+        except Exception as e:
+            logger.error(f"Error in cashier login: {str(e)}", exc_info=True)
+            # Return a simple error message
+            return f"<html><body><h1>Login Error</h1><p>An error occurred during login.</p><p>Error details: {str(e)}</p><p><a href='/login'>Try Again</a></p></body></html>"
     
     # Standard login flow for other users
     user = User.query.filter_by(username=username).first()
@@ -546,8 +551,8 @@ def cashier_dashboard():
     except Exception as e:
         logger.error(f"Error in cashier_dashboard: {str(e)}", exc_info=True)
         flash(_('An error occurred while loading the cashier dashboard.'), 'danger')
-        # Return a simple error page instead of redirecting to avoid loops
-        return render_template('error.html', message='Error loading cashier dashboard')
+        # Fallback to a simple message instead of using a template that might not exist
+        return f"<html><body><h1>Error</h1><p>An error occurred while loading the cashier dashboard.</p><p>Error details: {str(e)}</p><p><a href='/'>Go to Home</a></p></body></html>"
 
 @app.route('/admin/products/edit/<int:product_id>', methods=['GET', 'POST'])
 @login_required
