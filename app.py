@@ -571,63 +571,92 @@ def manage_products():
     search_query = request.args.get('search', '')
     
     try:
-        # Create a list to hold product objects
-        products = []
-        
-        # Use direct SQLite connection to avoid SQLAlchemy ORM issues
-        import sqlite3
-        conn = sqlite3.connect('inventory.db')
-        conn.row_factory = sqlite3.Row  # This allows accessing columns by name
-        cursor = conn.cursor()
-        
-        if search_query:
-            # Search in name, description, and category fields
-            search_term = f'%{search_query}%'
-            cursor.execute("""
-                SELECT id, name, description, category, purchase_price, price, stock, low_stock_threshold, date_added 
-                FROM product 
-                WHERE name LIKE ? OR description LIKE ? OR category LIKE ? 
-                ORDER BY name
-            """, (search_term, search_term, search_term))
-        else:
-            cursor.execute("""
-                SELECT id, name, description, category, purchase_price, price, stock, low_stock_threshold, date_added 
-                FROM product 
-                ORDER BY name
-            """)
-        
-        # Convert the result to a list of objects that mimic Product objects
-        for row in cursor.fetchall():
-            # Create a simple object that has the same attributes as a Product
-            class SimpleProduct:
-                pass
+        # Try using the SQLAlchemy ORM first
+        try:
+            if search_query:
+                # Search in name, description, and category fields
+                search_term = f'%{search_query}%'
+                products = Product.query.filter(
+                    db.or_(
+                        Product.name.like(search_term),
+                        Product.description.like(search_term),
+                        Product.category.like(search_term)
+                    )
+                ).order_by(Product.name).all()
+            else:
+                products = Product.query.order_by(Product.name).all()
+                
+            # If we get here, the ORM query worked
+            return render_template('manage_products.html', products=products, search_query=search_query)
             
-            product = SimpleProduct()
-            product.id = row['id']
-            product.name = row['name']
-            product.description = row['description']
-            product.category = row['category']
-            product.purchase_price = row['purchase_price']
-            product.price = row['price']
-            product.stock = row['stock']
-            product.low_stock_threshold = row['low_stock_threshold']
-            product.date_added = row['date_added']
+        except Exception as orm_error:
+            # If ORM fails, fall back to direct SQLite
+            logger.warning(f"ORM query failed, falling back to direct SQLite: {str(orm_error)}")
             
-            # Add default values for the problematic columns
-            product.is_packaged = False
-            product.units_per_package = 1
-            product.individual_price = 0
-            product.individual_stock = 0
+            # Create a list to hold product objects
+            products = []
             
-            # Add methods that might be used in the template
-            product.is_low_stock = lambda: product.stock <= product.low_stock_threshold
-            product.get_profit_margin = lambda: (product.price - product.purchase_price) / product.price * 100 if product.price > 0 else 0
+            # Use direct SQLite connection
+            import sqlite3
+            conn = sqlite3.connect('inventory.db')
+            conn.row_factory = sqlite3.Row  # This allows accessing columns by name
+            cursor = conn.cursor()
             
-            products.append(product)
-        
-        conn.close()
-        
-        return render_template('manage_products.html', products=products, search_query=search_query)
+            # Get all column names from the product table
+            cursor.execute("PRAGMA table_info(product)")
+            columns = [col[1] for col in cursor.fetchall()]
+            
+            # Build a query that selects all available columns
+            columns_str = ', '.join(columns)
+            
+            if search_query:
+                # Search in name, description, and category fields
+                search_term = f'%{search_query}%'
+                cursor.execute(f"""
+                    SELECT {columns_str}
+                    FROM product 
+                    WHERE name LIKE ? OR description LIKE ? OR category LIKE ? 
+                    ORDER BY name
+                """, (search_term, search_term, search_term))
+            else:
+                cursor.execute(f"""
+                    SELECT {columns_str}
+                    FROM product 
+                    ORDER BY name
+                """)
+            
+            # Convert the result to a list of objects that mimic Product objects
+            for row in cursor.fetchall():
+                # Create a simple object that has the same attributes as a Product
+                class SimpleProduct:
+                    pass
+                
+                product = SimpleProduct()
+                
+                # Add all available columns from the database
+                for col in columns:
+                    setattr(product, col, row[col])
+                
+                # Add default values for any missing columns
+                if 'is_packaged' not in columns:
+                    product.is_packaged = False
+                if 'units_per_package' not in columns:
+                    product.units_per_package = 1
+                if 'individual_price' not in columns:
+                    product.individual_price = 0
+                if 'individual_stock' not in columns:
+                    product.individual_stock = 0
+                
+                # Add methods that might be used in the template
+                product.is_low_stock = lambda: product.stock <= product.low_stock_threshold
+                product.get_profit_margin = lambda: (product.price - product.purchase_price) / product.price * 100 if product.price > 0 else 0
+                
+                products.append(product)
+            
+            conn.close()
+            
+            return render_template('manage_products.html', products=products, search_query=search_query)
+            
     except Exception as e:
         import traceback
         error_traceback = traceback.format_exc()
