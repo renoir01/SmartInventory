@@ -732,6 +732,8 @@ def delete_sale(sale_id):
 # Second cashier_dashboard route removed to avoid duplicate endpoint error
 
 @app.route('/cashier/sell', methods=['GET', 'POST'])
+@app.route('/sell_product', methods=['GET', 'POST'])
+@app.route('/record_sale', methods=['GET', 'POST'])
 @login_required
 def sell_product():
     try:
