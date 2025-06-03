@@ -42,7 +42,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # Session lifetime in seconds (
 app.config['SESSION_USE_SIGNER'] = True  # Add a cryptographic signature to cookies
 
 # Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///inventory.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/inventory.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Internationalization configuration
