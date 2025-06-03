@@ -598,7 +598,7 @@ def manage_products():
             
             # Use direct SQLite connection
             import sqlite3
-            conn = sqlite3.connect('instance/inventory.db')
+            conn = sqlite3.connect('inventory.db')
             conn.row_factory = sqlite3.Row  # This allows accessing columns by name
             cursor = conn.cursor()
             
@@ -686,7 +686,7 @@ def add_product():
             import sqlite3
             from datetime import datetime
             
-            conn = sqlite3.connect('instance/inventory.db')
+            conn = sqlite3.connect('inventory.db')
             cursor = conn.cursor()
             
             # Insert the product using only the basic columns that exist in the database
