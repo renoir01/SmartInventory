@@ -98,28 +98,20 @@ def format_currency(value):
     return f"RWF {int(value):,}"
 
 def get_uncashed_sales():
-    """Calculate uncashed sales based on is_cashed_out field"""
+    """Calculate uncashed sales since the last cashout"""
     
-    # Check if the is_cashed_out column exists in the sale table
-    try:
-        # Try to use the is_cashed_out field
-        uncashed_sales = Sale.query.filter(Sale.is_cashed_out == False).all()
-    except Exception as e:
-        # Fall back to the old method if the column doesn't exist
-        logger.warning(f"is_cashed_out column not found, using date-based method: {str(e)}")
-        
-        # Get the most recent cashout (regardless of date)
-        most_recent_cashout = CashoutRecord.query.order_by(CashoutRecord.cashed_out_at.desc()).first()
-        
-        # Get sales that haven't been cashed out yet
-        if most_recent_cashout:
-            # Only get sales after the most recent cashout
-            uncashed_sales = Sale.query.filter(
-                Sale.date_sold > most_recent_cashout.cashed_out_at
-            ).all()
-        else:
-            # No cashouts ever, get all sales
-            uncashed_sales = Sale.query.all()
+    # Get the most recent cashout (regardless of date)
+    most_recent_cashout = CashoutRecord.query.order_by(CashoutRecord.cashed_out_at.desc()).first()
+    
+    # Get sales that haven't been cashed out yet
+    if most_recent_cashout:
+        # Only get sales after the most recent cashout
+        uncashed_sales = Sale.query.filter(
+            Sale.date_sold > most_recent_cashout.cashed_out_at
+        ).all()
+    else:
+        # No cashouts ever, get all sales
+        uncashed_sales = Sale.query.all()
     
     # Calculate totals for uncashed sales only
     total_revenue = sum(sale.total_price for sale in uncashed_sales)
@@ -794,20 +786,10 @@ def cashier_dashboard():
             
             # Calculate total revenue for today
             total_revenue = sum(sale.total_price for sale in today_sales)
-            
-            # Also get all-time sales for this cashier
-            all_time_sales = Sale.query.filter(
-                Sale.cashier_id == current_user.id
-            ).all()
-            
-            # Calculate all-time total revenue
-            all_time_revenue = sum(sale.total_price for sale in all_time_sales)
         except Exception as e:
             logger.error(f"Error getting sales: {str(e)}")
             today_sales = []
             total_revenue = 0
-            all_time_sales = []
-            all_time_revenue = 0
             
         # Get uncashed sales data (for this cashier only)
         try:
@@ -827,7 +809,6 @@ def cashier_dashboard():
                             products=products or [],
                             today_sales=today_sales or [],
                             total_revenue=total_revenue or 0,
-                            all_time_revenue=all_time_revenue or 0,
                             search_query=search_query or '',
                             uncashed_revenue=uncashed_revenue,
                             uncashed_transactions=uncashed_transactions)
@@ -1610,16 +1591,6 @@ def perform_cashout():
             
             # Add and commit to the database
             db.session.add(new_cashout)
-            db.session.flush()  # Get the ID of the new cashout record
-            
-            # Mark all uncashed sales as cashed out
-            try:
-                for sale in uncashed_sales:
-                    sale.is_cashed_out = True
-                    sale.cashout_id = new_cashout.id
-            except Exception as column_e:
-                logger.warning(f"Could not update is_cashed_out field: {str(column_e)}")
-                
             db.session.commit()
             
             flash(_('Cash out completed successfully. The register has been reset.'), 'success')
