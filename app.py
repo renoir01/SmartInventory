@@ -65,24 +65,20 @@ def format_currency(value):
     return f"RWF {int(value):,}"
 
 def get_uncashed_sales():
-    """Calculate uncashed sales for today"""
-    today = datetime.now().date()
+    """Calculate uncashed sales since the last cashout"""
     
-    # Get the most recent cashout today (if any)
-    most_recent_cashout = CashoutRecord.query.filter_by(date=today).order_by(CashoutRecord.cashed_out_at.desc()).first()
+    # Get the most recent cashout (regardless of date)
+    most_recent_cashout = CashoutRecord.query.order_by(CashoutRecord.cashed_out_at.desc()).first()
     
     # Get sales that haven't been cashed out yet
     if most_recent_cashout:
         # Only get sales after the most recent cashout
         uncashed_sales = Sale.query.filter(
-            db.func.date(Sale.date_sold) == today,
             Sale.date_sold > most_recent_cashout.cashed_out_at
         ).all()
     else:
-        # No cashouts today, get all sales for today
-        uncashed_sales = Sale.query.filter(
-            db.func.date(Sale.date_sold) == today
-        ).all()
+        # No cashouts ever, get all sales
+        uncashed_sales = Sale.query.all()
     
     # Calculate totals for uncashed sales only
     total_revenue = sum(sale.total_price for sale in uncashed_sales)
@@ -1458,36 +1454,31 @@ def admin_cashout():
             flash(_('Access denied. Admin privileges required.'), 'danger')
             return redirect(url_for('index'))
         
-        # Get today's date
+        # Get today's date for display purposes
         today = datetime.now().date()
         
-        # Get all sales for today
-        today_sales = Sale.query.filter(
-            db.func.date(Sale.date_sold) == today
-        ).order_by(Sale.date_sold.desc()).all()
+        # Get the most recent cashout (regardless of date)
+        most_recent_cashout = CashoutRecord.query.order_by(CashoutRecord.cashed_out_at.desc()).first()
         
-        # Get all cashouts for today
+        # Get all cashouts for today (for display purposes)
         today_cashouts = CashoutRecord.query.filter_by(date=today).order_by(CashoutRecord.cashed_out_at.desc()).all()
         
-        # Calculate totals for uncashed sales
-        total_revenue = 0
-        
-        # If there are cashouts today, only count sales made after the most recent cashout
-        if today_cashouts:
-            most_recent_cashout = today_cashouts[0]
-            uncashed_sales = [sale for sale in today_sales if sale.date_sold > most_recent_cashout.cashed_out_at]
-            total_revenue = sum(sale.total_price for sale in uncashed_sales)
+        # Get sales that haven't been cashed out yet
+        if most_recent_cashout:
+            # Only get sales after the most recent cashout
+            uncashed_sales = Sale.query.filter(
+                Sale.date_sold > most_recent_cashout.cashed_out_at
+            ).order_by(Sale.date_sold.desc()).all()
         else:
-            # No cashouts today, count all sales
-            total_revenue = sum(sale.total_price for sale in today_sales)
+            # No cashouts ever, get all sales
+            uncashed_sales = Sale.query.order_by(Sale.date_sold.desc()).all()
+        
+        # Calculate totals for uncashed sales
+        total_revenue = sum(sale.total_price for sale in uncashed_sales)
         
         # Group sales by cashier (only uncashed sales)
         cashier_sales = {}
-        for sale in today_sales:
-            # Skip sales that have been cashed out
-            if today_cashouts and sale.date_sold <= today_cashouts[0].cashed_out_at:
-                continue
-                
+        for sale in uncashed_sales:
             if sale.cashier_id not in cashier_sales:
                 cashier_sales[sale.cashier_id] = {
                     'cashier': sale.cashier,
@@ -1502,7 +1493,7 @@ def admin_cashout():
         
         return render_template(
             'admin_cashout.html',
-            today_sales=today_sales,
+            today_sales=uncashed_sales,
             total_revenue=total_revenue,
             cashier_sales=cashier_sales,
             today=today,
@@ -1527,21 +1518,18 @@ def perform_cashout():
         today = datetime.now().date()
         now = datetime.now()
         
-        # Get the most recent cashout today (if any)
-        most_recent_cashout = CashoutRecord.query.filter_by(date=today).order_by(CashoutRecord.cashed_out_at.desc()).first()
+        # Get the most recent cashout (regardless of date)
+        most_recent_cashout = CashoutRecord.query.order_by(CashoutRecord.cashed_out_at.desc()).first()
         
         # Get sales that haven't been cashed out yet
         if most_recent_cashout:
             # Only get sales after the most recent cashout
             uncashed_sales = Sale.query.filter(
-                db.func.date(Sale.date_sold) == today,
                 Sale.date_sold > most_recent_cashout.cashed_out_at
             ).all()
         else:
-            # No cashouts today, get all sales for today
-            uncashed_sales = Sale.query.filter(
-                db.func.date(Sale.date_sold) == today
-            ).all()
+            # No cashouts ever, get all sales
+            uncashed_sales = Sale.query.all()
         
         # Calculate totals for uncashed sales only
         total_revenue = sum(sale.total_price for sale in uncashed_sales)
