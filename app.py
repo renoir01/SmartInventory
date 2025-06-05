@@ -42,7 +42,22 @@ app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # Session lifetime in seconds (
 app.config['SESSION_USE_SIGNER'] = True  # Add a cryptographic signature to cookies
 
 # Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/inventory.db'
+# Determine if we're running on PythonAnywhere by checking for specific environment variables
+is_pythonanywhere = 'PYTHONANYWHERE_SITE' in os.environ
+
+if is_pythonanywhere:
+    # Use absolute path for PythonAnywhere deployment
+    # This path should be adjusted to match your PythonAnywhere username and project path
+    username = os.environ.get('USERNAME', 'renoir01')
+    project_path = f'/home/{username}/SmartInventory'
+    db_path = os.path.join(project_path, 'inventory.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+    logger.info(f"Using database at: {db_path}")
+else:
+    # Local development configuration
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/inventory.db'
+    logger.info("Using local database at: instance/inventory.db")
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Internationalization configuration
