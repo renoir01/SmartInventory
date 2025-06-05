@@ -46,13 +46,20 @@ app.config['SESSION_USE_SIGNER'] = True  # Add a cryptographic signature to cook
 is_pythonanywhere = 'PYTHONANYWHERE_SITE' in os.environ
 
 if is_pythonanywhere:
-    # Use absolute path for PythonAnywhere deployment
-    # This path should be adjusted to match your PythonAnywhere username and project path
-    username = os.environ.get('USERNAME', 'renoir01')
-    project_path = f'/home/{username}/SmartInventory'
-    db_path = os.path.join(project_path, 'inventory.db')
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
-    logger.info(f"Using database at: {db_path}")
+    try:
+        # Import PythonAnywhere specific configuration
+        logger.info("Detected PythonAnywhere environment, loading specific configuration")
+        from pythonanywhere_config import get_pythonanywhere_config
+        pa_config = get_pythonanywhere_config()
+        
+        # Apply PythonAnywhere configuration
+        app.config.update(pa_config)
+        logger.info(f"Applied PythonAnywhere configuration: {pa_config['SQLALCHEMY_DATABASE_URI']}")
+    except Exception as e:
+        logger.error(f"Failed to load PythonAnywhere configuration: {str(e)}")
+        # Fallback to a direct path as a last resort
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/renoir0/SmartInventory/inventory.db'
+        logger.info("Using fallback database configuration")
 else:
     # Local development configuration
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/inventory.db'
