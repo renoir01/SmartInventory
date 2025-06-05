@@ -118,16 +118,32 @@ def fix_database():
                 # Check if role column exists in old table
                 if 'role' in column_names:
                     # Copy existing data with default password_hash
-                    cursor.execute('''
-                        INSERT INTO user_new (id, username, password_hash, role)
-                        SELECT id, username, 'pbkdf2:sha256:600000$5QRRxLhCVPrYNo6w$e7a4f1a9d0a80a3c8be0cb81c69cc8fd7ae17f9bf8332a27a65e3bef4caa789c', role FROM user
-                    ''')
+                    # First, fetch all users
+                    cursor.execute('SELECT id, username, role FROM user')
+                    users = cursor.fetchall()
+                    
+                    # Insert each user into the new table
+                    for user in users:
+                        user_id, username, role = user
+                        logger.info(f"Preserving user: {username} with role: {role}")
+                        cursor.execute(
+                            'INSERT INTO user_new (id, username, password_hash, role) VALUES (?, ?, ?, ?)',
+                            (user_id, username, 'pbkdf2:sha256:600000$5QRRxLhCVPrYNo6w$e7a4f1a9d0a80a3c8be0cb81c69cc8fd7ae17f9bf8332a27a65e3bef4caa789c', role)
+                        )
                 else:
                     # Copy existing data with default password_hash and role
-                    cursor.execute('''
-                        INSERT INTO user_new (id, username, password_hash, role)
-                        SELECT id, username, 'pbkdf2:sha256:600000$5QRRxLhCVPrYNo6w$e7a4f1a9d0a80a3c8be0cb81c69cc8fd7ae17f9bf8332a27a65e3bef4caa789c', 'user' FROM user
-                    ''')
+                    # First, fetch all users
+                    cursor.execute('SELECT id, username FROM user')
+                    users = cursor.fetchall()
+                    
+                    # Insert each user into the new table
+                    for user in users:
+                        user_id, username = user
+                        logger.info(f"Preserving user: {username} with default role: user")
+                        cursor.execute(
+                            'INSERT INTO user_new (id, username, password_hash, role) VALUES (?, ?, ?, ?)',
+                            (user_id, username, 'pbkdf2:sha256:600000$5QRRxLhCVPrYNo6w$e7a4f1a9d0a80a3c8be0cb81c69cc8fd7ae17f9bf8332a27a65e3bef4caa789c', 'user')
+                        )
                 
                 # Drop old table
                 logger.info("Dropping old table")
@@ -177,10 +193,119 @@ def fix_database():
         logger.error(f"Error fixing database: {str(e)}")
         return False
 
+def fix_database_readonly():
+    """Check the database schema without making any changes"""
+    try:
+        # Get username from environment or use default
+        username = os.environ.get('USER', 'renoir0')
+        
+        # Define paths - check both possible locations
+        project_path = f'/home/{username}/SmartInventory'
+        db_path = os.path.join(project_path, 'inventory.db')
+        instance_path = os.path.join(project_path, 'instance')
+        instance_db_path = os.path.join(instance_path, 'inventory.db')
+        
+        # Determine which database file to use
+        if os.path.exists(db_path):
+            actual_db_path = db_path
+            logger.info(f"Found database at: {db_path}")
+        elif os.path.exists(instance_db_path):
+            actual_db_path = instance_db_path
+            logger.info(f"Found database at: {instance_db_path}")
+        else:
+            logger.error("No database file found!")
+            return False
+        
+        # Connect to database (read-only)
+        conn = sqlite3.connect(f"file:{actual_db_path}?mode=ro", uri=True)
+        cursor = conn.cursor()
+        
+        # Check if user table exists
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='user'")
+        user_table_exists = cursor.fetchone() is not None
+        
+        if not user_table_exists:
+            logger.info("READ-ONLY MODE: User table doesn't exist, would need to create it")
+        else:
+            # User table exists, check columns
+            logger.info("READ-ONLY MODE: User table exists, checking columns")
+            
+            # Get columns in user table
+            cursor.execute("PRAGMA table_info(user)")
+            columns = cursor.fetchall()
+            column_names = [col[1] for col in columns]
+            
+            logger.info(f"READ-ONLY MODE: Existing columns: {column_names}")
+            
+            # Check if password_hash column exists
+            if 'password_hash' not in column_names:
+                logger.info("READ-ONLY MODE: Would need to add password_hash column")
+                
+                # Check users that would be preserved
+                if 'role' in column_names:
+                    cursor.execute('SELECT id, username, role FROM user')
+                    users = cursor.fetchall()
+                    logger.info(f"READ-ONLY MODE: Would preserve {len(users)} users with their roles")
+                    for user in users:
+                        logger.info(f"READ-ONLY MODE: Would preserve user: {user[1]} with role: {user[2]}")
+                else:
+                    cursor.execute('SELECT id, username FROM user')
+                    users = cursor.fetchall()
+                    logger.info(f"READ-ONLY MODE: Would preserve {len(users)} users with default role 'user'")
+                    for user in users:
+                        logger.info(f"READ-ONLY MODE: Would preserve user: {user[1]} with default role: user")
+            
+            # Check if role column exists
+            elif 'role' not in column_names:
+                logger.info("READ-ONLY MODE: Would need to add role column")
+            
+            # Check if any users exist
+            cursor.execute("SELECT COUNT(*) FROM user")
+            user_count = cursor.fetchone()[0]
+            
+            if user_count == 0:
+                logger.info("READ-ONLY MODE: No users found, would add default admin")
+        
+        # Check if other required tables exist
+        required_tables = ['product', 'category', 'sale', 'sale_item', 'cashout_record']
+        for table in required_tables:
+            cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table}'")
+            if cursor.fetchone() is None:
+                logger.warning(f"READ-ONLY MODE: Table '{table}' doesn't exist!")
+            else:
+                logger.info(f"READ-ONLY MODE: Table '{table}' exists")
+        
+        # Close connection
+        conn.close()
+        
+        logger.info("READ-ONLY MODE: Database check completed successfully")
+        return True
+    
+    except Exception as e:
+        logger.error(f"READ-ONLY MODE: Error checking database: {str(e)}")
+        return False
+
 if __name__ == "__main__":
-    logger.info("Starting direct database fix")
-    success = fix_database()
-    if success:
-        logger.info("Database fix completed successfully")
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='Fix database schema issues')
+    parser.add_argument('--readonly', action='store_true', help='Run in read-only mode (no changes will be made)')
+    args = parser.parse_args()
+    
+    if args.readonly:
+        logger.info("Starting direct database check in READ-ONLY mode")
+        success = fix_database_readonly()
+        if success:
+            logger.info("READ-ONLY MODE: Database check completed successfully")
+            logger.info("No changes were made to your database")
+        else:
+            logger.error("READ-ONLY MODE: Database check failed")
     else:
-        logger.error("Database fix failed")
+        logger.info("Starting direct database fix")
+        success = fix_database()
+        if success:
+            logger.info("Database fix completed successfully")
+        else:
+            logger.error("Database fix failed")
+        
+    logger.info("To run in read-only mode, use: python direct_db_fix.py --readonly")

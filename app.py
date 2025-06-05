@@ -43,27 +43,38 @@ app.config['SESSION_USE_SIGNER'] = True  # Add a cryptographic signature to cook
 
 # Database configuration
 # Determine if we're running on PythonAnywhere by checking for specific environment variables
-is_pythonanywhere = 'PYTHONANYWHERE_SITE' in os.environ
+is_pythonanywhere = os.environ.get('PYTHONANYWHERE_SITE') is not None
 
+# Configure database path
 if is_pythonanywhere:
+    logger.info("Detected PythonAnywhere environment, loading specific configuration")
     try:
-        # Import PythonAnywhere specific configuration
-        logger.info("Detected PythonAnywhere environment, loading specific configuration")
-        from pythonanywhere_config import get_pythonanywhere_config
-        pa_config = get_pythonanywhere_config()
-        
-        # Apply PythonAnywhere configuration
-        app.config.update(pa_config)
-        logger.info(f"Applied PythonAnywhere configuration: {pa_config['SQLALCHEMY_DATABASE_URI']}")
+        from pythonanywhere_config import configure_pythonanywhere
+        db_uri = configure_pythonanywhere(app)
+        app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+        logger.info(f"Applied PythonAnywhere configuration: {db_uri}")
     except Exception as e:
         logger.error(f"Failed to load PythonAnywhere configuration: {str(e)}")
-        # Fallback to a direct path as a last resort
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/renoir0/SmartInventory/inventory.db'
-        logger.info("Using fallback database configuration")
+        
+        # Get username from environment or use default
+        username = os.environ.get('USER', 'renoir0')
+        
+        # Check instance folder first
+        instance_db_path = f'/home/{username}/SmartInventory/instance/inventory.db'
+        if os.path.exists(instance_db_path):
+            app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{instance_db_path}'
+            logger.info(f"Using instance database: {instance_db_path}")
+        else:
+            # Fallback to root directory
+            root_db_path = f'/home/{username}/SmartInventory/inventory.db'
+            app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{root_db_path}'
+            logger.info(f"Using root database: {root_db_path}")
+        
+        logger.info(f"Using fallback database configuration: {app.config['SQLALCHEMY_DATABASE_URI']}")
 else:
     # Local development configuration
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/inventory.db'
-    logger.info("Using local database at: instance/inventory.db")
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///inventory.db'
+    logger.info("Using local database at: inventory.db")
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
